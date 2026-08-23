@@ -140,5 +140,7 @@ export function defaultCategory(kind: CapabilityKind): string {
     case "mcp-server":
     case "mcp-tool":
       return "mcp";
+    case "command":
+      return "command";
   }
 }

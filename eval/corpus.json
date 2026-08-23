@@ -1,84 +1,801 @@
 {
-  "note": "Golden corpus: P001-P010 are the original demo-capability cases; P011+ are 55 real prompt examples for the user's skills (mirrored into test/fixtures/home/.claude/skills). Run with the tuned eval config: node dist/eval/harness.js --routing (picks up eval/config.json automatically). passThrough:true labels hard/ambiguous cases that MUST NOT route (near-zero false positives).",
-  "cases": [
-    { "id": "P001", "prompt": "summarize this PDF into bullet points", "expect": { "route": true, "plan": [{ "primary": "skill:pdf-summarizer" }] } },
-    { "id": "P002", "prompt": "draft a follow-up email to the client", "expect": { "route": true, "plan": [{ "primary": "plugin-skill:gmail-draft" }] } },
-    { "id": "P003", "prompt": "extract tables from this PDF, then draft an email summary to the team", "expect": { "route": true, "plan": [{ "primary": "skill:pdf-extractor" }, { "primary": "plugin-skill:gmail-draft" }] } },
-    { "id": "P004", "prompt": "post today's sales chart to X", "expect": { "route": true, "plan": [{ "primary": "mcp-server:twitter" }] } },
-    { "id": "P005", "prompt": "create a new skill that fetches competitor prices", "expect": { "route": true, "plan": [{ "primary": "agent:skill-creator" }] } },
-    { "id": "P006", "prompt": "review my PR and open issues for it", "expect": { "route": true, "plan": [{ "primary": "plugin-agent:github-pr-review" }] } },
-    { "id": "P007", "prompt": "how's the weather today?", "expect": { "route": false, "passThrough": true } },
-    { "id": "P008", "prompt": "what do you think about this architecture doc?", "expect": { "route": false, "passThrough": true } },
-    { "id": "P009", "prompt": "check the logs first, then create a bug ticket in jira", "expect": { "route": true, "plan": [{ "primary": "skill:log-analyzer" }, { "primary": "mcp-server:jira" }] } },
-    { "id": "P010", "prompt": "u can u help meh with file??", "expect": { "route": false, "passThrough": true } },
-
-    { "id": "P011", "prompt": "brainstorm this new feature before implementation explore the requirements", "expect": { "route": true, "plan": [{ "primary": "skill:brainstorming" }] } },
-    { "id": "P012", "prompt": "help me design this feature explore the requirements before building", "expect": { "route": true, "plan": [{ "primary": "skill:brainstorming" }] } },
-    { "id": "P013", "prompt": "adding a new component explore the requirements for the design before implementation", "expect": { "route": true, "plan": [{ "primary": "skill:brainstorming" }] } },
-    { "id": "P014", "prompt": "creative work on a new feature explore user intent first before implementation", "expect": { "route": true, "plan": [{ "primary": "skill:brainstorming" }] } },
-
-    { "id": "P015", "prompt": "talk like caveman be brief use less tokens", "expect": { "route": true, "plan": [{ "primary": "skill:caveman" }] } },
-    { "id": "P016", "prompt": "/caveman ultra from now on", "expect": { "route": true, "plan": [{ "primary": "skill:caveman" }] } },
-    { "id": "P017", "prompt": "caveman mode cut output tokens full technical accuracy", "expect": { "route": true, "plan": [{ "primary": "skill:caveman" }] } },
-    { "id": "P018", "prompt": "ultra compressed caveman communication cut output tokens", "expect": { "route": true, "plan": [{ "primary": "skill:caveman" }] } },
-
-    { "id": "P019", "prompt": "compress my CLAUDE.md memory file into caveman format", "expect": { "route": true, "plan": [{ "primary": "skill:caveman-compress" }] } },
-    { "id": "P020", "prompt": "compress the todos file to caveman format save input tokens", "expect": { "route": true, "plan": [{ "primary": "skill:caveman-compress" }] } },
-    { "id": "P021", "prompt": "compress my preferences memory file keep the human readable backup", "expect": { "route": true, "plan": [{ "primary": "skill:caveman-compress" }] } },
-    { "id": "P022", "prompt": "/caveman-compress my memory file save input tokens", "expect": { "route": true, "plan": [{ "primary": "skill:caveman-compress" }] } },
-
-    { "id": "P023", "prompt": "execute the written implementation plan with review checkpoints", "expect": { "route": true, "plan": [{ "primary": "skill:executing-plans" }] } },
-    { "id": "P024", "prompt": "execute the plan in a separate session", "expect": { "route": true, "plan": [{ "primary": "skill:executing-plans" }] } },
-    { "id": "P025", "prompt": "execute the plan review at each checkpoint", "expect": { "route": true, "plan": [{ "primary": "skill:executing-plans" }] } },
-    { "id": "P026", "prompt": "run the implementation plan from docs with review checkpoints", "expect": { "route": true, "plan": [{ "primary": "skill:executing-plans" }] } },
-
-    { "id": "P027", "prompt": "find a skill that can extend my capabilities", "expect": { "route": true, "plan": [{ "primary": "skill:find-skills" }] } },
-    { "id": "P028", "prompt": "is there a skill for this discover it", "expect": { "route": true, "plan": [{ "primary": "skill:find-skills" }] } },
-    { "id": "P029", "prompt": "find an installable skill for this workflow", "expect": { "route": true, "plan": [{ "primary": "skill:find-skills" }] } },
-    { "id": "P030", "prompt": "discover a skill for data analysis find one to install", "expect": { "route": true, "plan": [{ "primary": "skill:find-skills" }] } },
-
-    { "id": "P031", "prompt": "distinctive visual design for this UI intentional aesthetic direction typography avoid templated defaults", "expect": { "route": true, "plan": [{ "primary": "skill:frontend-design" }] } },
-    { "id": "P032", "prompt": "reshape this page with a distinctive visual design intentional aesthetic direction typography", "expect": { "route": true, "plan": [{ "primary": "skill:frontend-design" }] } },
-    { "id": "P033", "prompt": "visual design direction for this frontend distinctive intentional not templated defaults", "expect": { "route": true, "plan": [{ "primary": "skill:frontend-design" }] } },
-    { "id": "P034", "prompt": "visual design for the hero distinctive typography aesthetic direction not templated", "expect": { "route": true, "plan": [{ "primary": "skill:frontend-design" }] } },
-
-    { "id": "P035", "prompt": "graphify this repo map the codebase architecture and file relationships", "expect": { "route": true, "plan": [{ "primary": "skill:graphify" }] } },
-    { "id": "P036", "prompt": "query this folder as a graphify knowledge graph community detection and explain tools", "expect": { "route": true, "plan": [{ "primary": "skill:graphify" }] } },
-    { "id": "P037", "prompt": "question about my codebase architecture graphify it first", "expect": { "route": true, "plan": [{ "primary": "skill:graphify" }] } },
-    { "id": "P038", "prompt": "map file relationships across this project as a knowledge graph", "expect": { "route": true, "plan": [{ "primary": "skill:graphify" }] } },
-
-    { "id": "P039", "prompt": "warm monochrome editorial bento grid no gradients muted pastels", "expect": { "route": true, "plan": [{ "primary": "skill:minimalist-ui" }] } },
-    { "id": "P040", "prompt": "make this page a clean editorial interface warm monochrome flat bento grid", "expect": { "route": true, "plan": [{ "primary": "skill:minimalist-ui" }] } },
-    { "id": "P041", "prompt": "clean editorial interface warm monochrome palette no heavy shadows", "expect": { "route": true, "plan": [{ "primary": "skill:minimalist-ui" }] } },
-    { "id": "P042", "prompt": "editorial muted pastels on a flat bento grid no gradients", "expect": { "route": true, "plan": [{ "primary": "skill:minimalist-ui" }] } },
-
-    { "id": "P043", "prompt": "ponytail this refactor laziest simplest solution yagni no boilerplate", "expect": { "route": true, "plan": [{ "primary": "skill:ponytail" }] } },
-    { "id": "P044", "prompt": "use the laziest solution simplest minimal code skip the boilerplate", "expect": { "route": true, "plan": [{ "primary": "skill:ponytail" }] } },
-    { "id": "P045", "prompt": "be lazy do less yagni this simplest solution", "expect": { "route": true, "plan": [{ "primary": "skill:ponytail" }] } },
-    { "id": "P046", "prompt": "laziest minimal solution no unnecessary dependencies cut the bloat", "expect": { "route": true, "plan": [{ "primary": "skill:ponytail" }] } },
-
-    { "id": "P047", "prompt": "create a skill improve its description for triggering accuracy run evals to benchmark performance", "expect": { "route": true, "plan": [{ "primary": "skill:skill-creator" }] } },
-    { "id": "P048", "prompt": "run evals on my skill benchmark its performance", "expect": { "route": true, "plan": [{ "primary": "skill:skill-creator" }] } },
-    { "id": "P049", "prompt": "measure my skill performance with variance analysis", "expect": { "route": true, "plan": [{ "primary": "skill:skill-creator" }] } },
-    { "id": "P050", "prompt": "optimize an existing skill run evals to test it", "expect": { "route": true, "plan": [{ "primary": "skill:skill-creator" }] } },
-
-    { "id": "P051", "prompt": "mobile ux design ui palette font pairing accessibility review of the page", "expect": { "route": true, "plan": [{ "primary": "skill:ui-ux-pro-max" }] } },
-    { "id": "P052", "prompt": "pick a color palette font pairing for my ui mobile design", "expect": { "route": true, "plan": [{ "primary": "skill:ui-ux-pro-max" }] } },
-    { "id": "P053", "prompt": "which chart type for this design check the ux guidelines", "expect": { "route": true, "plan": [{ "primary": "skill:ui-ux-pro-max" }] } },
-    { "id": "P054", "prompt": "design review of my page accessibility ux web mobile", "expect": { "route": true, "plan": [{ "primary": "skill:ui-ux-pro-max" }] } },
-
-    { "id": "P055", "prompt": "spec requirements for a multi step task write the plan before touching code", "expect": { "route": true, "plan": [{ "primary": "skill:writing-plans" }] } },
-    { "id": "P056", "prompt": "write the implementation plan for these requirements multi step task before touching code", "expect": { "route": true, "plan": [{ "primary": "skill:writing-plans" }] } },
-    { "id": "P057", "prompt": "plan this multi step task from the requirements before touching code", "expect": { "route": true, "plan": [{ "primary": "skill:writing-plans" }] } },
-    { "id": "P058", "prompt": "spec for a multi step task write the plan before touching code", "expect": { "route": true, "plan": [{ "primary": "skill:writing-plans" }] } },
-
-    { "id": "P059", "prompt": "write the plan for this multi step task from the spec before touching code then execute the written implementation plan with review checkpoints", "expect": { "route": true, "plan": [{ "primary": "skill:writing-plans" }, { "primary": "skill:executing-plans" }] } },
-    { "id": "P060", "prompt": "ponytail this refactor to the laziest solution then execute the written implementation plan with review checkpoints", "expect": { "route": true, "plan": [{ "primary": "skill:ponytail" }, { "primary": "skill:executing-plans" }] } },
-
-    { "id": "P061", "prompt": "thanks that works great", "expect": { "route": false, "passThrough": true } },
-    { "id": "P062", "prompt": "remind me to buy milk", "expect": { "route": false, "passThrough": true } },
-    { "id": "P063", "prompt": "is it going to rain tomorrow", "expect": { "route": false, "passThrough": true } },
-    { "id": "P064", "prompt": "what's the fastest car in the world", "expect": { "route": false, "passThrough": true } },
-    { "id": "P065", "prompt": "thanks for the help that's perfect", "expect": { "route": false, "passThrough": true } }
-  ]
+    "note":  "Golden corpus: P001-P010 are the original demo-capability cases; P011+ are 55 real prompt examples for the user\u0027s skills (mirrored into test/fixtures/home/.claude/skills). Run with the tuned eval config: node dist/eval/harness.js --routing (picks up eval/config.json automatically). passThrough:true labels hard/ambiguous cases that MUST NOT route (near-zero false positives).",
+    "cases":  [
+                  {
+                      "id":  "P001",
+                      "prompt":  "summarize this PDF into bullet points",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:pdf-summarizer"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P002",
+                      "prompt":  "draft a follow-up email to the client",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "plugin-skill:gmail-draft"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P003",
+                      "prompt":  "extract tables from this PDF, then draft an email summary to the team",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:pdf-extractor"
+                                                  },
+                                                  {
+                                                      "primary":  "plugin-skill:gmail-draft"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P004",
+                      "prompt":  "post today\u0027s sales chart to X",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "mcp-server:twitter"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P005",
+                      "prompt":  "create a new skill that fetches competitor prices",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "agent:skill-creator"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P006",
+                      "prompt":  "review my PR and open issues for it",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "plugin-agent:github-pr-review"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P007",
+                      "prompt":  "how\u0027s the weather today?",
+                      "expect":  {
+                                     "route":  false,
+                                     "passThrough":  true
+                                 }
+                  },
+                  {
+                      "id":  "P008",
+                      "prompt":  "what do you think about this architecture doc?",
+                      "expect":  {
+                                     "route":  false,
+                                     "passThrough":  true
+                                 }
+                  },
+                  {
+                      "id":  "P009",
+                      "prompt":  "check the logs first, then create a bug ticket in jira",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:log-analyzer"
+                                                  },
+                                                  {
+                                                      "primary":  "mcp-server:jira"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P010",
+                      "prompt":  "u can u help meh with file??",
+                      "expect":  {
+                                     "route":  false,
+                                     "passThrough":  true
+                                 }
+                  },
+                  {
+                      "id":  "P011",
+                      "prompt":  "brainstorm this new feature before implementation explore the requirements",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:brainstorming"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P012",
+                      "prompt":  "help me design this feature explore the requirements before building",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:brainstorming"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P013",
+                      "prompt":  "adding a new component explore the requirements for the design before implementation",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:brainstorming"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P014",
+                      "prompt":  "creative work on a new feature explore user intent first before implementation",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:brainstorming"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P015",
+                      "prompt":  "talk like caveman be brief use less tokens",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:caveman"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P016",
+                      "prompt":  "/caveman ultra from now on",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:caveman"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P017",
+                      "prompt":  "caveman mode cut output tokens full technical accuracy",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:caveman"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P018",
+                      "prompt":  "ultra compressed caveman communication cut output tokens",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:caveman"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P019",
+                      "prompt":  "compress my CLAUDE.md memory file into caveman format",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:caveman-compress"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P020",
+                      "prompt":  "compress the todos file to caveman format save input tokens",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:caveman-compress"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P021",
+                      "prompt":  "compress my preferences memory file keep the human readable backup",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:caveman-compress"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P022",
+                      "prompt":  "/caveman-compress my memory file save input tokens",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:caveman-compress"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P023",
+                      "prompt":  "execute the written implementation plan with review checkpoints",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:executing-plans"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P024",
+                      "prompt":  "execute the plan in a separate session",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:executing-plans"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P025",
+                      "prompt":  "execute the plan review at each checkpoint",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:executing-plans"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P026",
+                      "prompt":  "run the implementation plan from docs with review checkpoints",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:executing-plans"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P027",
+                      "prompt":  "find a skill that can extend my capabilities",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:find-skills"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P028",
+                      "prompt":  "is there a skill for this discover it",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:find-skills"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P029",
+                      "prompt":  "find an installable skill for this workflow",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:find-skills"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P030",
+                      "prompt":  "discover a skill for data analysis find one to install",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:find-skills"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P031",
+                      "prompt":  "distinctive visual design for this UI intentional aesthetic direction typography avoid templated defaults",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:frontend-design"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P032",
+                      "prompt":  "reshape this page with a distinctive visual design intentional aesthetic direction typography",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:frontend-design"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P033",
+                      "prompt":  "visual design direction for this frontend distinctive intentional not templated defaults",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:frontend-design"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P034",
+                      "prompt":  "visual design for the hero distinctive typography aesthetic direction not templated",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:frontend-design"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P035",
+                      "prompt":  "graphify this repo map the codebase architecture and file relationships",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:graphify"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P036",
+                      "prompt":  "query this folder as a graphify knowledge graph community detection and explain tools",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:graphify"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P037",
+                      "prompt":  "question about my codebase architecture graphify it first",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:graphify"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P038",
+                      "prompt":  "map file relationships across this project as a knowledge graph",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:graphify"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P039",
+                      "prompt":  "warm monochrome editorial bento grid no gradients muted pastels",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:minimalist-ui"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P040",
+                      "prompt":  "make this page a clean editorial interface warm monochrome flat bento grid",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:minimalist-ui"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P041",
+                      "prompt":  "clean editorial interface warm monochrome palette no heavy shadows",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:minimalist-ui"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P042",
+                      "prompt":  "editorial muted pastels on a flat bento grid no gradients",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:minimalist-ui"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P043",
+                      "prompt":  "ponytail this refactor laziest simplest solution yagni no boilerplate",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:ponytail"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P044",
+                      "prompt":  "use the laziest solution simplest minimal code skip the boilerplate",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:ponytail"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P045",
+                      "prompt":  "be lazy do less yagni this simplest solution",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:ponytail"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P046",
+                      "prompt":  "laziest minimal solution no unnecessary dependencies cut the bloat",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:ponytail"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P047",
+                      "prompt":  "create a skill improve its description for triggering accuracy run evals to benchmark performance",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:skill-creator"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P048",
+                      "prompt":  "run evals on my skill benchmark its performance",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:skill-creator"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P049",
+                      "prompt":  "measure my skill performance with variance analysis",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:skill-creator"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P050",
+                      "prompt":  "optimize an existing skill run evals to test it",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:skill-creator"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P051",
+                      "prompt":  "mobile ux design ui palette font pairing accessibility review of the page",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:ui-ux-pro-max"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P052",
+                      "prompt":  "pick a color palette font pairing for my ui mobile design",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:ui-ux-pro-max"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P053",
+                      "prompt":  "which chart type for this design check the ux guidelines",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:ui-ux-pro-max"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P054",
+                      "prompt":  "design review of my page accessibility ux web mobile",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:ui-ux-pro-max"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P055",
+                      "prompt":  "spec requirements for a multi step task write the plan before touching code",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:writing-plans"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P056",
+                      "prompt":  "write the implementation plan for these requirements multi step task before touching code",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:writing-plans"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P057",
+                      "prompt":  "plan this multi step task from the requirements before touching code",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:writing-plans"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P058",
+                      "prompt":  "spec for a multi step task write the plan before touching code",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:writing-plans"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P059",
+                      "prompt":  "write the plan for this multi step task from the spec before touching code then execute the written implementation plan with review checkpoints",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:writing-plans"
+                                                  },
+                                                  {
+                                                      "primary":  "skill:executing-plans"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P060",
+                      "prompt":  "ponytail this refactor to the laziest solution then execute the written implementation plan with review checkpoints",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "skill:ponytail"
+                                                  },
+                                                  {
+                                                      "primary":  "skill:executing-plans"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P061",
+                      "prompt":  "thanks that works great",
+                      "expect":  {
+                                     "route":  false,
+                                     "passThrough":  true
+                                 }
+                  },
+                  {
+                      "id":  "P062",
+                      "prompt":  "remind me to buy milk",
+                      "expect":  {
+                                     "route":  false,
+                                     "passThrough":  true
+                                 }
+                  },
+                  {
+                      "id":  "P063",
+                      "prompt":  "is it going to rain tomorrow",
+                      "expect":  {
+                                     "route":  false,
+                                     "passThrough":  true
+                                 }
+                  },
+                  {
+                      "id":  "P064",
+                      "prompt":  "what\u0027s the fastest car in the world",
+                      "expect":  {
+                                     "route":  false,
+                                     "passThrough":  true
+                                 }
+                  },
+                  {
+                      "id":  "P065",
+                      "prompt":  "thanks for the help that\u0027s perfect",
+                      "expect":  {
+                                     "route":  false,
+                                     "passThrough":  true
+                                 }
+                  },
+                  {
+                      "id":  "P066",
+                      "prompt":  "ship my changes and open a pull request",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "command:deploy"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P067",
+                      "prompt":  "run the database migrations and check schema drift",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "command:db-migrate"
+                                                  }
+                                              ]
+                                 }
+                  },
+                  {
+                      "id":  "P068",
+                      "prompt":  "check if my pull request can merge yet",
+                      "expect":  {
+                                     "route":  true,
+                                     "plan":  [
+                                                  {
+                                                      "primary":  "command:pr-status"
+                                                  }
+                                              ]
+                                 }
+                  }
+              ]
 }

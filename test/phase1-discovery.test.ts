@@ -44,6 +44,10 @@ const EXPECTED_IDS = [
   "plugin-agent:github-pr-review",
   "mcp-server:twitter",
   "mcp-server:jira",
+  // slash commands (user / workspace / plugin)
+  "command:deploy",
+  "command:db-migrate",
+  "command:pr-status",
 ];
 
 test("discovery finds capabilities from all four sources", () => {

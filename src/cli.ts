@@ -194,7 +194,8 @@ export function listCapabilities(): void {
   if (entries.length === 0) {
     console.log("No capabilities discovered.");
     console.log("Searched: ~/.claude/skills, <workspace>/.claude/skills, ~/.claude/agents, <workspace>/.claude/agents,");
-    console.log("          ~/.claude/plugins/*/plugin-root/{skills,agents}, .mcp.json, ~/.claude.json mcpServers");
+    console.log("          ~/.claude/commands, <workspace>/.claude/commands,");
+    console.log("          ~/.claude/plugins/*/plugin-root/{skills,agents,commands}, .mcp.json, ~/.claude.json mcpServers");
     console.log("Add a skill under ~/.claude/skills/<name>/SKILL.md and re-run this command.");
     return;
   }

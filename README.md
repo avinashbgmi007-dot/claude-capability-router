@@ -199,7 +199,8 @@ Claude Code ──UserPromptSubmit──▶ hook-wrapper.mjs (stdin JSON)
 
 Capabilities are discovered from: `~/.claude/skills`, `.claude/skills`
 (workspace), `~/.claude/agents`, `.claude/agents` (workspace),
-`~/.claude/plugins/*/plugin-root/{skills,agents}`, `.mcp.json` and
+`~/.claude/commands`, `.claude/commands` (workspace slash commands),
+`~/.claude/plugins/*/plugin-root/{skills,agents,commands}`, `.mcp.json` and
 `~/.claude.json` (`mcpServers`).
 
 ---

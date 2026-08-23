@@ -187,8 +187,9 @@ test("list: prints discovered capabilities with enabled state", () => {
     assert.ok(out.includes("skill:pdf-summarizer"), out);
     assert.ok(out.includes("plugin-skill:gmail-draft"), out);
     assert.ok(out.includes("mcp-server:twitter"), out);
+    assert.ok(out.includes("command:deploy"), out);
     assert.ok(out.includes("invoke=pdf-summarizer"), out);
-    assert.ok(/21 enabled \/ 21 total/.test(out), out);
+    assert.ok(/24 enabled \/ 24 total/.test(out), out);
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }

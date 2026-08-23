@@ -9,7 +9,8 @@ export type CapabilityKind =
   | "plugin-skill"
   | "plugin-agent"
   | "mcp-server"
-  | "mcp-tool";
+  | "mcp-tool"
+  | "command";
 
 /** Raw metadata extracted from a discovered capability source. */
 export interface CapabilityMetadata {

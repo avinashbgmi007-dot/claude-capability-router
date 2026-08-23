@@ -97,6 +97,25 @@ function discoverAgents(root: string, kind: "agent" | "plugin-agent"): Discovere
   return out;
 }
 
+/**
+ * Discover slash commands (*.md with frontmatter description) under a
+ * commands root. Flat directory, like agents. Invocation is the slash
+ * syntax the user actually types: "/<command-name>".
+ */
+function discoverCommands(root: string): DiscoveredCapability[] {
+  if (!existsSync(root)) return [];
+  const out: DiscoveredCapability[] = [];
+  for (const f of sortedEntries(root)) {
+    const full = path.join(root, f);
+    if (!isFile(full) || !f.toLowerCase().endsWith(".md")) continue;
+    const name = f.replace(/\.md$/, "");
+    const md = extractFromMarkdown({ name, kind: "command", sourcePath: full, rawText: readSafe(full) });
+    md.invocation = `/${name}`;
+    out.push({ ...md, id: `command:${name}`, fingerprint: fingerprint(full + "\n" + readSafe(full)) });
+  }
+  return out;
+}
+
 /** Discover plugin skills/agents under ~/.claude/plugins/<marketplace>/<plugin>/plugin-root/. */
 function discoverPlugins(claudeRoot: string): DiscoveredCapability[] {
   const pluginsRoot = path.join(claudeRoot, "plugins");
@@ -111,6 +130,7 @@ function discoverPlugins(claudeRoot: string): DiscoveredCapability[] {
       if (!existsSync(pluginRoot)) continue;
       out.push(...discoverSkills(path.join(pluginRoot, "skills"), "plugin-skill"));
       out.push(...discoverAgents(path.join(pluginRoot, "agents"), "plugin-agent"));
+      out.push(...discoverCommands(path.join(pluginRoot, "commands")));
     }
   }
   return out;
@@ -155,7 +175,7 @@ function discoverMcp(roots: DiscoveryRoots): DiscoveredCapability[] {
   return out;
 }
 
-/** Full deterministic discovery across all four sources. */
+/** Full deterministic discovery across all sources. */
 export function discoverAll(roots: DiscoveryRoots): DiscoveredCapability[] {
   const claude = path.join(roots.homeDir, ".claude");
   const out: DiscoveredCapability[] = [
@@ -164,6 +184,8 @@ export function discoverAll(roots: DiscoveryRoots): DiscoveredCapability[] {
     ...discoverSkills(path.join(roots.workspaceDir, ".claude", "skills"), "skill"),
     ...discoverAgents(path.join(claude, "agents"), "agent"),
     ...discoverAgents(path.join(roots.workspaceDir, ".claude", "agents"), "agent"),
+    ...discoverCommands(path.join(claude, "commands")),
+    ...discoverCommands(path.join(roots.workspaceDir, ".claude", "commands")),
     ...discoverPlugins(claude),
     ...discoverMcp(roots),
   ];
@@ -191,11 +213,20 @@ export function scanFingerprint(roots: DiscoveryRoots): string {
       if (isFile(full) && f.toLowerCase().endsWith(".md")) files.add(full);
     }
   };
+  const addCommands = (root: string) => {
+    if (!existsSync(root)) return;
+    for (const f of sortedEntries(root)) {
+      const full = path.join(root, f);
+      if (isFile(full) && f.toLowerCase().endsWith(".md")) files.add(full);
+    }
+  };
   addSkills(path.join(claude, "skills"));
   addSkills(path.join(roots.homeDir, ".agents", "skills"));
   addSkills(path.join(roots.workspaceDir, ".claude", "skills"));
   addAgents(path.join(claude, "agents"));
   addAgents(path.join(roots.workspaceDir, ".claude", "agents"));
+  addCommands(path.join(claude, "commands"));
+  addCommands(path.join(roots.workspaceDir, ".claude", "commands"));
   const pluginsRoot = path.join(claude, "plugins");
   if (existsSync(pluginsRoot)) {
     for (const mp of sortedEntries(pluginsRoot)) {
@@ -207,6 +238,7 @@ export function scanFingerprint(roots: DiscoveryRoots): string {
         if (!existsSync(pr)) continue;
         addSkills(path.join(pr, "skills"));
         addAgents(path.join(pr, "agents"));
+        addCommands(path.join(pr, "commands"));
       }
     }
   }

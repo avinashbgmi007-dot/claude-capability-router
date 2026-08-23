@@ -31,7 +31,10 @@ export interface CapabilityStats {
 export interface StatsResult {
   decisions: number;
   attributedDecisions: number;
+  /** routed=true across ALL decisions (attributed or not) — headline count */
   routedDecisions: number;
+  /** routed decisions that carry a sessionId — the correlation denominator */
+  routedAttributed: number;
   compliant: number;
   overridden: number;
   ignored: number;
@@ -48,7 +51,8 @@ export function computeStats(decisions: DecisionLogEntry[], usage: UsageLogEntry
   const result: StatsResult = {
     decisions: decisions.length,
     attributedDecisions: 0,
-    routedDecisions: 0,
+    routedDecisions: decisions.filter((d) => d.routed).length,
+    routedAttributed: 0,
     compliant: 0,
     overridden: 0,
     ignored: 0,
@@ -108,7 +112,7 @@ export function computeStats(decisions: DecisionLogEntry[], usage: UsageLogEntry
         }
         continue;
       }
-      result.routedDecisions++;
+      result.routedAttributed++;
       for (const id of new Set(primaries)) cap(id).routedAsPrimary++;
       const hit = primaries.some((p) => invokedIds.has(p));
       if (hit) {

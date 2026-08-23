@@ -60,7 +60,8 @@ test("stats: compliance, override, ignored, silent-win, unattributed", () => {
   const s = computeStats(decisions, usage);
   assert.equal(s.decisions, 5);
   assert.equal(s.attributedDecisions, 4);
-  assert.equal(s.routedDecisions, 3);
+  assert.equal(s.routedDecisions, 4);
+  assert.equal(s.routedAttributed, 3);
   assert.equal(s.compliant, 1);
   assert.equal(s.overridden, 1);
   assert.equal(s.ignored, 1);

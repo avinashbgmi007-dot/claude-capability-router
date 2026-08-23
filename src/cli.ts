@@ -305,10 +305,14 @@ export function stats(opts: { days?: number; json?: boolean } = {}): void {
     return;
   }
   const pct = (n: number, d: number) => (d === 0 ? "n/a" : `${((n / d) * 100).toFixed(0)}%`);
-  console.log(`CMR stats — ${s.decisions} decisions (${s.attributedDecisions} attributed), ${s.routedDecisions} routed`);
-  console.log(`compliance (routed & invoked): ${pct(s.compliant, s.routedDecisions)}`);
-  console.log(`ignored    (routed, unused):  ${pct(s.ignored, s.routedDecisions)}`);
-  console.log(`override   (invoked other):   ${pct(s.overridden, s.routedDecisions)}`);
+  console.log(`CMR stats — ${s.decisions} decisions, ${s.routedDecisions} routed (${s.attributedDecisions} attributed to sessions, ${s.routedAttributed} routed+attributed)`);
+  if (s.routedAttributed < s.routedDecisions) {
+    console.log(`  note: compliance percentages cover session-attributed decisions only; reinstall to attribute future prompts`);
+  }
+  const denom = s.routedAttributed;
+  console.log(`compliance (routed & invoked): ${pct(s.compliant, denom)}`);
+  console.log(`ignored    (routed, unused):  ${pct(s.ignored, denom)}`);
+  console.log(`override   (invoked other):   ${pct(s.overridden, denom)}`);
   console.log(`silent wins (pass-through but invoked): ${s.silentWins.length}`);
   const unattributed = s.decisions - s.attributedDecisions;
   if (unattributed > 0) console.log(`unattributed entries (no session_id, pre-stats format): ${unattributed}`);

@@ -5,11 +5,47 @@
  *              overridden (ToolUse/SessionEnd hooks); schema is frozen now
  *              so Phase 5 (P1) needs no architecture change.
  */
-import { appendFileSync, mkdirSync, readFileSync, existsSync } from "node:fs";
+import { appendFileSync, mkdirSync, readFileSync, existsSync, writeFileSync, renameSync, statSync } from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import { logsDir } from "./paths.js";
 import type { DecisionLogEntry, ExecutionRequest } from "./types.js";
+
+/**
+ * Log retention: both JSONL logs grow forever without pruning, and
+ * loadUsageLog is re-read on every prompt for the recency boost. 90 days
+ * loses nothing (recency score at 90d ≈ 2^-12); hard line caps bound the
+ * worst case. Compaction only runs when the file exceeds SIZE_TRIGGER so
+ * the per-append cost stays a cheap stat call.
+ */
+const RETENTION_MS = 90 * 24 * 3600 * 1000;
+const SIZE_TRIGGER = 256 * 1024;
+const MAX_LINES: Record<string, number> = { "decisions.jsonl": 10000, "usage.jsonl": 5000 };
+
+function compactLog(file: string): void {
+  try {
+    if (!existsSync(file) || statSync(file).size < SIZE_TRIGGER) return;
+    const lines = readFileSync(file, "utf8").split("\n").filter((l) => l.trim());
+    const cutoff = Date.now() - RETENTION_MS;
+    let kept = lines.filter((l) => {
+      try {
+        const t = Date.parse((JSON.parse(l) as { ts?: string }).ts ?? "");
+        return Number.isNaN(t) ? true : t >= cutoff; // unparseable lines are preserved
+      } catch {
+        return true;
+      }
+    });
+    const max = MAX_LINES[path.basename(file)];
+    if (max && kept.length > max) kept = kept.slice(-max);
+    if (kept.length !== lines.length) {
+      const tmp = `${file}.tmp`;
+      writeFileSync(tmp, kept.join("\n") + "\n", "utf8");
+      renameSync(tmp, file);
+    }
+  } catch {
+    /* pruning must never break logging */
+  }
+}
 
 export function promptHash(prompt: string): string {
   return createHash("sha1").update(prompt, "utf8").digest("hex").slice(0, 16);
@@ -36,7 +72,9 @@ export function toDecisionEntry(req: ExecutionRequest, sessionId?: string): Deci
 export function appendDecisionLog(entry: DecisionLogEntry, dir?: string): void {
   const d = dir || logsDir();
   mkdirSync(d, { recursive: true });
-  appendFileSync(path.join(d, "decisions.jsonl"), JSON.stringify(entry) + "\n", "utf8");
+  const file = path.join(d, "decisions.jsonl");
+  appendFileSync(file, JSON.stringify(entry) + "\n", "utf8");
+  compactLog(file);
 }
 
 /** P1 usage record — frozen schema (populated by ToolUse hooks). */
@@ -54,7 +92,9 @@ export interface UsageLogEntry {
 export function appendUsageLog(entry: UsageLogEntry, dir?: string): void {
   const d = dir || logsDir();
   mkdirSync(d, { recursive: true });
-  appendFileSync(path.join(d, "usage.jsonl"), JSON.stringify(entry) + "\n", "utf8");
+  const file = path.join(d, "usage.jsonl");
+  appendFileSync(file, JSON.stringify(entry) + "\n", "utf8");
+  compactLog(file);
 }
 
 /** Read back the append-only usage log (corrupt lines skipped). */

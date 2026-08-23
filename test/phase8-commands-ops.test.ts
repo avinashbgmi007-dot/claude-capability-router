@@ -5,12 +5,13 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { mkdtempSync, rmSync, writeFileSync, mkdirSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import os from "node:os";
 import { discoverAll, indexById, scanFingerprint } from "../src/discovery.js";
 import { updateIndex } from "../src/index-store.js";
 import { createRouter } from "../src/router.js";
 import { DEFAULT_CONFIG } from "../src/config.js";
+import { appendUsageLog } from "../src/logs.js";
 import type { CapabilityIndexEntry } from "../src/types.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
@@ -59,6 +60,31 @@ test("commands: adding a command file changes the scan fingerprint", () => {
     writeFileSync(path.join(home.workspaceDir, ".claude", "commands", "lint.md"), "---\ndescription: run lint checks\n---\nrun eslint\n");
     const after = scanFingerprint(home);
     assert.notEqual(before, after, "new command must invalidate the persisted index");
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
+});
+
+test("logs: compaction drops pre-retention entries once the file grows past the trigger", () => {
+  const tmp = mkdtempSync(path.join(os.tmpdir(), "cmr-p8log-"));
+  try {
+    const file = path.join(tmp, "usage.jsonl");
+    const oldTs = new Date(Date.now() - 100 * 24 * 3600 * 1000).toISOString();
+    const newTs = new Date().toISOString();
+    // ~3300 old lines ≈ 300KB > SIZE_TRIGGER (256KB); plus junk that must survive
+    const old = Array.from({ length: 3300 }, (_, i) =>
+      JSON.stringify({ ts: oldTs, capabilityId: `skill:old-${i % 3}`, invoked: true, source: "tool-use" }),
+    );
+    writeFileSync(file, ["garbage line", ...old, JSON.stringify({ ts: newTs, capabilityId: "skill:recent", invoked: true, source: "tool-use" })].join("\n") + "\n");
+
+    appendUsageLog({ ts: newTs, capabilityId: "skill:fresh", invoked: true, source: "test" }, tmp);
+
+    const after = readFileSync(file, "utf8").trim().split("\n");
+    assert.ok(after.length < 100, `compacted file should shrink dramatically, got ${after.length}`);
+    assert.ok(after.includes("garbage line"), "unparseable lines are preserved");
+    assert.ok(after.some((l) => l.includes("skill:fresh")), "fresh entry kept");
+    assert.ok(!after.some((l) => l.includes("skill:old-")), "pre-retention entries dropped");
+    assert.ok(after.some((l) => l.includes("skill:recent")), "recent entries kept");
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }

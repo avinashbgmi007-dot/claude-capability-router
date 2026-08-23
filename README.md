@@ -176,6 +176,16 @@ automatically (it's what makes description-heavy skills like the ones in
 frontmatter, so scoring leans on `purpose`/`description`/`name`). Set
 `CLAUDE_CMR_HOME` to override it with your live `~/.claude-cmr/config.json`.
 
+### Live verification loop
+
+After installing, verify real behavior in three steps:
+
+1. Restart Claude Code, then type the trigger prompts printed by the check tool
+2. `npm run live:check` — install integrity + last-24h decisions + 7-day fidelity report (paste it back for analysis)
+3. `npm run simulate` — compress a week of usage into seconds against a sandboxed home; proves the measurement machinery (obedience numbers are model assumptions, not reality)
+
+`npm run bench` reports routing latency p50/p95 (in-process and end-to-end through the spawned wrapper).
+
 ---
 
 ## How it works

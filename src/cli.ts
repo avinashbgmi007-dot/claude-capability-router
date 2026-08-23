@@ -314,6 +314,9 @@ export function stats(opts: { days?: number; json?: boolean } = {}): void {
   console.log(`compliance (routed & invoked): ${pct(s.compliant, denom)}`);
   console.log(`ignored    (routed, unused):  ${pct(s.ignored, denom)}`);
   console.log(`override   (invoked other):   ${pct(s.overridden, denom)}`);
+  console.log(
+    `intention fidelity (compliant + correct pass-through / attributed): ${pct(s.compliant + s.correctPassThrough, s.attributedDecisions)}`,
+  );
   console.log(`silent wins (pass-through but invoked): ${s.silentWins.length}`);
   const unattributed = s.decisions - s.attributedDecisions;
   if (unattributed > 0) console.log(`unattributed entries (no session_id, pre-stats format): ${unattributed}`);

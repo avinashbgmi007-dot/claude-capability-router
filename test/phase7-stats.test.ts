@@ -66,6 +66,10 @@ test("stats: compliance, override, ignored, silent-win, unattributed", () => {
   assert.equal(s.overridden, 1);
   assert.equal(s.ignored, 1);
   assert.equal(s.silentWins.length, 1);
+  // fidelity: compliant(1) + correctPassThrough(0) over 4 attributed
+  assert.equal(s.passThrough, 1);
+  assert.equal(s.correctPassThrough, 0);
+  assert.ok(Math.abs(s.fidelity - 0.25) < 1e-9, `fidelity ${s.fidelity}`);
   assert.equal(s.silentWins[0].prompt, "tweet this now");
   assert.deepEqual(s.silentWins[0].invokedIds, ["mcp-server:twitter"]);
 

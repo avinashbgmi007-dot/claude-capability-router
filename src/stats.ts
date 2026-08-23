@@ -38,6 +38,15 @@ export interface StatsResult {
   compliant: number;
   overridden: number;
   ignored: number;
+  passThrough: number;
+  /** pass-through decisions where nothing was invoked — the correct outcome */
+  correctPassThrough: number;
+  /**
+   * Intention fidelity: of attributable decisions, the fraction where the
+   * system did the right thing overall — routed AND obeyed, or passed
+   * through AND nothing was needed. The composite end-to-end bar.
+   */
+  fidelity: number;
   silentWins: SilentWin[];
   perCapability: CapabilityStats[];
 }
@@ -56,6 +65,9 @@ export function computeStats(decisions: DecisionLogEntry[], usage: UsageLogEntry
     compliant: 0,
     overridden: 0,
     ignored: 0,
+    passThrough: 0,
+    correctPassThrough: 0,
+    fidelity: 0,
     silentWins: [],
     perCapability: [],
   };
@@ -102,13 +114,16 @@ export function computeStats(decisions: DecisionLogEntry[], usage: UsageLogEntry
 
       const primaries = d.plan.map((s) => s.primary).filter((p): p is string => !!p);
       if (!d.routed || primaries.length === 0) {
-        // pass-through with invocations → router missed a routable prompt
+        result.passThrough++;
         if (invokedIds.size > 0) {
+          // pass-through with invocations → router missed a routable prompt
           result.silentWins.push({
             ts: d.ts,
             prompt: d.prompt ?? "",
             invokedIds: [...invokedIds],
           });
+        } else {
+          result.correctPassThrough++;
         }
         continue;
       }
@@ -130,5 +145,9 @@ export function computeStats(decisions: DecisionLogEntry[], usage: UsageLogEntry
   for (const id of [...invokedCount.keys()]) cap(id); // ensure invoked-only capabilities appear
   result.perCapability = [...capStats.values()].map((s) => ({ ...s, invoked: invokedCount.get(s.id) ?? 0 }));
   result.perCapability.sort((a, b) => b.routedAsPrimary + b.invoked - (a.routedAsPrimary + a.invoked) || (a.id < b.id ? -1 : 1));
+  result.fidelity =
+    result.attributedDecisions === 0
+      ? 0
+      : (result.compliant + result.correctPassThrough) / result.attributedDecisions;
   return result;
 }

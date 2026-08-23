@@ -4,6 +4,17 @@
   "private": true,
   "type": "module",
   "description": "Deterministic hook-based capability router for Claude Code (Capability Router v2)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/avinashbgmi007-dot/claude-capability-router.git"
+  },
+  "bugs": {
+    "url": "https://github.com/avinashbgmi007-dot/claude-capability-router/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "scripts": {

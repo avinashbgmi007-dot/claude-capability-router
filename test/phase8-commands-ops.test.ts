@@ -4,6 +4,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { mkdtempSync, rmSync, writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import os from "node:os";
@@ -88,4 +89,16 @@ test("logs: compaction drops pre-retention entries once the file grows past the 
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }
+});
+
+test("simulator: same seed produces an identical run (deterministic machinery)", () => {
+  const run = () =>
+    execFileSync(process.execPath, [path.join(repoRoot, "eval", "simulate.mjs"), "--days", "1", "--sessions-per-day", "2", "--seed", "7"], {
+      encoding: "utf8",
+    });
+  const a = run();
+  const b = run();
+  const digestOf = (out: string) => out.match(/determinism digest: (\S+)/)?.[1];
+  assert.ok(digestOf(a), `digest present in:\n${a}`);
+  assert.equal(digestOf(a), digestOf(b), "same seed must reproduce byte-identical stats");
 });

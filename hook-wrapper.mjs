@@ -102,7 +102,7 @@ async function main() {
     const id = capabilityIdFromToolUse(hook.tool_use);
     if (id) {
       appendUsageLog(
-        { ts: new Date().toISOString(), capabilityId: id, invoked: true, source: "tool-use" },
+        { ts: new Date().toISOString(), sessionId: hook.session_id, capabilityId: id, invoked: true, source: "tool-use" },
         path.join(SCRIPT_DIR, "logs"),
       );
     }
@@ -128,7 +128,7 @@ async function main() {
   const config = loadConfig(path.join(SCRIPT_DIR, "config.json"));
   const router = createRouter({ config, roots: discoveryRoots(), usageDir: path.join(SCRIPT_DIR, "logs") });
   const req = router.route(prompt);
-  appendDecisionLog(toDecisionEntry(req), path.join(SCRIPT_DIR, "logs"));
+  appendDecisionLog(toDecisionEntry(req, typeof hook.session_id === "string" ? hook.session_id : undefined), path.join(SCRIPT_DIR, "logs"));
   if (process.env.CLAUDE_CMR_DEBUG === "1") {
     console.error(`CMR debug: routed=${req.routed} entries=${router.entries().length}`);
   }

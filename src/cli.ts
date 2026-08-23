@@ -14,10 +14,12 @@ import { copyFileSync, mkdirSync, readdirSync, readFileSync, writeFileSync, exis
 import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { cmrHome, settingsPath, discoveryRoots } from "./paths.js";
+import { cmrHome, settingsPath, discoveryRoots, logsDir } from "./paths.js";
 import { loadConfig, DEFAULT_CONFIG } from "./config.js";
 import { createRouter } from "./router.js";
 import { buildEnhancedPrompt } from "./enhancer.js";
+import { loadDecisionLog, loadUsageLog } from "./logs.js";
+import { computeStats } from "./stats.js";
 
 const CLI_DIR = path.dirname(fileURLToPath(import.meta.url)); // dist/src
 const REPO_ROOT = path.resolve(CLI_DIR, "..", "..");
@@ -279,8 +281,53 @@ export function explain(prompt: string): void {
   }
 }
 
+/**
+ * Join decisions.jsonl × usage.jsonl per session → last-mile compliance report.
+ * Report-only by design: it measures whether routed capabilities actually get
+ * invoked, and surfaces silent wins (pass-through prompts that triggered a
+ * capability anyway) as corpus material.
+ */
+export function stats(opts: { days?: number; json?: boolean } = {}): void {
+  const dir = logsDir();
+  let decisions = loadDecisionLog(dir);
+  const usage = loadUsageLog(dir);
+  if (opts.days && opts.days > 0) {
+    const cutoff = Date.now() - opts.days * 24 * 3600 * 1000;
+    const inWindow = (e: { ts: string }) => {
+      const t = Date.parse(e.ts);
+      return !Number.isNaN(t) && t >= cutoff;
+    };
+    decisions = decisions.filter(inWindow);
+  }
+  const s = computeStats(decisions, usage);
+  if (opts.json) {
+    console.log(JSON.stringify(s, null, 2));
+    return;
+  }
+  const pct = (n: number, d: number) => (d === 0 ? "n/a" : `${((n / d) * 100).toFixed(0)}%`);
+  console.log(`CMR stats — ${s.decisions} decisions (${s.attributedDecisions} attributed), ${s.routedDecisions} routed`);
+  console.log(`compliance (routed & invoked): ${pct(s.compliant, s.routedDecisions)}`);
+  console.log(`ignored    (routed, unused):  ${pct(s.ignored, s.routedDecisions)}`);
+  console.log(`override   (invoked other):   ${pct(s.overridden, s.routedDecisions)}`);
+  console.log(`silent wins (pass-through but invoked): ${s.silentWins.length}`);
+  const unattributed = s.decisions - s.attributedDecisions;
+  if (unattributed > 0) console.log(`unattributed entries (no session_id, pre-stats format): ${unattributed}`);
+  if (s.perCapability.length) {
+    console.log("\nper-capability:");
+    for (const c of s.perCapability.slice(0, 15)) {
+      console.log(`  ${c.id.padEnd(34)} routed=${String(c.routedAsPrimary).padEnd(4)} invoked=${String(c.invoked).padEnd(4)} ignored=${c.ignoredDecisions}`);
+    }
+  }
+  if (s.silentWins.length) {
+    console.log("\nsilent-win corpus candidates (label + add to eval/corpus.json):");
+    for (const w of s.silentWins.slice(0, 10)) {
+      console.log(`  "${w.prompt.replace(/\s+/g, " ").trim().slice(0, 90)}" -> ${w.invokedIds.join(", ")}`);
+    }
+  }
+}
+
 function usage(): void {
-  console.log(`Usage: node dist/src/cli.js <install|uninstall|validate|list|selftest|explain "<prompt>">`);
+  console.log(`Usage: node dist/src/cli.js <install|uninstall|validate|list|selftest|stats|explain "<prompt>">`);
   process.exit(1);
 }
 
@@ -301,9 +348,15 @@ switch (cmd) {
   case "selftest":
     process.exit(selftest());
     break;
+  case "stats": {
+    const daysIdx = rest.indexOf("--days");
+    const days = daysIdx >= 0 ? Number(rest[daysIdx + 1]) : undefined;
+    stats({ days: Number.isFinite(days) ? days : undefined, json: rest.includes("--json") });
+    break;
+  }
   case "explain":
     if (!rest.length) usage();
-    explain(rest.join(" "));
+    explain(rest.filter((a) => a !== "--json").join(" "));
     break;
   default:
     usage();

@@ -15,8 +15,8 @@ export function promptHash(prompt: string): string {
   return createHash("sha1").update(prompt, "utf8").digest("hex").slice(0, 16);
 }
 
-export function toDecisionEntry(req: ExecutionRequest): DecisionLogEntry {
-  return {
+export function toDecisionEntry(req: ExecutionRequest, sessionId?: string): DecisionLogEntry {
+  const entry: DecisionLogEntry = {
     ts: new Date().toISOString(),
     promptHash: promptHash(req.originalPrompt),
     prompt: req.originalPrompt.slice(0, 240),
@@ -29,6 +29,8 @@ export function toDecisionEntry(req: ExecutionRequest): DecisionLogEntry {
     })),
     rationale: req.rationale,
   };
+  if (sessionId) entry.sessionId = sessionId;
+  return entry;
 }
 
 export function appendDecisionLog(entry: DecisionLogEntry, dir?: string): void {
@@ -37,10 +39,12 @@ export function appendDecisionLog(entry: DecisionLogEntry, dir?: string): void {
   appendFileSync(path.join(d, "decisions.jsonl"), JSON.stringify(entry) + "\n", "utf8");
 }
 
-/** P1 usage record — frozen schema (populated by future ToolUse/SessionEnd hooks). */
+/** P1 usage record — frozen schema (populated by ToolUse hooks). */
 export interface UsageLogEntry {
   ts: string;
   promptHash?: string;
+  /** Claude Code session id — the join key for decision-log correlation (stats). */
+  sessionId?: string;
   capabilityId: string;
   invoked: boolean;
   override?: string;
@@ -56,13 +60,22 @@ export function appendUsageLog(entry: UsageLogEntry, dir?: string): void {
 /** Read back the append-only usage log (corrupt lines skipped). */
 export function loadUsageLog(dir?: string): UsageLogEntry[] {
   const d = dir || logsDir();
-  const f = path.join(d, "usage.jsonl");
-  if (!existsSync(f)) return [];
-  const out: UsageLogEntry[] = [];
-  for (const line of readFileSync(f, "utf8").split("\n")) {
+  return readJsonl<UsageLogEntry>(path.join(d, "usage.jsonl"));
+}
+
+/** Read back the decision log (corrupt lines skipped). */
+export function loadDecisionLog(dir?: string): DecisionLogEntry[] {
+  const d = dir || logsDir();
+  return readJsonl<DecisionLogEntry>(path.join(d, "decisions.jsonl"));
+}
+
+function readJsonl<T>(file: string): T[] {
+  if (!existsSync(file)) return [];
+  const out: T[] = [];
+  for (const line of readFileSync(file, "utf8").split("\n")) {
     if (!line.trim()) continue;
     try {
-      out.push(JSON.parse(line) as UsageLogEntry);
+      out.push(JSON.parse(line) as T);
     } catch {
       /* skip corrupt line */
     }

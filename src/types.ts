@@ -117,6 +117,8 @@ export interface DecisionLogEntry {
   ts: string;
   promptHash: string;
   prompt?: string;
+  /** Claude Code session id — the join key for usage-log correlation (stats). */
+  sessionId?: string;
   routed: boolean;
   plan: Array<{ intent: string; primary: string | null; fallbacks: string[]; confidence: number }>;
   rationale?: string;

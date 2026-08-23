@@ -17,6 +17,7 @@
     "explain": "node dist/src/cli.js explain",
     "list": "node dist/src/cli.js list",
     "selftest": "node dist/src/cli.js selftest",
+    "stats": "node dist/src/cli.js stats",
     "live:e2e": "node eval/live-e2e.mjs"
   },
   "devDependencies": {

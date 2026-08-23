@@ -63,6 +63,35 @@ test("scoring: alphabetical tie-break", () => {
   assert.deepEqual(ids, [...ids].sort());
 });
 
+test("scoring: field-recall is damped — a small field fully recalled cannot outscore query precision", () => {
+  const mk = (id: string, description: string): CapabilityIndexEntry => ({
+    id,
+    name: id,
+    kind: "skill",
+    purpose: description,
+    description,
+    body: "",
+    actions: [],
+    domains: [],
+    examples: [],
+    category: "skill",
+    invocation: id,
+    sourcePath: "test",
+    fingerprint: id,
+    enabled: true,
+    weight: 1,
+  });
+  // 4-token query, only half its tokens appear in the field
+  const queryTokens = ["extract", "tables", "from", "pdf"];
+  const exact = mk("skill:exact", "extract tables from pdf");
+  const tinyField = mk("skill:tiny", "extract tables");
+  const eScore = scoreCapability(queryTokens, exact, DEFAULT_CONFIG.weights).fieldScores.description;
+  const tScore = scoreCapability(queryTokens, tinyField, DEFAULT_CONFIG.weights).fieldScores.description;
+  assert.equal(eScore, 1, "full query-precision match is undamped");
+  // undamped this would be 1.0 via full field recall; damped it must sit at 0.75
+  assert.ok(tScore < 1 && tScore >= 0.74, `full-recall small field must damp below 1 (~0.75), got ${tScore}`);
+});
+
 test("router: chat prompts pass through, actionable prompts route", () => {
   const router = createRouter({ config: DEFAULT_CONFIG, roots, entries: [...buildEntries().values()] });
   assert.equal(router.route("how's the weather today?").routed, false);

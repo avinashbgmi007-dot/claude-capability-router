@@ -27,6 +27,21 @@ export function tokenize(text: string): string[] {
   return out;
 }
 
+/**
+ * Stemming-lite plural folding (blueprint §3.1). NOTE: intentionally NOT
+ * wired into tokenize/normalizeTokens yet — on the current 65-case corpus,
+ * singular/plural equivalence lifts FPR above zero (P008 "architecture doc"
+ * starts matching graphify's "docs"). Revisit together with a threshold
+ * re-sweep once the corpus has grown past 100 real prompts.
+ */
+export function foldToken(t: string): string {
+  if (!/^[a-z]{4,}$/.test(t)) return t;
+  if (t.endsWith("ies")) return `${t.slice(0, -3)}y`;
+  if (/(?:[sxz]|ch|sh)es$/.test(t)) return t.slice(0, -2);
+  if (t.endsWith("ss") || t.endsWith("us") || !t.endsWith("s")) return t;
+  return t.slice(0, -1);
+}
+
 /** Main-clause extraction: drop subordinate clauses introduced by relative pronouns. */
 export function extractMainClause(prompt: string): string {
   const m = prompt.match(RELATIVE_CLAUSE_RE);

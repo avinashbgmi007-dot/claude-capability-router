@@ -12,6 +12,13 @@ import type { CapabilityIndexEntry, FieldScores, RouterConfig, ScoredCapability 
 
 export type Weights = RouterConfig["weights"];
 
+/**
+ * Field-recall damping: a verbose capability description that happens to
+ * contain many query words must not score as high as a genuine query match.
+ * max(queryPrecision, dampedFieldRecall) keeps precision dominant.
+ */
+const FIELD_RECALL_DAMP = 0.75;
+
 function tokenMatch(q: string, f: string): boolean {
   if (q === f) return true;
   if (q.length >= 4 && f.startsWith(q)) return true;
@@ -25,7 +32,7 @@ function fieldMatch(queryTokens: string[], fieldTokens: string[]): number {
   for (const q of queryTokens) if (fieldTokens.some((f) => tokenMatch(q, f))) qMatched++;
   let fMatched = 0;
   for (const f of fieldTokens) if (queryTokens.some((q) => tokenMatch(q, f))) fMatched++;
-  return Math.max(qMatched / queryTokens.length, fMatched / fieldTokens.length);
+  return Math.max(qMatched / queryTokens.length, (fMatched / fieldTokens.length) * FIELD_RECALL_DAMP);
 }
 
 export function scoreCapability(

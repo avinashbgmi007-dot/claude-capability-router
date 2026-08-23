@@ -175,6 +175,19 @@ async function main(): Promise<void> {
       const m = runRoutingMetrics(corpus, (p) => router.route(p));
       console.log(`accuracy@1=${(m.accuracyAt1 * 100).toFixed(1)}% fpr=${(m.fpr * 100).toFixed(1)}% fnr=${(m.fnr * 100).toFixed(1)}% planCorrect=${(m.planCorrect * 100).toFixed(1)}% preservation=${(m.preservation * 100).toFixed(1)}%`);
       for (const d of m.detail) console.log(`  ${d.ok ? "PASS" : "FAIL"} ${d.id}: got=${d.got} want=${d.want}`);
+
+      // CI regression gate: nonzero exit on any corpus metric regression
+      if (args.includes("--gate")) {
+        const gateOk =
+          cov.missing.length === 0 &&
+          m.accuracyAt1 >= 0.99 &&
+          m.fpr === 0 &&
+          m.fnr === 0 &&
+          m.planCorrect >= 0.99 &&
+          m.preservation === 1;
+        console.log(`GATE ${gateOk ? "PASS" : "FAIL"} (coverage=100%, accuracy@1≥99%, fpr=0, fnr=0, planCorrect≥99%, preservation=100%)`);
+        if (!gateOk) process.exitCode = 1;
+      }
     }
   }
 }

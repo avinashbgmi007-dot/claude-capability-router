@@ -35,6 +35,21 @@ test("splitIntents: connectors produce segments, noise trimmed", () => {
   assert.deepEqual(splitIntents("帮我剪辑视频然后发邮件"), ["帮我剪辑视频", "发邮件"]);
 });
 
+test("splitIntents: list debris folds back — lists are not plans", () => {
+  // comma-separated list items are connector debris, not intents
+  assert.deepEqual(splitIntents("make it red, green, and blue"), ["make it red, green, blue"]);
+  // leading debris folds forward
+  assert.deepEqual(splitIntents("hi, summarize this PDF into bullet points"), ["hi, summarize this PDF into bullet points"]);
+  // real compound intents on both sides of a comma still split
+  assert.deepEqual(splitIntents("review my pull request, then open issues for it"), ["review my pull request", "open issues for it"]);
+});
+
+test("router: list prompt produces at most a single-step plan", () => {
+  const router = makeRouter();
+  const r = router.route("make it red, green, and blue");
+  assert.ok(r.plan.length <= 1, `plan length ${r.plan.length} for a list prompt`);
+});
+
 test("planner: compound prompt → ordered multi-step plan", () => {
   const router = makeRouter();
   const r = router.route("extract tables from this PDF, then draft an email summary to the team");

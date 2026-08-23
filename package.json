@@ -30,6 +30,9 @@
     "selftest": "node dist/src/cli.js selftest",
     "stats": "node dist/src/cli.js stats",
     "promote": "node eval/promote.mjs",
+    "bench": "node eval/bench.mjs",
+    "simulate": "node eval/simulate.mjs",
+    "live:check": "node eval/live-check.mjs",
     "live:e2e": "node eval/live-e2e.mjs"
   },
   "devDependencies": {

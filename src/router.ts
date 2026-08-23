@@ -7,7 +7,7 @@
 import { discoverAll, indexById, scanFingerprint } from "./discovery.js";
 import { updateIndex, loadIndex } from "./index-store.js";
 import { fingerprintJson } from "./fingerprint.js";
-import { loadUsageLog, usageScore } from "./logs.js";
+import { loadUsageLog, computeUsageScores } from "./logs.js";
 import { normalizeTokens, extractMainClause } from "./normalization.js";
 import { rankCapabilities, type Weights } from "./scorer.js";
 import { splitIntents } from "./planner.js";
@@ -72,8 +72,9 @@ export function createRouter(opts: RouterOptions): Router {
   if (opts.usageDir) {
     const usage = loadUsageLog(opts.usageDir);
     if (usage.length) {
+      const scores = computeUsageScores(usage);
       entries = entries.map((e) => {
-        const score = usageScore(e.id, usage);
+        const score = scores.get(e.id) ?? 0;
         // 1 fresh hit ≈ +0.5 weight, capped (confidence stays ≤ 1 via scorer)
         return score > 0 ? { ...e, weight: e.weight * (1 + 0.5 * Math.min(score, 1)) } : e;
       });

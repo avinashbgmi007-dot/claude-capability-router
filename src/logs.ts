@@ -139,3 +139,23 @@ export function usageScore(
   }
   return score;
 }
+
+/**
+ * Aggregate recency scores for ALL capabilities in one pass over the log.
+ * The per-prompt router previously called usageScore once per capability —
+ * O(caps × lines). One map build is O(lines).
+ */
+export function computeUsageScores(
+  entries: UsageLogEntry[],
+  now: number = Date.now(),
+  halfLifeMs: number = 7 * 24 * 3600 * 1000,
+): Map<string, number> {
+  const scores = new Map<string, number>();
+  for (const e of entries) {
+    if (!e.capabilityId) continue;
+    const t = Date.parse(e.ts);
+    if (Number.isNaN(t)) continue;
+    scores.set(e.capabilityId, (scores.get(e.capabilityId) ?? 0) + Math.pow(0.5, Math.max(0, now - t) / halfLifeMs));
+  }
+  return scores;
+}

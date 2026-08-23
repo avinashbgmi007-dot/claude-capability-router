@@ -63,14 +63,33 @@ export function buildAliasLookup(aliases: Record<string, string[]>): Map<string,
 }
 
 /**
+ * Per-config memoization: the alias map and stopword set are rebuilt on
+ * every normalizeTokens call (every segment of every prompt). Configs are
+ * stable objects — cache the derived lookups against the instance.
+ */
+interface NormalizationTables {
+  lookup: Map<string, string[]>;
+  stop: Set<string>;
+}
+const tableCache = new WeakMap<RouterConfig, NormalizationTables>();
+
+function tablesFor(config: RouterConfig): NormalizationTables {
+  let t = tableCache.get(config);
+  if (!t) {
+    t = { lookup: buildAliasLookup(config.aliases), stop: new Set(config.stopwords) };
+    tableCache.set(config, t);
+  }
+  return t;
+}
+
+/**
  * Full normalization → deduplicated token set.
  * Alias expansion REPLACES the raw token with its canonical form(s);
  * stopwords/single-char tokens are dropped after expansion.
  */
 export function normalizeTokens(text: string, config: RouterConfig): string[] {
   const main = extractMainClause(text);
-  const lookup = buildAliasLookup(config.aliases);
-  const stop = new Set(config.stopwords);
+  const { lookup, stop } = tablesFor(config);
   const out = new Set<string>();
   for (const t of tokenize(main)) {
     const canonicals = lookup.get(t);

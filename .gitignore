@@ -3,3 +3,5 @@ dist/
 .freebuff/
 .remember/
 *.log
+
+eval/corpus-candidates.json

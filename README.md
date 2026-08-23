@@ -103,7 +103,7 @@ tuning and logs are left in place.
 
 ```bash
 npm install        # installs typescript + @types/node (dev only)
-npm test           # 60 tests across all phases
+npm test           # 70 tests across all phases
 node dist/eval/harness.js --routing   # corpus metrics (accuracy@1, FPR, FNR, …)
 ```
 

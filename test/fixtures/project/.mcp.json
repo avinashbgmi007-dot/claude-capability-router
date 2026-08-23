@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "twitter": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-twitter"],
+      "description": "Post tweets and manage the X (Twitter) account.",
+      "tools": ["postTweet", "getTimeline"]
+    },
+    "jira": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-jira"],
+      "description": "Create and search Jira issues and bug tickets.",
+      "tools": ["createIssue", "searchIssues"]
+    }
+  }
+}

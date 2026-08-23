@@ -1,0 +1,14 @@
+{
+  "note": "Eval tuning for the real skills corpus (eval/corpus.json). Real SKILL.md files carry their routing signal in description+name only (no actions/domains/examples frontmatter), so description/name weights are raised and actions/domains lowered. Threshold lowered to 0.38 so description-rich prompts route while chit-chat still passes through (FPR stays 0). body (0.05) scores trigger words in SKILL.md bodies; a body-only match stays below the threshold, so it only nudges near-miss routing (keeps the skill:skill-creator vs agent:skill-creator race correct). These values are the shipped defaults (src/config.ts).",
+  "threshold": 0.38,
+  "ambiguityBand": 0.05,
+  "weights": {
+    "purpose": 0.3,
+    "actions": 0.08,
+    "domains": 0.06,
+    "examples": 0.08,
+    "description": 0.28,
+    "name": 0.15,
+    "body": 0.05
+  }
+}

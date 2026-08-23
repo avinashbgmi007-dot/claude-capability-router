@@ -1,0 +1,26 @@
+{
+  "name": "claude-capability-manager",
+  "version": "0.1.5",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic hook-based capability router for Claude Code (Capability Router v2)",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && node --test \"dist/test/*.test.js\"",
+    "test:only": "node --test \"dist/test/*.test.js\"",
+    "install:cr": "node dist/src/cli.js install",
+    "uninstall:cr": "node dist/src/cli.js uninstall",
+    "validate": "node dist/src/cli.js validate",
+    "explain": "node dist/src/cli.js explain",
+    "list": "node dist/src/cli.js list",
+    "selftest": "node dist/src/cli.js selftest",
+    "live:e2e": "node eval/live-e2e.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "typescript": "^5.5.0"
+  }
+}

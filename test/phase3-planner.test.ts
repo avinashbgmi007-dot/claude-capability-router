@@ -50,6 +50,34 @@ test("router: list prompt produces at most a single-step plan", () => {
   assert.ok(r.plan.length <= 1, `plan length ${r.plan.length} for a list prompt`);
 });
 
+test("force-route: @cmr prefix bypasses threshold, preserves original prompt byte-identical", () => {
+  const router = makeRouter();
+  // chat prompt passes through unforced…
+  assert.equal(router.route("how's the weather today?").routed, false);
+  // …but routes when forced, even though it scores below τ
+  const forced = router.route("@cmr how's the weather today?");
+  assert.equal(forced.routed, true, "forced chat prompt must route");
+  assert.ok(forced.plan[0].primary, "forced route has a primary");
+  assert.ok(forced.rationale?.includes("forced"), "rationale marks the force");
+  // original prompt invariant holds including the prefix
+  assert.equal(forced.originalPrompt, "@cmr how's the weather today?");
+  // normal routing unaffected
+  const normal = router.route("summarize this PDF into bullet points");
+  const viaPrefix = router.route("@cmr summarize this PDF into bullet points");
+  assert.equal(viaPrefix.plan[0].primary?.entry.id, normal.plan[0].primary?.entry.id);
+});
+
+test("force-route: custom prefix from config; empty prefix disables", () => {
+  const cfgGo = { ...DEFAULT_CONFIG, forcePrefix: "!go" };
+  const routerGo = makeRouter(cfgGo);
+  assert.equal(routerGo.route("!go how's the weather today?").routed, true);
+  assert.equal(routerGo.route("@cmr how's the weather today?").routed, false, "default prefix inert under custom config");
+
+  const cfgNone = { ...DEFAULT_CONFIG, forcePrefix: "" };
+  const routerNone = makeRouter(cfgNone);
+  assert.equal(routerNone.route("@cmr how's the weather today?").routed, false, "empty prefix disables forcing");
+});
+
 test("planner: compound prompt → ordered multi-step plan", () => {
   const router = makeRouter();
   const r = router.route("extract tables from this PDF, then draft an email summary to the team");

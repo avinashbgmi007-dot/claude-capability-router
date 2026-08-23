@@ -41,6 +41,7 @@ export const DEFAULT_CONFIG: RouterConfig = {
   exclude: [],
   verbosity: "brief",
   tokenBudget: 300,
+  forcePrefix: "@cmr",
 };
 
 export function loadConfig(configPath?: string): RouterConfig {
@@ -66,5 +67,6 @@ function mergeConfig(base: RouterConfig, raw: Partial<RouterConfig>): RouterConf
   if (Array.isArray(raw.exclude)) out.exclude = raw.exclude;
   if (raw.verbosity === "full" || raw.verbosity === "brief") out.verbosity = raw.verbosity;
   if (typeof raw.tokenBudget === "number") out.tokenBudget = raw.tokenBudget;
+  if (typeof raw.forcePrefix === "string") out.forcePrefix = raw.forcePrefix;
   return out;
 }

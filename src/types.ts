@@ -94,6 +94,8 @@ export interface RouterConfig {
   exclude: string[];
   verbosity: "brief" | "full";
   tokenBudget: number;
+  /** leading prefix that forces routing past the threshold ("" disables) */
+  forcePrefix: string;
 }
 
 export interface HookInput {

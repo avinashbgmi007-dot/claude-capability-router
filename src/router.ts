@@ -80,11 +80,18 @@ export function createRouter(opts: RouterOptions): Router {
     }
   }
 
-  /** Rank candidates for one segment; primary = top if confidence ≥ τ. */
-  function routeSegment(segment: string): { scored: ScoredCapability[]; primary: ScoredCapability | null; ambiguous: boolean } {
+  /** Rank candidates for one segment; primary = top if confidence ≥ τ (or forced). */
+  function routeSegment(segment: string, forced = false): { scored: ScoredCapability[]; primary: ScoredCapability | null; ambiguous: boolean } {
     const tokens = normalizeTokens(segment, opts.config);
-    if (tokens.length < MIN_ROUTE_TOKENS) return { scored: [], primary: null, ambiguous: false };
+    if (!forced && tokens.length < MIN_ROUTE_TOKENS) return { scored: [], primary: null, ambiguous: false };
     const scored = scoreRoute(tokens, entries, opts.config.weights);
+    if (forced) {
+      // escape hatch: user explicitly asked for routing — take the top candidate
+      const primary = scored.length ? scored[0] : null;
+      const ambiguous =
+        !!primary && scored.length >= 2 && scored[0].confidence - scored[1].confidence < opts.config.ambiguityBand;
+      return { scored, primary, ambiguous };
+    }
     const primary = scored.length && scored[0].confidence >= opts.config.threshold ? scored[0] : null;
     // top-2 within the band → don't treat the pick as confident
     const ambiguous =
@@ -98,25 +105,40 @@ export function createRouter(opts: RouterOptions): Router {
     return s;
   }
 
-  function routeSingleIntent(prompt: string): ExecutionRequest {
-    const { scored, primary, ambiguous } = routeSegment(prompt);
+  function routeSingleIntent(prompt: string, o: { scoreText?: string; forced?: boolean } = {}): ExecutionRequest {
+    const forced = o.forced ?? false;
+    const { scored, primary, ambiguous } = routeSegment(o.scoreText ?? prompt, forced);
     if (!primary) return { originalPrompt: prompt, routed: false, plan: [] };
     return {
       originalPrompt: prompt,
       routed: true,
-      plan: [buildStep(1, extractMainClause(prompt), scored, primary, ambiguous)],
-      rationale: `routed to ${primary.entry.id} (confidence ${primary.confidence.toFixed(3)})`,
+      plan: [buildStep(1, extractMainClause(o.scoreText ?? prompt), scored, primary, ambiguous)],
+      rationale: `${forced ? "forced via prefix — " : ""}routed to ${primary.entry.id} (confidence ${primary.confidence.toFixed(3)})`,
     };
   }
 
   function route(prompt: string): ExecutionRequest {
-    const segments = splitIntents(prompt);
-    if (segments.length < 2) return routeSingleIntent(prompt);
+    // force-route escape hatch: leading prefix bypasses τ + MIN_ROUTE_TOKENS.
+    // originalPrompt stays byte-identical (invariant) — only the working copy is stripped.
+    const prefix = opts.config.forcePrefix;
+    let forced = false;
+    let working = prompt;
+    if (prefix) {
+      const trimmed = prompt.trimStart();
+      if (trimmed.startsWith(prefix)) {
+        forced = true;
+        working = trimmed.slice(prefix.length).trim();
+      }
+    }
+    const segments = splitIntents(working);
+    if (segments.length < 2) {
+      return forced ? routeSingleIntent(prompt, { scoreText: working, forced: true }) : routeSingleIntent(prompt);
+    }
 
     const steps: PlanStep[] = [];
     let anyRouted = false;
     for (let i = 0; i < segments.length; i++) {
-      const { scored, primary, ambiguous } = routeSegment(segments[i]);
+      const { scored, primary, ambiguous } = routeSegment(segments[i], forced);
       if (primary) anyRouted = true;
       steps.push(buildStep(i + 1, segments[i], scored, primary, ambiguous));
     }
@@ -124,7 +146,7 @@ export function createRouter(opts: RouterOptions): Router {
     // all routed steps → same capability? collapse to a single intent
     const routedPrimaries = steps.filter((s) => s.primary).map((s) => s.primary!.entry.id);
     if (new Set(routedPrimaries).size <= 1) {
-      return routeSingleIntent(prompt);
+      return forced ? routeSingleIntent(prompt, { scoreText: working, forced: true }) : routeSingleIntent(prompt);
     }
     if (!anyRouted) return { originalPrompt: prompt, routed: false, plan: [] };
 
@@ -132,7 +154,7 @@ export function createRouter(opts: RouterOptions): Router {
       .filter((s) => s.primary)
       .map((s) => `${s.step}. ${s.primary!.entry.id} (${s.primary!.confidence.toFixed(3)})`)
       .join(" | ");
-    return { originalPrompt: prompt, routed: true, plan: steps, rationale: `plan: ${rationale}` };
+    return { originalPrompt: prompt, routed: true, plan: steps, rationale: `${forced ? "forced via prefix — " : ""}plan: ${rationale}` };
   }
 
   function explain(prompt: string): ExplainResult {

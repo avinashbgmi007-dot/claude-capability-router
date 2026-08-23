@@ -142,6 +142,19 @@ the decision, and the enhanced block.
 
 Edit the file, then restart Claude Code. No reinstall needed.
 
+### Force-route escape hatch
+
+When routing wrongly passes through, prefix the prompt with `@cmr` to force
+the top-ranked capability regardless of confidence:
+
+```text
+@cmr how's the weather today?
+```
+
+The original prompt is still delivered byte-identical; only the routing
+decision changes (the rationale in `logs/decisions.jsonl` says "forced").
+Configure or disable via `"forcePrefix": "@cmr"` in `config.json` (`""` disables).
+
 ### Usage feedback loop
 
 Every capability actually invoked is recorded by the `PreToolUse` hook into

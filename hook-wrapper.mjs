@@ -52,19 +52,25 @@ function outEmpty() {
  * Map a ToolUse tool to a capability id. Best-effort: unknown tools → null
  * (never logged). Covers skills (Skill tool), MCP (mcp__server__tool), and
  * agents/subagents (Agent/Task tools).
+ *
+ * Payload shapes: current Claude Code sends `tool_name` + `tool_input` as
+ * TOP-LEVEL hook fields; older builds nested them under `tool_use`. Read
+ * both — reading only the legacy shape meant live Skill invocations were
+ * never recorded (compliance measured 0% while the model obeyed).
  */
-function capabilityIdFromToolUse(toolUse) {
-  const name = (toolUse && toolUse.name) || "";
+function capabilityIdFromToolUse(hook) {
+  const name = hook.tool_name || (hook.tool_use && hook.tool_use.name) || "";
+  const input = hook.tool_input || (hook.tool_use && hook.tool_use.input) || {};
   if (name.startsWith("mcp__")) {
     const parts = name.split("__");
     return parts.length >= 2 && parts[1] ? `mcp-server:${parts[1]}` : null;
   }
   if (name === "Skill") {
-    const n = toolUse.input && toolUse.input.name;
+    const n = input.name;
     return typeof n === "string" && n ? `skill:${n}` : null;
   }
   if (name === "Agent" || name === "Task") {
-    const t = toolUse.input && (toolUse.input.subagent_type || toolUse.input.agent);
+    const t = input.subagent_type || input.agent;
     return typeof t === "string" && t ? `agent:${t}` : null;
   }
   return null;
@@ -101,7 +107,7 @@ async function main() {
   if (event === "PreToolUse" || event === "ToolUse") {
     // side-effect only: record the invoked capability, never shape output
     const { appendUsageLog } = await rt("logs.js");
-    const id = capabilityIdFromToolUse(hook.tool_use);
+    const id = capabilityIdFromToolUse(hook);
     if (id) {
       appendUsageLog(
         { ts: new Date().toISOString(), sessionId: hook.session_id, capabilityId: id, invoked: true, source: "tool-use" },

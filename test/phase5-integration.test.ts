@@ -167,6 +167,27 @@ test("wrapper: ToolUse records invoked capability into usage.jsonl", () => {
   }
 });
 
+test("wrapper: modern Claude Code payload shape (top-level tool_name/tool_input) is captured", () => {
+  const inst = installToTemp();
+  try {
+    // current CC schema: tool_name/tool_input at the root — reading only the
+    // legacy nested tool_use shape meant live obediences were never recorded
+    const modern = invokeHook(
+      inst,
+      JSON.stringify({ hook_event_name: "PreToolUse", session_id: "s-modern", tool_name: "Skill", tool_input: { name: "graphify" } }),
+    );
+    assert.equal(modern.trim(), "{}");
+    // legacy nested shape must keep working too
+    invokeHook(inst, JSON.stringify({ hook_event_name: "PreToolUse", session_id: "s-legacy", tool_use: { name: "Skill", input: { name: "caveman" } } }));
+    const usage = loadUsageLog(path.join(inst.home, "logs"));
+    const ids = usage.map((u) => u.capabilityId).sort();
+    assert.deepEqual(ids, ["skill:caveman", "skill:graphify"]);
+    assert.ok(usage.every((u) => u.sessionId?.startsWith("s-")), "session ids recorded");
+  } finally {
+    inst.cleanup();
+  }
+});
+
 test("wrapper: SessionEnd passes through and writes nothing", () => {
   const inst = installToTemp();
   try {

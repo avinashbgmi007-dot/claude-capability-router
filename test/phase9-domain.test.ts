@@ -10,7 +10,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { classifyDomain, deriveDomain, DOMAIN_TEST_VECTORS, MIN_DERIVE_AFFINITY } from "../src/domains.js";
+import { classifyDomain, classifySubtype, deriveDomain, signalClass, DOMAIN_TEST_VECTORS, MIN_DERIVE_AFFINITY } from "../src/domains.js";
 import { createRouter } from "../src/router.js";
 import { DEFAULT_CONFIG } from "../src/config.js";
 import type { CapabilityIndexEntry, RouterConfig } from "../src/types.js";
@@ -87,7 +87,7 @@ test("domain: ping-pong style prompt routes to strongest same-domain candidate",
   assert.equal(req.routed, true);
   assert.equal(req.plan[0].primary?.entry.id, "agent:sw-eng", "strongest affinity wins");
   assert.equal(req.plan[0].domainMatch, true);
-  assert.match(req.rationale ?? "", /domain-match\(code, affinity 3\)/);
+  assert.match(req.rationale ?? "", /domain-match\(code\/generative, affinity 3\+2\)/);
 });
 
 test("domain: tiebreak prefers lighter kind (skill over agent) at equal affinity", () => {
@@ -118,4 +118,47 @@ test("routing: specialist lexical match still beats domain candidates", () => {
 test("domain: kill-switch disables fallback entirely", () => {
   const r = routerWith([SW_ENG()], { domainRouting: { enabled: false } });
   assert.equal(r.route(PING_PONG).routed, false);
+});
+
+// ---- intent-subtype boost: builders for generative, verifiers for diagnostic ----
+const QA_AGENT = () =>
+  mkEntry(
+    "agent:qa-team",
+    "agent",
+    "AI QA engineer agent (Ivy). Testing features, running E2E tests, playtesting, filing bug reports and regression suites.",
+  );
+const BUILDER_SKILL = () =>
+  mkEntry(
+    "skill:builder",
+    "skill",
+    "Software development agent. Writes application code and delivers production-ready features.",
+  );
+
+test("subtype: generative prompt boosts builder over higher-affinity verifier", () => {
+  const verifier = QA_AGENT(); // affinity 3
+  const builder = BUILDER_SKILL(); // affinity 2
+  const r = routerWith([verifier, builder]);
+  const req = r.route(PING_PONG); // generative: "write me a…"
+  assert.equal(classifySubtype(PING_PONG), "generative");
+  assert.equal(req.routed, true);
+  // builder: 2 +2 = 4 | verifier: 3 -2 = 1
+  assert.equal(req.plan[0].primary?.entry.id, "skill:builder");
+});
+
+test("subtype: diagnostic prompt boosts verifier over builder", () => {
+  const verifier = QA_AGENT();
+  const builder = BUILDER_SKILL();
+  const r = routerWith([verifier, builder]);
+  const diagPrompt = "why does my game crash when the ball hits the paddle? getting TypeError";
+  assert.equal(classifySubtype(diagPrompt), "diagnostic");
+  const req = r.route(diagPrompt);
+  assert.equal(req.routed, true);
+  // verifier: 3 +2 = 5 | builder: 2 -2 = 0
+  assert.equal(req.plan[0].primary?.entry.id, "agent:qa-team");
+});
+
+test("subtype: signalClass classifies description leanings", () => {
+  assert.equal(signalClass("Writes code and delivers production-ready features."), "builder");
+  assert.equal(signalClass("Testing, E2E suites and regression review."), "verifier");
+  assert.equal(signalClass("Builds features and writes test suites for them."), "mixed");
 });

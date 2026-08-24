@@ -49,6 +49,37 @@ export function classifyDomain(prompt: string): TaskDomain {
   return "chat";
 }
 
+// ---- intent subtype: building vs fixing (ranks candidates within a domain) ----
+
+export type IntentSubtype = "generative" | "diagnostic" | "neutral";
+
+const GENERATIVE_RE = /\b(write|build|create|make|implement|add|develop|generate|design)\b/i;
+const DIAGNOSTIC_RE = /\b(debug|fix(ed|ing)?|why|failing|fails?|broken|error|not working|investigate|crash\w*|wrong)\b/i;
+
+/** Generative prompt ("write/build a…"), diagnostic ("why does it crash"), or both/neither. */
+export function classifySubtype(prompt: string): IntentSubtype {
+  const t = prompt || "";
+  const gen = GENERATIVE_RE.test(t);
+  const diag = DIAGNOSTIC_RE.test(t);
+  if (gen && !diag) return "generative";
+  if (diag && !gen) return "diagnostic";
+  return "neutral";
+}
+
+const BUILDER_SIGNALS = /\b(build|writes?|writing|implement\w*|delivers?|production-ready|develop\w*|creates?|features?)\b/i;
+const VERIFIER_SIGNALS = /\b(tests?|testing|test plans?|e2e|qa\b|review\w*|audit\w*|debug\w*|root-cause|regression|playtesting)\b/i;
+
+/** Which way this capability leans: builds things, verifies things, both, or neither. */
+export function signalClass(description: string, purpose = ""): "builder" | "verifier" | "mixed" | "none" {
+  const text = `${description || ""}\n${purpose || ""}`;
+  const b = BUILDER_SIGNALS.test(text);
+  const v = VERIFIER_SIGNALS.test(text);
+  if (b && v) return "mixed";
+  if (b) return "builder";
+  if (v) return "verifier";
+  return "none";
+}
+
 // ---- derivation: read a capability's OWN text and infer its domain ----
 
 /** Description-prose signal families (distinct families = stronger fit).

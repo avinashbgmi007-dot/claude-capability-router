@@ -11,7 +11,7 @@ import { loadUsageLog, computeUsageScores } from "./logs.js";
 import { normalizeTokens, extractMainClause } from "./normalization.js";
 import { rankCapabilities, type Weights } from "./scorer.js";
 import { splitIntents } from "./planner.js";
-import { classifyDomain, deriveDomain, type DomainDerivation } from "./domains.js";
+import { classifyDomain, classifySubtype, deriveDomain, MIN_DERIVE_AFFINITY, signalClass, type DomainDerivation } from "./domains.js";
 import type { DiscoveryRoots } from "./paths.js";
 import { stateDir } from "./paths.js";
 import type { CapabilityIndexEntry, ExecutionRequest, PlanStep, RouterConfig, ScoredCapability } from "./types.js";
@@ -113,6 +113,7 @@ export function createRouter(opts: RouterOptions): Router {
   }
 
   const derivationCache = new Map<string, DomainDerivation | null>();
+  const signalCache = new Map<string, ReturnType<typeof signalClass>>();
   function deriveFor(e: CapabilityIndexEntry): DomainDerivation | null {
     const key = `${e.id}:${e.fingerprint}`;
     if (!derivationCache.has(key)) {
@@ -124,6 +125,11 @@ export function createRouter(opts: RouterOptions): Router {
     }
     return derivationCache.get(key) ?? null;
   }
+  function signalFor(e: CapabilityIndexEntry): ReturnType<typeof signalClass> {
+    const key = `${e.id}:${e.fingerprint}`;
+    if (!signalCache.has(key)) signalCache.set(key, signalClass(e.description, e.purpose));
+    return signalCache.get(key) ?? "none";
+  }
 
   // lighter kinds first on equal affinity: skills/commands load instructions,
   // agents spawn subagents (heavier), MCP is heaviest
@@ -131,19 +137,39 @@ export function createRouter(opts: RouterOptions): Router {
 
   /** DOMAIN PASS (fallback): specialist scoring stayed silent — classify the
       task, then suggest the strongest same-domain capability as derived from
-      its OWN description. Zero configuration; chat is never represented. */
+      its OWN description. Zero configuration; chat is never represented.
+      Within the domain, an intent-subtype boost ranks builders for
+      generative prompts and verifiers for diagnostic ones. */
   function tryDomainRoute(prompt: string): ExecutionRequest | null {
     const dr = opts.config.domainRouting;
     if (!dr?.enabled) return null;
     const domain = classifyDomain(prompt);
     if (domain === "chat") return null;
+    const subtype = classifySubtype(prompt);
+    // semantic bridge: generative prompts favor builders, diagnostic favor verifiers
+    const wantedSignal: "builder" | "verifier" | null =
+      subtype === "generative" ? "builder" : subtype === "diagnostic" ? "verifier" : null;
     const candidates = entries
       .filter((e) => e.enabled)
-      .map((e) => ({ e, d: deriveFor(e) }))
-      .filter((x) => x.d && x.d.domain === domain)
+      .map((e) => {
+        const d = deriveFor(e);
+        const s = signalFor(e);
+        // aligned leaning +2, OPPOSITE leaning -2, mixed/none neutral —
+        // a rich verifier blurb must not outrank a true builder for a build ask
+        const opposite = wantedSignal === "builder" ? "verifier" : "builder";
+        const adj = wantedSignal === null || s === "mixed" || s === "none" ? 0 : s === wantedSignal ? 2 : s === opposite ? -2 : 0;
+        return { e, d, s, adj, effAffinity: (d?.affinity ?? 0) + adj };
+      })
+      .filter((x) => {
+        // strict pool: domain-derived with sufficient signal. Subtype alignment
+        // reorders WITHIN this pool (+/-2) but never expands it — that keeps
+        // FPR guarantees intact while honoring build-vs-fix intent.
+        if (!x.d || x.d.domain !== domain || x.d.affinity < MIN_DERIVE_AFFINITY) return false;
+        return true;
+      })
       .sort(
         (a, b) =>
-          b.d!.affinity - a.d!.affinity ||
+          b.effAffinity - a.effAffinity ||
           kindRank(a.e.kind) - kindRank(b.e.kind) ||
           (a.e.id < b.e.id ? -1 : 1),
       );
@@ -159,7 +185,7 @@ export function createRouter(opts: RouterOptions): Router {
       originalPrompt: prompt,
       routed: true,
       plan: [step],
-      rationale: `domain-match(${domain}, affinity ${top.d!.affinity}): ${top.e.id}`,
+      rationale: `domain-match(${domain}/${subtype}, affinity ${top.d?.affinity ?? 0}${top.s === wantedSignal && wantedSignal ? "+2" : ""}): ${top.e.id}`,
     };
   }
 

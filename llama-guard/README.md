@@ -25,6 +25,22 @@ Monitor-first by design: v1 changes nothing about responses. Auto-retry
 
 ## Usage
 
+### Set-and-forget (installed)
+
+One-time wiring (already done on the authoring machine):
+- agent CLI baseURL points at `http://127.0.0.1:11435` instead of `:8080`
+- `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\LlamaGuard.cmd`
+  launches `run-guard.ps1` hidden at every logon; it self-heals (respawns
+  node after crashes) and refuses duplicate instances
+
+Daily routine afterwards: start llama-server however you always do,
+launch Claude — the guard is already resident between them.
+Strikes land in `llama-guard\loop-strikes.jsonl`.
+
+Remove: delete that Startup .cmd + stop the node process on :11435.
+
+### Manual windows
+
 ```powershell
 # 1. tuned server (flags chosen for MoE/MTP Q4_K_M — see file comments)
 .\llama-guard\tuned-launch.ps1 -ModelPath D:\models\YourModel-Q4_K_M.gguf

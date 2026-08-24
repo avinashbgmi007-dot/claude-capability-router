@@ -13,3 +13,6 @@ llama-guard/loop-strikes.jsonl
 llama-guard/sampling-observed.jsonl
 
 .serena/
+
+.graphify_*
+graphify-out/

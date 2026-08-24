@@ -95,6 +95,11 @@ const PLAN_DESC_SIGNALS = [
   /\b(prd|requirements|blueprint|implementation)\b/i,
 ];
 
+/** Structural terms — required (alongside family count) for CODE membership.
+    Without this gate, every gstack reviewer/QA tool mentioning "fixes" or
+    "tests" floods the code pool and drowns real builders. */
+const STRUCTURAL_CODE_RE = /\b(software|engineering|engineer|developer|development|programming)\b/i;
+
 /** Minimum distinct signal families before a capability may be suggested by
     the domain pass. Single-family derivations are noise magnets. */
 export const MIN_DERIVE_AFFINITY = 2;
@@ -123,6 +128,7 @@ export function deriveDomain(description: string, purpose = ""): DomainDerivatio
     if (re.test(text)) planScore++;
   }
   if (planScore > codeScore && planScore >= MIN_DERIVE_AFFINITY) return { domain: "plan", affinity: planScore };
-  if (codeScore >= MIN_DERIVE_AFFINITY) return { domain: "code", affinity: codeScore };
+  // CODE requires a structural engineering term, not just fix/test vocabulary
+  if (codeScore >= MIN_DERIVE_AFFINITY && STRUCTURAL_CODE_RE.test(text)) return { domain: "code", affinity: codeScore };
   return null;
 }

@@ -4,10 +4,12 @@
  * Reads hook JSON from stdin, runs the capability router, records the
  * decision locally, and emits the Claude Code hook output on stdout:
  *   - pass-through / failure → {} (Claude Code continues unchanged)
- *   - routed → { hookSpecificOutput: { hookEventName, additionalContext: [block] } }
+ *   - routed → { hookSpecificOutput: { hookEventName, additionalContext: block } }
  *
- * additionalContext is emitted in ARRAY form (the documented Claude Code
- * shape) — a bare string can be silently ignored by Claude Code.
+ * additionalContext MUST be a plain STRING. An array fails Claude Code's
+ * hook-output schema validation ("Hook JSON output validation failed —
+ * (root): Invalid input") and the routing block is silently discarded —
+ * observed live on 2026-08-24: routed prompts errored while {} passed.
  *
  * The wrapper never throws: any error degrades to pass-through.
  * It also self-heals a stale install (rewrites the runtime ESM marker if
@@ -138,7 +140,7 @@ async function main() {
   if (!block) return outEmpty();
   process.stdout.write(
     JSON.stringify({
-      hookSpecificOutput: { hookEventName: "UserPromptSubmit", additionalContext: [block] },
+      hookSpecificOutput: { hookEventName: "UserPromptSubmit", additionalContext: block },
     }),
   );
 }

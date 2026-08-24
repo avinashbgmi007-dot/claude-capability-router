@@ -67,9 +67,11 @@ test("wrapper: routed prompt returns additionalContext with routing block", () =
     const parsed = JSON.parse(out);
     assert.ok(parsed.hookSpecificOutput, "hook output present");
     assert.equal(parsed.hookSpecificOutput.hookEventName, "UserPromptSubmit");
-    // documented Claude Code shape: additionalContext is an ARRAY
-    assert.ok(Array.isArray(parsed.hookSpecificOutput.additionalContext), "array-form additionalContext");
-    const ctx = parsed.hookSpecificOutput.additionalContext.join("\n");
+    // Claude Code schema: additionalContext is a plain STRING — an array
+    // fails validation ("Hook JSON output validation failed") and the block
+    // is discarded before the model ever sees it (observed live).
+    const ctx = parsed.hookSpecificOutput.additionalContext;
+    assert.equal(typeof ctx, "string", "string-form additionalContext");
     assert.ok(ctx.includes("<capability-routing>"));
     assert.ok(ctx.includes("pdf-summarizer"));
   } finally {
@@ -92,9 +94,7 @@ test("wrapper: multi-step plan flows through the hook", () => {
   try {
     const out = invokeHook(inst, JSON.stringify({ prompt: "check the logs first, then create a bug ticket in jira" }));
     const parsed = JSON.parse(out);
-    const ctx = Array.isArray(parsed.hookSpecificOutput.additionalContext)
-      ? parsed.hookSpecificOutput.additionalContext.join("\n")
-      : parsed.hookSpecificOutput.additionalContext;
+    const ctx = String(parsed.hookSpecificOutput.additionalContext);
     assert.ok(ctx.includes("log-analyzer"), ctx);
     assert.ok(ctx.includes("jira"), ctx);
   } finally {

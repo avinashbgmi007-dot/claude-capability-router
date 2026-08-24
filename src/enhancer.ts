@@ -21,6 +21,28 @@ function escapeXml(s: string): string {
 }
 
 /**
+ * Executable tool-call syntax per capability kind. A bare name ("ship")
+ * forces the model to guess the mapping — live runs show it guesses wrong
+ * and improvises instead. Spell out the exact call.
+ */
+function invocationFor(kind: string, invocation: string): string {
+  switch (kind) {
+    case "skill":
+    case "plugin-skill":
+      return `Skill tool with { "name": "${invocation}" }`;
+    case "agent":
+    case "plugin-agent":
+      return `Task tool with { "subagent_type": "${invocation}" }`;
+    case "mcp-server":
+      return `MCP server "${invocation}" tools (mcp__${invocation}__*)`;
+    case "command":
+      return `workflow "/${invocation}" — follow its documented steps yourself`;
+    default:
+      return invocation;
+  }
+}
+
+/**
  * Build the routing-context block. Returns undefined for pass-through.
  * The block is injected as context (not user speech) so the model never
  * mistakes it for a user requirement.
@@ -34,6 +56,9 @@ export function buildEnhancedPrompt(req: ExecutionRequest, config: RouterConfig)
     .map((s) => s.intent)
     .join("; ");
   if (intents) lines.push(`  <intent>${escapeXml(intents)}</intent>`);
+  // imperative directive at PRIMACY position (right after the intent) —
+  // directives at block-end were ignored in live runs; beginnings carry weight
+  lines.push(`  <action>Invoke the capabilities below with the exact tool calls given, before doing anything else; skip any that fail and continue.</action>`);
   if (req.rationale && config.verbosity === "full") {
     lines.push(`  <rationale>${escapeXml(req.rationale)}</rationale>`);
   }
@@ -48,17 +73,13 @@ export function buildEnhancedPrompt(req: ExecutionRequest, config: RouterConfig)
     lines.push(`    <capability>${escapeXml(e.name)}</capability>`);
     lines.push(`    <kind>${e.kind}</kind>`);
     if (step.ambiguous) lines.push(`    <ambiguous>true</ambiguous>`);
-    lines.push(`    <invoke>${escapeXml(e.invocation)}</invoke>`);
+    lines.push(`    <invoke>${escapeXml(invocationFor(e.kind, e.invocation))}</invoke>`);
     if (alts) {
       lines.push(`    <alternatives>${escapeXml(alts)}</alternatives>`);
       lines.push(`    <on-failure>try each alternative in order; if all fail, continue without routing</on-failure>`);
     }
     lines.push(`  </step>`);
   }
-  // imperative closer: descriptive blocks get treated as FYI and ignored —
-  // measured live (1 invocation across 30 historical routings). One line,
-  // ~20 tokens, dropped first when the token budget overflows.
-  lines.push(`  <action>Before answering, invoke each step's capability using its invocation syntax; if one fails, continue without it.</action>`);
   lines.push("</capability-routing>");
   let block = lines.join("\n");
 

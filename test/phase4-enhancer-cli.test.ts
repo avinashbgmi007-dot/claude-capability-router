@@ -37,7 +37,7 @@ test("enhancer: routed request produces capability-routing block with invocation
   assert.ok(block, "enhanced block exists");
   assert.ok(block.includes("<capability-routing>"), "wrapped as routing context");
   assert.ok(block.includes("pdf-summarizer"), "contains capability name");
-  assert.ok(block.includes("<invoke>pdf-summarizer</invoke>"), "contains invocation syntax");
+  assert.ok(block.includes("<invoke>Skill tool with { &quot;name&quot;: &quot;pdf-summarizer&quot; }</invoke>"), "executable Skill tool-call syntax");
   assert.ok(block.includes("<intent>"), "intent restatement present");
   assert.ok(block.includes("<on-failure>"), "explicit retry instruction present");
 });
@@ -67,8 +67,10 @@ test("enhancer: multi-step plan yields one step element per capability", () => {
   const req = router.route("extract tables from this PDF, then draft an email summary to the team");
   const block = buildEnhancedPrompt(req, DEFAULT_CONFIG)!;
   assert.equal((block.match(/<step n=/g) || []).length, 2);
-  assert.ok(block.includes("<invoke>pdf-extractor</invoke>"));
-  assert.ok(block.includes("<invoke>gmail-draft</invoke>"));
+  assert.ok(block.includes("pdf-extractor"), block);
+  assert.ok(block.includes("gmail-draft"), block);
+  // directive sits at primacy position — right after the intent
+  assert.ok(block.indexOf("<action>") > -1 && block.indexOf("<action>") < block.indexOf("<step"), "action precedes steps");
 });
 
 test("ambiguity: top-2 within band flags the step and the block", () => {

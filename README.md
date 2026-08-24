@@ -176,6 +176,34 @@ automatically (it's what makes description-heavy skills like the ones in
 frontmatter, so scoring leans on `purpose`/`description`/`name`). Set
 `CLAUDE_CMR_HOME` to override it with your live `~/.claude-cmr/config.json`.
 
+### Interpreting live results (measured 2026-08-24)
+
+Three layers fail independently — check them in order:
+
+1. **Delivery** — hook errors (`Hook JSON output validation failed`) mean the
+   block never reached the model (`additionalContext` must be a plain string;
+   array form is rejected by schema validation). Fix delivery before judging
+   anything else.
+2. **Obedience** — delivered but not invoked. Measured reality: a competent
+   model frequently out-votes the block with its own plan (ran git directly
+   instead of the ship skill — correctly, since there was nothing to ship).
+   Treat low invocation rates as partly *correct* judgment, not pure failure.
+   Blocks earn their keep where improvisation is expensive (niche skills,
+   multi-step workflows), not on tasks the model does natively.
+3. **Outcome quality** — the metric that actually matters: did the user get
+   the right result at reasonable cost? `intention fidelity` in
+   `npm run stats` approximates it; read "ignored" with the above in mind.
+
+`@cmr <prompt>` forces a route past the threshold — useful for testing
+delivery end-to-end, but the pick is top-ranked-whatever, so obeying it can
+be inappropriate by construction (it will happily route opinion questions
+to agents).
+
+`@cmr <prompt>` forces a route past the threshold — useful for testing
+delivery end-to-end, but the pick is top-ranked-whatever, so obeying it can
+be inappropriate by construction (it will happily route opinion questions
+to agents).
+
 ### Live verification loop
 
 After installing, verify real behavior in three steps:

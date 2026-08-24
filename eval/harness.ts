@@ -171,7 +171,9 @@ async function main(): Promise<void> {
       const routerMod = (await import(pathToFileURL(routerPath).href)) as {
         createRouter: (opts: unknown) => { route: (p: string) => ExecutionRequest };
       };
-      const router = routerMod.createRouter({ config, roots });
+      // repo-local state dir: without it the router persists index.json into
+      // the REAL ~/.claude-cmr/state on every eval run (state leakage bug)
+      const router = routerMod.createRouter({ config, roots, stateDir: path.join(repoRoot(), ".cmr-eval-state") });
       const m = runRoutingMetrics(corpus, (p) => router.route(p));
       console.log(`accuracy@1=${(m.accuracyAt1 * 100).toFixed(1)}% fpr=${(m.fpr * 100).toFixed(1)}% fnr=${(m.fnr * 100).toFixed(1)}% planCorrect=${(m.planCorrect * 100).toFixed(1)}% preservation=${(m.preservation * 100).toFixed(1)}%`);
       for (const d of m.detail) console.log(`  ${d.ok ? "PASS" : "FAIL"} ${d.id}: got=${d.got} want=${d.want}`);

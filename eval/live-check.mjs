@@ -35,6 +35,14 @@ console.log("");
 
 // --- install integrity -------------------------------------------------------
 let failures = 0;
+if (!existsSync(path.join(home, "hook-wrapper.mjs"))) {
+  console.log("=================================================================");
+  console.log(" INSTALL IS BROKEN: hook-wrapper.mjs missing from " + home);
+  console.log(" Every hook invocation is erroring right now. Run: npm run install:cr");
+  console.log(" (agents asked to 'fix settings' have been known to uninstall things)");
+  console.log("=================================================================");
+  failures++;
+}
 try {
   const v = cli(["validate"]);
   for (const line of v.split("\n")) if (/^(PASS|FAIL) /.test(line)) console.log(line);

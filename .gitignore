@@ -5,3 +5,5 @@ dist/
 *.log
 
 eval/corpus-candidates.json
+
+.cmr-eval-state/

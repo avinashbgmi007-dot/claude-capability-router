@@ -15,13 +15,20 @@ Q4_K_M-class quants). Zero dependencies — plain Node ≥20 + PowerShell.
 
 ```
 agent CLI ──▶ guard-proxy (:11435) ──▶ llama-server (:8080)
-                 │ taps responses (streaming included), forwards untouched
-                 └─ verbatim-block recurrence ≥6× in final 2KB → STRIKE
-                    + post-compaction tag when message count collapsed
+                 │
+                 ├─ STREAMING   → piped live, tapped for strikes (never retried)
+                 └─ NON-STREAM  → inspected; verbatim loop (16–160ch block ≥6×
+                                  in final 2KB) triggers ONE escalated retry:
+                                  dry-multiplier ↑ repeat-penalty ↑ temp +0.1.
+                                  Clean retry is what Claude receives.
+                 └─ message-count collapse before a strike → tagged
+                    suspectedPostCompaction
 ```
 
-Monitor-first by design: v1 changes nothing about responses. Auto-retry
-(non-streaming only) is a future tier gated on real strike data.
+Tier 2 auto-retry ships ON by default (`GUARD_AUTO_RETRY=0` disables,
+`GUARD_MAX_RETRIES` caps attempts, default 1). Strike records carry
+`attempt`, `resolvedByRetry`, `gaveUpAfterAttempts` — so effectiveness is
+measured, not claimed.
 
 ## Usage
 

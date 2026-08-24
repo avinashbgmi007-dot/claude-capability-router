@@ -61,18 +61,34 @@ function logStrike(rec) {
 }
 
 function extractText(body) {
-  // OpenAI-compatible: choices[0].message.content + tool_call arguments
+  // Handles BOTH protocols seen on local setups:
+  //   OpenAI-compatible : choices[].message/delta.content + tool_call args
+  //   Anthropic         : /v1/messages content[].text + content_block_delta
+  //                       stream frames (delta.text / delta.thinking)
   try {
     const parts = [];
-    for (const ch of body.choices || []) {
-      const m = ch.message || ch.delta || {};
-      if (typeof m.content === "string") parts.push(m.content);
-      else if (Array.isArray(m.content)) {
-        for (const p of m.content) if (p?.type === "text" && p.text) parts.push(p.text);
+    if (Array.isArray(body.choices)) {
+      for (const ch of body.choices) {
+        const m = ch.message || ch.delta || {};
+        if (typeof m.content === "string") parts.push(m.content);
+        else if (Array.isArray(m.content)) {
+          for (const p of m.content) if (p?.type === "text" && p.text) parts.push(p.text);
+        }
+        for (const tc of m.tool_calls || []) {
+          if (tc.function?.arguments) parts.push(String(tc.function.arguments));
+        }
       }
-      for (const tc of m.tool_calls || []) {
-        if (tc.function?.arguments) parts.push(String(tc.function.arguments));
+    }
+    if (Array.isArray(body.content)) {
+      // Anthropic non-streaming: { content: [{ type: "text", text }] }
+      for (const p of body.content) {
+        if (typeof p?.text === "string") parts.push(p.text);
       }
+    }
+    if (body.type === "content_block_delta" && body.delta) {
+      // Anthropic streaming frame
+      if (typeof body.delta.text === "string") parts.push(body.delta.text);
+      if (typeof body.delta.thinking === "string") parts.push(body.delta.thinking);
     }
     return parts.join("");
   } catch {

@@ -53,6 +53,27 @@ const mock = http.createServer((req, res) => {
     const body = JSON.parse(Buffer.concat(chunks).toString() || "{}");
     const looping = body.model === "looper";
     const text = looping ? loopText : healthyText;
+    if (req.url === "/v1/messages") {
+      // Anthropic protocol — the shape Claude Code actually speaks to llama-server
+      if (body.stream) {
+        let raw = "";
+        for (let i = 0; i < text.length; i += 48) {
+          raw += `event: content_block_delta\ndata: ${JSON.stringify({
+            type: "content_block_delta",
+            index: 0,
+            delta: { type: "text_delta", text: text.slice(i, i + 48) },
+          })}\n\n`;
+        }
+        anthropicRawSse = raw;
+        res.writeHead(200, { "content-type": "text/event-stream" });
+        res.end(raw);
+      } else {
+        res.writeHead(200, { "content-type": "application/json" });
+        res.end(JSON.stringify({ role: "assistant", content: [{ type: "text", text }] }));
+      }
+      return;
+    }
+    // OpenAI-compatible
     if (body.stream) {
       const raw = makeSse(text);
       res.writeHead(200, {
@@ -67,6 +88,7 @@ const mock = http.createServer((req, res) => {
     }
   });
 });
+let anthropicRawSse = "";
 await new Promise((r) => mock.listen(MOCK_PORT, r));
 
 // --- guard under test --------------------------------------------------------
@@ -124,6 +146,23 @@ try {
   await chat("healthy", true, 2);
   await new Promise((r) => setTimeout(r, 300));
   check("healthy sse adds no strikes", strikes().length === 2);
+
+  // --- Anthropic protocol (what Claude Code actually speaks to llama-server) ---
+  const anthropic = async (model, stream, msgCount) => {
+    const body = JSON.stringify({ model, stream, max_tokens: 1024, messages: Array.from({ length: msgCount }, () => ({ role: "user", content: "hi" })) });
+    return fetch(`${BASE}/v1/messages`, { method: "POST", body, headers: { "content-type": "application/json" } });
+  };
+  await anthropic("looper", false, 6); // msgs 2 -> 6, no collapse expected
+  await new Promise((r) => setTimeout(r, 250));
+  let s2 = strikes();
+  check("anthropic json loop detected", s2.length === 3 && s2[2].kind === "json");
+
+  const aRes = await anthropic("looper", true, 4);
+  const aReceived = await aRes.text();
+  check("anthropic SSE passthrough byte-identical", aReceived === anthropicRawSse);
+  await new Promise((r) => setTimeout(r, 400));
+  s2 = strikes();
+  check("anthropic SSE loop detected (kind=stream)", s2.length === 4 && s2[3].kind === "stream");
 
   console.log(failures === 0 ? "\nSMOKE TEST GREEN" : `\nSMOKE TEST RED (${failures})`);
   writeFileSync(path.join(tmp, "child-stderr.log"), childErr);

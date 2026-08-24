@@ -48,3 +48,50 @@ export function classifyDomain(prompt: string): TaskDomain {
   if (PLAN_RE.test(t)) return "plan";
   return "chat";
 }
+
+// ---- derivation: read a capability's OWN text and infer its domain ----
+
+/** Description-prose signal families (distinct families = stronger fit).
+    Deliberately structural for f1 — bare words like "code" appear in every
+    dev tool's blurb and must not inflate affinity alone. */
+const CODE_DESC_SIGNALS = [
+  /\b(software|engineering|engineer|developer|development|programming)\b/i,
+  /\b(refactor\w*|dead code|debug\w*|\bbugs?\b|production-ready|implement\w*|fix\w*)\b/i,
+  /\b(tests?|tested|testing|e2e|unit ?tests?|qa)\b/i,
+];
+const PLAN_DESC_SIGNALS = [
+  /\b(plans?|planning|planner|roadmap|architecture|architect|strategic|strategy|milestones?|phases? of work)\b/i,
+  /\b(prd|requirements|blueprint|implementation)\b/i,
+];
+
+/** Minimum distinct signal families before a capability may be suggested by
+    the domain pass. Single-family derivations are noise magnets. */
+export const MIN_DERIVE_AFFINITY = 2;
+
+export interface DomainDerivation {
+  domain: TaskDomain;
+  /** distinct signal families matched — higher = stronger fit */
+  affinity: number;
+}
+
+/**
+ * Infer which task-domain a capability serves purely from its own written
+ * description + purpose. Zero configuration: the author's text IS the tag.
+ * Ambiguity biases toward code; returns null below MIN_DERIVE_AFFINITY and
+ * for chat (catch-all never has representatives).
+ */
+export function deriveDomain(description: string, purpose = ""): DomainDerivation | null {
+  const text = `${description || ""}\n${purpose || ""}`.toLowerCase();
+  let codeScore = 0;
+  if (CODE_FENCE_RE.test(text)) codeScore++;
+  for (const re of CODE_DESC_SIGNALS) {
+    if (re.test(text)) codeScore++;
+  }
+  let planScore = 0;
+  for (const re of PLAN_DESC_SIGNALS) {
+    if (re.test(text)) planScore++;
+  }
+  if (planScore > codeScore && planScore >= MIN_DERIVE_AFFINITY) return { domain: "plan", affinity: planScore };
+  if (codeScore >= MIN_DERIVE_AFFINITY) return { domain: "code", affinity: codeScore };
+  return null;
+}

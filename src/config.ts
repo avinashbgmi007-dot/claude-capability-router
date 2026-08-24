@@ -42,7 +42,7 @@ export const DEFAULT_CONFIG: RouterConfig = {
   verbosity: "brief",
   tokenBudget: 300,
   forcePrefix: "@cmr",
-  domainRouting: { enabled: true, representatives: {} },
+  domainRouting: { enabled: true },
 };
 
 export function loadConfig(configPath?: string): RouterConfig {
@@ -70,13 +70,7 @@ function mergeConfig(base: RouterConfig, raw: Partial<RouterConfig>): RouterConf
   if (typeof raw.tokenBudget === "number") out.tokenBudget = raw.tokenBudget;
   if (typeof raw.forcePrefix === "string") out.forcePrefix = raw.forcePrefix;
   if (raw.domainRouting && typeof raw.domainRouting === "object") {
-    out.domainRouting = {
-      enabled: raw.domainRouting.enabled ?? out.domainRouting.enabled,
-      representatives: { ...out.domainRouting.representatives, ...(raw.domainRouting.representatives ?? {}) },
-    };
-    // chat is the catch-all category — a chat representative would fire on
-    // every prompt, contradicting safe-pass-through. Rejected, not honored.
-    delete (out.domainRouting.representatives as { chat?: string }).chat;
+    out.domainRouting = { enabled: raw.domainRouting.enabled ?? out.domainRouting.enabled };
   }
   return out;
 }

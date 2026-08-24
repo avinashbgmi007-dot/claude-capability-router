@@ -183,23 +183,6 @@ export function validate(): boolean {
     console.log(`${pass ? "PASS" : "FAIL"} ${name}`);
     if (!pass) ok = false;
   }
-  // domain-routing representative health (warnings only — ghosts fail validate
-  // so stale configs surface, but chat-reps are rejected at merge time anyway)
-  try {
-    const cfg = loadConfig(path.join(cmrHome(), "config.json"));
-    const reps = cfg.domainRouting?.representatives ?? {};
-    if ("chat" in reps) console.log("WARN chat representative configured but rejected (catch-all category must stay unrepresented)");
-    const discovered = new Set(discoverAll(discoveryRoots()).map((d) => d.id));
-    for (const [domain, id] of Object.entries(reps)) {
-      if (!id) continue;
-      if (!discovered.has(id)) {
-        console.log(`WARN domain representative (${domain}) "${id}" is not in the discovery index — ${domain} domain routing is inert`);
-        ok = false;
-      }
-    }
-  } catch {
-    /* config problems surface elsewhere */
-  }
   return ok;
 }
 

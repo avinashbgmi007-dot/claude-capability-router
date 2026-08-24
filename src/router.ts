@@ -11,7 +11,7 @@ import { loadUsageLog, computeUsageScores } from "./logs.js";
 import { normalizeTokens, extractMainClause } from "./normalization.js";
 import { rankCapabilities, type Weights } from "./scorer.js";
 import { splitIntents } from "./planner.js";
-import { classifyDomain } from "./domains.js";
+import { classifyDomain, deriveDomain, type DomainDerivation } from "./domains.js";
 import type { DiscoveryRoots } from "./paths.js";
 import { stateDir } from "./paths.js";
 import type { CapabilityIndexEntry, ExecutionRequest, PlanStep, RouterConfig, ScoredCapability } from "./types.js";
@@ -112,28 +112,45 @@ export function createRouter(opts: RouterOptions): Router {
     return s;
   }
 
-  const warnedGhosts = new Set<string>();
+  const derivationCache = new Map<string, DomainDerivation | null>();
+  function deriveFor(e: CapabilityIndexEntry): DomainDerivation | null {
+    const key = `${e.id}:${e.fingerprint}`;
+    if (!derivationCache.has(key)) {
+      try {
+        derivationCache.set(key, deriveDomain(e.description, e.purpose));
+      } catch {
+        derivationCache.set(key, null);
+      }
+    }
+    return derivationCache.get(key) ?? null;
+  }
 
-  /** DOMAIN PASS (fallback): specialist scoring stayed silent — suggest the
-      user-appointed representative for the classified task domain. Never
-      fires for forced routes (@cmr means "top-ranked, whatever it is"). */
+  // lighter kinds first on equal affinity: skills/commands load instructions,
+  // agents spawn subagents (heavier), MCP is heaviest
+  const kindRank = (k: string): number => (k.includes("agent") ? 1 : k.includes("mcp") ? 2 : 0);
+
+  /** DOMAIN PASS (fallback): specialist scoring stayed silent — classify the
+      task, then suggest the strongest same-domain capability as derived from
+      its OWN description. Zero configuration; chat is never represented. */
   function tryDomainRoute(prompt: string): ExecutionRequest | null {
     const dr = opts.config.domainRouting;
     if (!dr?.enabled) return null;
     const domain = classifyDomain(prompt);
-    if (domain === "chat") return null; // catch-all category: never represented
-    const repId = dr.representatives[domain];
-    if (!repId) return null;
-    const entry = entries.find((e) => e.id === repId);
-    if (!entry || !entry.enabled) {
-      if (!warnedGhosts.has(repId)) {
-        warnedGhosts.add(repId);
-        console.error(`[domain-routing] representative "${repId}" (${domain}) not found/enabled in discovery index — skipping`);
-      }
-      return null;
-    }
+    if (domain === "chat") return null;
+    const candidates = entries
+      .filter((e) => e.enabled)
+      .map((e) => ({ e, d: deriveFor(e) }))
+      .filter((x) => x.d && x.d.domain === domain)
+      .sort(
+        (a, b) =>
+          b.d!.affinity - a.d!.affinity ||
+          kindRank(a.e.kind) - kindRank(b.e.kind) ||
+          (a.e.id < b.e.id ? -1 : 1),
+      );
+    if (candidates.length === 0) return null;
+    const top = candidates[0];
     const primary: ScoredCapability = {
-      entry,
+      entry: top.e,
       confidence: DOMAIN_CONFIDENCE,
       fieldScores: { purpose: 0, actions: 0, domains: 0, examples: 0, description: 0, name: 0, body: 0 },
     };
@@ -142,7 +159,7 @@ export function createRouter(opts: RouterOptions): Router {
       originalPrompt: prompt,
       routed: true,
       plan: [step],
-      rationale: `domain-match: ${domain} -> ${repId}`,
+      rationale: `domain-match(${domain}, affinity ${top.d!.affinity}): ${top.e.id}`,
     };
   }
 

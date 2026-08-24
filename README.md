@@ -109,14 +109,17 @@ node dist/eval/harness.js --routing   # corpus metrics (accuracy@1, FPR, FNR, �
 
 ## Domain-fallback routing
 
-When no installed capability lexically matches a prompt (specialist pass
-silent), the router classifies the task — `code`, `plan`, or `chat` — and,
-if you've appointed a representative capability for that domain, suggests it
-with a `domain-match` marker in the rationale. Specialists always beat
-domain reps; chat has no representative by design (catch-all category).
-Configure via `domainRouting.representatives` in `config.json`
-(e.g. `"code": "skill:caveman"`), disable with `"enabled": false`.
-Ghost representatives (renamed/deleted skills) are flagged by `npm run validate`.
+When no installed capability lexically matches a prompt, the router classifies
+the task (`code`, `plan`, or `chat`) and suggests the **strongest same-domain
+capability — derived from each capability's own description**. No mapping
+files, no key-value config: the author's text is the tag.
+
+- Ranking: description-signal strength → lighter kind (skills before
+  spawning-agents) → id. `domain-match(…)` appears in the rationale.
+- Chat is never represented (catch-all); single-family descriptions stay
+  inert (`MIN_DERIVE_AFFINITY = 2`).
+- Specialists always beat domain matches; disable with
+  `"domainRouting": { "enabled": false }`.
 
 ---
 

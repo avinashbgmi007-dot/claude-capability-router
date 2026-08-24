@@ -71,13 +71,11 @@ export interface PlanStep {
   domainMatch?: true;
 }
 
-/** Domain-fallback routing: when specialists stay silent, suggest the
-    capability the user appointed as that task-domain's representative. */
+/** Domain-fallback routing: when specialists stay silent, suggest the best
+    same-domain capability — derived from each capability's own description
+    (zero configuration; the author's text is the tag). */
 export interface DomainRoutingConfig {
   enabled: boolean;
-  /** capability id per task domain. NOTE: chat representatives are rejected —
-      chat is the catch-all category; a chat rep would fire on every prompt. */
-  representatives: { code?: string; plan?: string; chat?: string };
 }
 
 export interface ExecutionRequest {

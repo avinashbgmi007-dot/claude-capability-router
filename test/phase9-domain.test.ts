@@ -1,15 +1,16 @@
 /**
- * Phase 9 tests — domain-fallback routing.
+ * Phase 9 tests — domain-fallback routing (zero-config, description-derived).
  *  - canonical classifier vectors (shared with llama-guard's classifier)
- *  - specialist-beats-domain precedence
- *  - fallback fires only when specialist silent AND rep exists/enabled
- *  - chat reps rejected; ghosts warned + skipped; kill-switch honored
+ *  - derivation reads each capability's OWN description; needs >=2 distinct
+ *    signal families (MIN_DERIVE_AFFINITY) — single-family blurbs stay inert
+ *  - affinity ranking picks strongest; skills beat spawning-agents on ties
+ *  - specialist-beats-domain precedence; kill-switch; chat never represented
  */
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { classifyDomain, DOMAIN_TEST_VECTORS } from "../src/domains.js";
+import { classifyDomain, deriveDomain, DOMAIN_TEST_VECTORS, MIN_DERIVE_AFFINITY } from "../src/domains.js";
 import { createRouter } from "../src/router.js";
 import { DEFAULT_CONFIG } from "../src/config.js";
 import type { CapabilityIndexEntry, RouterConfig } from "../src/types.js";
@@ -20,19 +21,36 @@ const roots = {
   workspaceDir: path.join(repoRoot, "test", "fixtures", "project"),
 };
 
-test("classifier: canonical vectors (sync contract with llama-guard)", () => {
+test("classifier: canonical prompt vectors (sync contract with llama-guard)", () => {
   for (const v of DOMAIN_TEST_VECTORS) {
     assert.equal(classifyDomain(v.text), v.expect, `vector: ${v.text}`);
   }
 });
 
-function mkEntry(id: string): CapabilityIndexEntry {
+test("derivation: multi-family descriptions qualify, single-family stay inert", () => {
+  const eng = deriveDomain("Expert-level software engineering agent. Deliver production-ready, tested application code.");
+  assert.equal(eng?.domain, "code");
+  assert.equal(eng?.affinity, 3, "engineering + production-ready + testing = three families");
+
+  const simplifier = deriveDomain("Refactoring specialist removes dead code.");
+  assert.equal(simplifier, null, "single-family blurb stays below the suggestion bar");
+  assert.ok(MIN_DERIVE_AFFINITY >= 2, "suggestion bar requires multi-family evidence");
+
+  const planner = deriveDomain("Task planner for creating actionable implementation plans and roadmaps.");
+  assert.equal(planner?.domain, "plan");
+  assert.ok((planner?.affinity ?? 0) >= 2);
+
+  const neutral = deriveDomain("Terse low-token responses with minimal words.");
+  assert.equal(neutral, null, "chat-flavored text derives no domain");
+});
+
+function mkEntry(id: string, kind: CapabilityIndexEntry["kind"], description: string): CapabilityIndexEntry {
   return {
     id,
     name: id.split(":")[1] ?? id,
-    kind: "skill",
-    purpose: `${id} capability`,
-    description: `${id} does specialized things for the arsenal`,
+    kind,
+    purpose: description,
+    description,
     body: "",
     actions: [],
     domains: [],
@@ -46,68 +64,58 @@ function mkEntry(id: string): CapabilityIndexEntry {
   };
 }
 
-function routerWith(reps: RouterConfig["domainRouting"]["representatives"], entries: CapabilityIndexEntry[], overrides: Partial<RouterConfig["domainRouting"]> = {}) {
-  const config: RouterConfig = {
-    ...DEFAULT_CONFIG,
-    domainRouting: { enabled: true, representatives: reps, ...overrides },
-  };
+const SW_ENG = () =>
+  mkEntry(
+    "agent:sw-eng",
+    "agent",
+    "Expert-level software engineering agent. Deliver production-ready, tested application code.",
+  );
+const JUNIOR_DEV = () =>
+  mkEntry("agent:junior-dev", "agent", "Software development assistant with debugging support for everyday issues.");
+
+// zero lexical overlap with any synthetic entry -> specialist pass silent
+const PING_PONG = "write me a ping pong game with arrow keys and bouncing ball";
+
+function routerWith(entries: CapabilityIndexEntry[], overrides: Partial<RouterConfig> = {}) {
+  const config: RouterConfig = { ...DEFAULT_CONFIG, ...overrides };
   return createRouter({ config, roots, entries });
 }
 
-// a prompt with zero lexical overlap with any synthetic entry -> specialist silent
-const AMBIGUOUS_PROMPT = "write me a ping pong game with arrow keys and bouncing ball";
-
-test("domain: fallback fires when specialists silent and rep exists", () => {
-  const r = routerWith({ code: "skill:code-rep" }, [mkEntry("skill:code-rep"), mkEntry("skill:unrelated")]);
-  const req = r.route(AMBIGUOUS_PROMPT);
+test("domain: ping-pong style prompt routes to strongest same-domain candidate", () => {
+  const r = routerWith([SW_ENG(), JUNIOR_DEV()]);
+  const req = r.route(PING_PONG);
   assert.equal(req.routed, true);
-  assert.equal(req.plan[0].primary?.entry.id, "skill:code-rep");
+  assert.equal(req.plan[0].primary?.entry.id, "agent:sw-eng", "strongest affinity wins");
   assert.equal(req.plan[0].domainMatch, true);
-  assert.match(req.rationale ?? "", /domain-match: code/);
+  assert.match(req.rationale ?? "", /domain-match\(code, affinity 3\)/);
 });
 
-test("domain: specialist beats domain rep on lexically-matching prompt", () => {
-  // 'summarize this PDF into bullet points' lexically hits fixture pdf-summarizer
-  const r = routerWith({ code: "skill:code-rep" }, [
-    mkEntry("skill:code-rep"),
-    ...[...createRouter({ config: DEFAULT_CONFIG, roots }).entries()],
-  ]);
+test("domain: tiebreak prefers lighter kind (skill over agent) at equal affinity", () => {
+  const desc = "Software development agent delivering production-ready application code.";
+  const skillCoder = mkEntry("skill:light-coder", "skill", desc);
+  const agentCoder = mkEntry("agent:heavy-coder", "agent", desc);
+  const r = routerWith([agentCoder, skillCoder]);
+  const req = r.route(PING_PONG);
+  assert.equal(req.routed, true);
+  assert.equal(req.plan[0].primary?.entry.id, "skill:light-coder", "equal affinity -> lighter kind wins");
+});
+
+test("domain: chat prompts never route via domains", () => {
+  const r = routerWith([SW_ENG()]);
+  assert.equal(r.route("how's the weather today?").routed, false);
+});
+
+test("routing: specialist lexical match still beats domain candidates", () => {
+  const pdfSummarizer = createRouter({ config: DEFAULT_CONFIG, roots }).entries().find((e) => e.id === "skill:pdf-summarizer");
+  assert.ok(pdfSummarizer, "fixture exists");
+  const r = routerWith([SW_ENG(), pdfSummarizer]);
   const req = r.route("summarize this PDF into bullet points");
   assert.equal(req.routed, true);
   assert.equal(req.plan[0].primary?.entry.id, "skill:pdf-summarizer");
   assert.equal(req.plan[0].domainMatch, undefined);
 });
 
-test("domain: ghost representative skipped (with warning) -> pass-through", () => {
-  const warnings: string[] = [];
-  const orig = console.error;
-  console.error = (m: string) => warnings.push(m);
-  try {
-    const r = routerWith({ code: "skill:ghost" }, [mkEntry("skill:unrelated")]);
-    const req = r.route(AMBIGUOUS_PROMPT);
-    assert.equal(req.routed, false);
-    assert.ok(warnings.some((w) => w.includes("skill:ghost")), "ghost warned once");
-  } finally {
-    console.error = orig;
-  }
-});
-
-test("domain: disabled via config -> passthrough even with rep", () => {
-  const r = routerWith({ code: "skill:code-rep" }, [mkEntry("skill:code-rep")], { enabled: false });
-  assert.equal(r.route(AMBIGUOUS_PROMPT).routed, false);
-});
-
-test("domain: chat representatives rejected at config merge", async () => {
-  const { loadConfig } = await import("../src/config.js");
-  const fs = await import("node:fs");
-  const os = await import("node:os");
-  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "cmr-p9cfg-"));
-  try {
-    const cfgFile = path.join(tmp, "config.json");
-    fs.writeFileSync(cfgFile, JSON.stringify({ domainRouting: { enabled: true, representatives: { chat: "skill:chatty" } } }));
-    const cfg = loadConfig(cfgFile);
-    assert.equal(cfg.domainRouting.representatives.chat, undefined, "chat rep stripped at load");
-  } finally {
-    fs.rmSync(tmp, { recursive: true, force: true });
-  }
+test("domain: kill-switch disables fallback entirely", () => {
+  const r = routerWith([SW_ENG()], { domainRouting: { enabled: false } });
+  assert.equal(r.route(PING_PONG).routed, false);
 });

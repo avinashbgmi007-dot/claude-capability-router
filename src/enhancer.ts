@@ -55,11 +55,16 @@ export function buildEnhancedPrompt(req: ExecutionRequest, config: RouterConfig)
     }
     lines.push(`  </step>`);
   }
+  // imperative closer: descriptive blocks get treated as FYI and ignored —
+  // measured live (1 invocation across 30 historical routings). One line,
+  // ~20 tokens, dropped first when the token budget overflows.
+  lines.push(`  <action>Before answering, invoke each step's capability using its invocation syntax; if one fails, continue without it.</action>`);
   lines.push("</capability-routing>");
   let block = lines.join("\n");
 
-  // token budget: drop alternatives + on-failure first, then truncate (never the primary)
+  // token budget: drop the imperative closer + alternatives + on-failure first, then truncate (never the primary)
   if (estimateTokens(block) > config.tokenBudget) {
+    block = block.replace(/\n\s*<action>[^<]*<\/action>/g, "");
     block = block.replace(/\n\s*<alternatives>[^<]*<\/alternatives>/g, "");
     block = block.replace(/\n\s*<on-failure>[^<]*<\/on-failure>/g, "");
   }

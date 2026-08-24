@@ -42,6 +42,18 @@ test("enhancer: routed request produces capability-routing block with invocation
   assert.ok(block.includes("<on-failure>"), "explicit retry instruction present");
 });
 
+test("enhancer: imperative action closer present when budget allows, dropped first under pressure", () => {
+  const router = makeRouter();
+  const req = router.route("summarize this PDF into bullet points");
+  const roomy = buildEnhancedPrompt(req, { ...DEFAULT_CONFIG, tokenBudget: 300 })!;
+  assert.ok(roomy.includes("<action>"), "directive closer present at normal budget");
+  assert.ok(roomy.trimEnd().endsWith("</capability-routing>"), "block still well-formed");
+
+  const tight = buildEnhancedPrompt(req, { ...DEFAULT_CONFIG, tokenBudget: 60 })!;
+  assert.ok(!tight.includes("<action>"), "action line dropped first under tight budget");
+  assert.ok(tight.includes("pdf-summarizer"), "primary capability never dropped");
+});
+
 test("enhancer: pass-through produces no block; original prompt untouched", () => {
   const router = makeRouter();
   const req = router.route("how's the weather today?");

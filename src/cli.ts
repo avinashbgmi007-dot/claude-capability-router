@@ -218,7 +218,7 @@ export function selftest(): number {
 
   if (ok) {
     const res = spawnSync(process.execPath, [wrapper], {
-      input: JSON.stringify({ prompt: "summarize this PDF into bullet points", hook_event_name: "UserPromptSubmit" }),
+      input: JSON.stringify({ prompt: "summarize this PDF into bullet points", hook_event_name: "UserPromptSubmit", session_id: "cmr-selftest" }),
       encoding: "utf8",
       timeout: 20000,
       env: process.env,

@@ -9,3 +9,5 @@ eval/corpus-candidates.json
 .cmr-eval-state/
 
 llama-guard/loop-strikes.jsonl
+
+llama-guard/sampling-observed.jsonl

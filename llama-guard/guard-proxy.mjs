@@ -54,6 +54,41 @@ function loopScan(text) {
 let prevMessageCount = null;
 const stats = { requests: 0, strikes: 0, retriedRequests: 0, resolvedByRetry: 0 };
 
+// ---- D0 instrumentation: what sampler fields do clients ACTUALLY send? ----
+// GUARD_SAMPLING_LOG=path enables one JSONL line per request capturing only
+// the sampling keys explicitly present in the body. Feeds the profile-
+// precedence decision (does Claude Code pin temperature, or omit it?).
+const SAMPLING_LOG = process.env.GUARD_SAMPLING_LOG || "";
+const SAMPLING_KEYS = [
+  "temperature", "top_p", "top_k", "min_p",
+  "repeat_penalty", "presence_penalty", "frequency_penalty",
+  "dry_multiplier", "dry_base", "dry_allowed_length", "max_tokens",
+];
+function observeSampling(body, meta) {
+  if (!SAMPLING_LOG) return;
+  try {
+    const explicit = {};
+    for (const k of SAMPLING_KEYS) {
+      if (typeof body[k] !== "undefined") explicit[k] = body[k];
+    }
+    appendFileSync(
+      SAMPLING_LOG,
+      JSON.stringify({
+        ts: new Date().toISOString(),
+        kind: meta?.url || "",
+        model: meta?.model ?? "",
+        stream: !!meta?.stream,
+        messageCount: meta?.messageCount ?? null,
+        toolCount: Array.isArray(body.tools) ? body.tools.length : 0,
+        explicit,
+      }) + "\n",
+      "utf8",
+    );
+  } catch {
+    /* observability must never break forwarding */
+  }
+}
+
 /** Sampling escalation ladder — rung index = retry attempt number - 1. */
 const ESCALATIONS = [
   null,
@@ -194,21 +229,19 @@ const server = http.createServer((clientReq, clientRes) => {
   clientReq.on("end", async () => {
     const reqBody = Buffer.concat(chunks);
     let meta = {};
+    let wantsStream = false;
     try {
       const parsed = JSON.parse(reqBody.toString() || "{}");
       meta.model = parsed.model || "";
       meta.messageCount = Array.isArray(parsed.messages) ? parsed.messages.length : null;
+      meta.stream = parsed.stream === true;
+      meta.url = clientReq.url;
+      wantsStream = meta.stream;
+      observeSampling(parsed, meta);
       if (DEBUG) console.error(`[req] ${clientReq.method} ${clientReq.url} msgs=${meta.messageCount} model=${meta.model}`);
     } catch {
       /* opaque body — still proxied fine */
     }
-
-    // peek request stream flag: decides tap-vs-retry path up front so
-    // streamed responses pipe live instead of being buffered
-    let wantsStream = false;
-    try {
-      wantsStream = JSON.parse(reqBody.toString() || "{}").stream === true;
-    } catch {}
 
     if (wantsStream) {
       // ---- TIER 1 path: single request, piped live while tapped ----

@@ -11,3 +11,5 @@ eval/corpus-candidates.json
 llama-guard/loop-strikes.jsonl
 
 llama-guard/sampling-observed.jsonl
+
+.serena/

@@ -30,6 +30,26 @@ Tier 2 auto-retry ships ON by default (`GUARD_AUTO_RETRY=0` disables,
 `attempt`, `resolvedByRetry`, `gaveUpAfterAttempts` — so effectiveness is
 measured, not claimed.
 
+## Task-aware sampling profiles
+
+Every request is classified deterministically (no ML): **code > plan > chat**
+— code wins ties because chat-on-code misclassification costs far more than
+the reverse. Profile values fill only the keys the client left unset;
+explicit client choices always win. `GUARD_PROFILES=0` disables.
+
+| Profile | temperature | repeat_penalty | dry_multiplier | Trigger examples |
+|---|---|---|---|---|
+| `code` | 0.25 | 1.0 | off | fences, file extensions, diff markers, implement/refactor/debug verbs |
+| `plan` | 0.65 | 1.05 | 0.6 | plan/roadmap/architecture/approach language |
+| `chat` | 0.75 | 1.07 | 0.8 | everything else |
+
+**Protocol caveat (measured on this machine, see probe-sampling.mjs):** the
+turboquant fork honors temperature but silently IGNORES extended sampler
+fields (`repeat_penalty`/`dry_*`) on `/v1/messages` — so for Claude Code
+traffic only the temperature axis injects, and your server CLI baseline
+(keep it at `repeat-penalty 1.00`) provides the code-safe penalty floor.
+Penalty/DRY axes fully apply on OpenAI-shaped endpoints.
+
 ## Usage
 
 ### Set-and-forget (installed)

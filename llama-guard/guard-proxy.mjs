@@ -52,7 +52,7 @@ function loopScan(text) {
 }
 
 let prevMessageCount = null;
-const stats = { requests: 0, strikes: 0, retriedRequests: 0, resolvedByRetry: 0 };
+const stats = { requests: 0, strikes: 0, retriedRequests: 0, resolvedByRetry: 0, byProfile: { code: 0, plan: 0, chat: 0 } };
 
 // ---- D0 instrumentation: what sampler fields do clients ACTUALLY send? ----
 // GUARD_SAMPLING_LOG=path enables one JSONL line per request capturing only
@@ -95,6 +95,88 @@ const ESCALATIONS = [
   { dry_multiplier: 1.2, repeat_penalty: 1.15 },
   { dry_multiplier: 1.6, repeat_penalty: 1.25 },
 ];
+
+/**
+ * Task-aware sampling profiles (D1). Deterministic classifier picks one of
+ * three categories per request; profile values fill ONLY the keys the
+ * client left unset (explicit client choices always win).
+ *
+ * Evidence base (D0/D0.5 probes, 2026-08-24):
+ *  - Claude Code sends NO sampling params -> profiles fully in control
+ *  - this llama.cpp fork honors temperature on /v1/messages but IGNORES
+ *    extended fields (repeat_penalty/dry_*) there -> penalty axes are only
+ *    injected on OpenAI-shaped paths; server CLI flags remain the baseline
+ *    for Anthropic traffic (user runs repeat-penalty 1.00, no DRY — already
+ *    code-safe).
+ * Classifier is ambiguity-biased toward CODE: chat-on-code misclassification
+ * costs far more than code-on-chat.
+ */
+const PROFILES_ENABLED = process.env.GUARD_PROFILES !== "0";
+const PROFILES = {
+  code: { temperature: 0.25, repeat_penalty: 1.0, dry_multiplier: 0 },
+  plan: { temperature: 0.65, repeat_penalty: 1.05, dry_multiplier: 0.6 },
+  chat: { temperature: 0.75, repeat_penalty: 1.07, dry_multiplier: 0.8 },
+};
+const CODE_FENCE_RE = /```/;
+const CODE_FILE_RE = /\.(py|ts|tsx|js|jsx|mjs|cjs|java|c|h|cpp|hpp|cs|go|rs|rb|php|sh|ps1|psm1|sql|json|ya?ml|toml|ini|cfg|html|css)\b/i;
+const DIFF_MARKER_RE = /^(\+\+\+|---) |^@@ -\d+/m;
+const CODE_VERB_RE =
+  /\b(refactor|implement|debug|compile|stack ?trace|regex|unit ?tests?|write (a |the )?(function|script|class|hook|module)|fix (the |this )?(bug|error|crash)|typeerror|syntaxerror|nullpointer)\b/i;
+const PLAN_RE = /\b(plan|roadmap|architecture|approach|strategy|milestones?|step[- ]by[- ]step|phases? of work)\b/i;
+
+function messageText(m) {
+  if (!m) return "";
+  if (typeof m.content === "string") return m.content;
+  if (Array.isArray(m.content)) return m.content.map((p) => p?.text ?? "").join(" ");
+  return "";
+}
+
+/** Deterministic task classifier: code > plan > chat. */
+function classifyTask(messages) {
+  if (!Array.isArray(messages) || messages.length === 0) return "chat";
+  let lastUser = "";
+  let prevAssistant = "";
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const m = messages[i];
+    const t = messageText(m);
+    if (m.role === "user" && !lastUser) lastUser = t;
+    if (m.role === "assistant" && !prevAssistant) prevAssistant = t;
+    if (lastUser && prevAssistant) break;
+  }
+  const looksCode =
+    CODE_FENCE_RE.test(lastUser) ||
+    CODE_FILE_RE.test(lastUser) ||
+    DIFF_MARKER_RE.test(lastUser) ||
+    CODE_VERB_RE.test(lastUser) ||
+    // short follow-ups inherit coding context from the previous assistant turn
+    (lastUser.length > 0 && lastUser.length < 120 && (CODE_FENCE_RE.test(prevAssistant) || CODE_FILE_RE.test(prevAssistant)));
+  if (looksCode) return "code";
+  if (PLAN_RE.test(lastUser)) return "plan";
+  return "chat";
+}
+
+/**
+ * Merge the chosen profile into the request body. Returns
+ * { profile, applied[] } or null when disabled/nothing applied.
+ * On /v1/messages only temperature-class fields are injected (fork drops
+ * extended sampler fields there — see probe-sampling.mjs findings).
+ */
+function injectProfile(body, url) {
+  if (!PROFILES_ENABLED || !body || typeof body !== "object" || !Array.isArray(body.messages)) return null;
+  const profile = classifyTask(body.messages);
+  const vals = { ...PROFILES[profile] };
+  if (typeof url === "string" && url.startsWith("/v1/messages")) {
+    delete vals.repeat_penalty;
+    delete vals.dry_multiplier;
+  }
+  const applied = [];
+  for (const [k, v] of Object.entries(vals)) {
+    if (typeof body[k] === "number") continue; // respect explicit client choice
+    body[k] = v;
+    applied.push(k);
+  }
+  return { profile, applied };
+}
 
 function logStrike(rec) {
   appendFileSync(STRIKES_LOG, JSON.stringify(rec) + "\n", "utf8");
@@ -175,6 +257,7 @@ function sseTap(upRes, meta) {
         ts: new Date().toISOString(),
         kind: "stream",
         model: meta?.model ?? "",
+        profile: meta?.profile ?? null,
         messageCount: msgCount,
         suspectedPostCompaction: postCompaction(msgCount),
         count: scan.count,
@@ -227,7 +310,7 @@ const server = http.createServer((clientReq, clientRes) => {
   const chunks = [];
   clientReq.on("data", (c) => chunks.push(c));
   clientReq.on("end", async () => {
-    const reqBody = Buffer.concat(chunks);
+    let reqBody = Buffer.concat(chunks);
     let meta = {};
     let wantsStream = false;
     try {
@@ -236,9 +319,14 @@ const server = http.createServer((clientReq, clientRes) => {
       meta.messageCount = Array.isArray(parsed.messages) ? parsed.messages.length : null;
       meta.stream = parsed.stream === true;
       meta.url = clientReq.url;
-      wantsStream = meta.stream;
       observeSampling(parsed, meta);
-      if (DEBUG) console.error(`[req] ${clientReq.method} ${clientReq.url} msgs=${meta.messageCount} model=${meta.model}`);
+      const inj = injectProfile(parsed, meta.url);
+      meta.profile = inj ? inj.profile : null;
+      if (meta.profile && stats.byProfile[meta.profile] !== undefined) stats.byProfile[meta.profile]++;
+      if (inj && inj.applied.length > 0) reqBody = Buffer.from(JSON.stringify(parsed));
+      wantsStream = meta.stream;
+      if (DEBUG)
+        console.error(`[req] ${clientReq.method} ${clientReq.url} msgs=${meta.messageCount} model=${meta.model} profile=${meta.profile}`);
     } catch {
       /* opaque body — still proxied fine */
     }
@@ -279,6 +367,7 @@ const server = http.createServer((clientReq, clientRes) => {
           ts: new Date().toISOString(),
           kind: "json",
           model: meta?.model ?? "",
+          profile: meta?.profile ?? null,
           messageCount: meta?.messageCount ?? null,
           suspectedPostCompaction: postCompaction(meta?.messageCount),
           count: cur.scan.count,
@@ -307,6 +396,7 @@ const server = http.createServer((clientReq, clientRes) => {
           ts: new Date().toISOString(),
           kind: "json",
           model: meta?.model ?? "",
+          profile: meta?.profile ?? null,
           messageCount: meta?.messageCount ?? null,
           suspectedPostCompaction: postCompaction(meta?.messageCount),
           count: cur.scan.count,
@@ -376,8 +466,9 @@ server.listen(PORT, () => {
 });
 
 setInterval(() => {
+  const bp = stats.byProfile;
   console.error(
-    `[stats] requests=${stats.requests} strikes=${stats.strikes} retried=${stats.retriedRequests} resolvedByRetry=${stats.resolvedByRetry}`,
+    `[stats] requests=${stats.requests} strikes=${stats.strikes} retried=${stats.retriedRequests} resolvedByRetry=${stats.resolvedByRetry} | profiles: code=${bp.code} plan=${bp.plan} chat=${bp.chat}`,
   );
 }, 60000).unref();
 

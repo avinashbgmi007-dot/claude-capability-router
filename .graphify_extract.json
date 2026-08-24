@@ -1,0 +1,4085 @@
+{
+  "nodes": [
+    {
+      "id": "eval_harness_ts",
+      "label": "harness.ts",
+      "file_type": "code",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "harness_loadcorpus",
+      "label": "loadCorpus()",
+      "file_type": "code",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L30"
+    },
+    {
+      "id": "harness_collectexpectedids",
+      "label": "collectExpectedIds()",
+      "file_type": "code",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L36"
+    },
+    {
+      "id": "harness_discoverycoverage",
+      "label": "discoveryCoverage()",
+      "file_type": "code",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L50"
+    },
+    {
+      "id": "harness_runroutingmetrics",
+      "label": "runRoutingMetrics()",
+      "file_type": "code",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L69"
+    },
+    {
+      "id": "harness_reporoot",
+      "label": "repoRoot()",
+      "file_type": "code",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L133"
+    },
+    {
+      "id": "harness_defaultfixtureroots",
+      "label": "defaultFixtureRoots()",
+      "file_type": "code",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L137"
+    },
+    {
+      "id": "harness_defaultcorpuspath",
+      "label": "defaultCorpusPath()",
+      "file_type": "code",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L144"
+    },
+    {
+      "id": "harness_main",
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L148"
+    },
+    {
+      "id": "llama_guard_install_task_ps1",
+      "label": "install-task.ps1",
+      "file_type": "code",
+      "source_file": "llama-guard\\install-task.ps1",
+      "source_location": "L1"
+    },
+    {
+      "id": "llama_guard_run_guard_ps1",
+      "label": "run-guard.ps1",
+      "file_type": "code",
+      "source_file": "llama-guard\\run-guard.ps1",
+      "source_location": "L1"
+    },
+    {
+      "id": "llama_guard_tuned_launch_ps1",
+      "label": "tuned-launch.ps1",
+      "file_type": "code",
+      "source_file": "llama-guard\\tuned-launch.ps1",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_cli_ts",
+      "label": "cli.ts",
+      "file_type": "code",
+      "source_file": "src\\cli.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "cli_atomicwrite",
+      "label": "atomicWrite()",
+      "file_type": "code",
+      "source_file": "src\\cli.ts",
+      "source_location": "L29"
+    },
+    {
+      "id": "cli_copyruntime",
+      "label": "copyRuntime()",
+      "file_type": "code",
+      "source_file": "src\\cli.ts",
+      "source_location": "L35"
+    },
+    {
+      "id": "cli_readsettings",
+      "label": "readSettings()",
+      "file_type": "code",
+      "source_file": "src\\cli.ts",
+      "source_location": "L47"
+    },
+    {
+      "id": "cli_writesettings",
+      "label": "writeSettings()",
+      "file_type": "code",
+      "source_file": "src\\cli.ts",
+      "source_location": "L57"
+    },
+    {
+      "id": "cli_hookcommand",
+      "label": "hookCommand()",
+      "file_type": "code",
+      "source_file": "src\\cli.ts",
+      "source_location": "L62"
+    },
+    {
+      "id": "cli_hashookregistration",
+      "label": "hasHookRegistration()",
+      "file_type": "code",
+      "source_file": "src\\cli.ts",
+      "source_location": "L71"
+    },
+    {
+      "id": "cli_gethooklist",
+      "label": "getHookList()",
+      "file_type": "code",
+      "source_file": "src\\cli.ts",
+      "source_location": "L84"
+    },
+    {
+      "id": "cli_install",
+      "label": "install()",
+      "file_type": "code",
+      "source_file": "src\\cli.ts",
+      "source_location": "L94"
+    },
+    {
+      "id": "cli_uninstall",
+      "label": "uninstall()",
+      "file_type": "code",
+      "source_file": "src\\cli.ts",
+      "source_location": "L133"
+    },
+    {
+      "id": "cli_validate",
+      "label": "validate()",
+      "file_type": "code",
+      "source_file": "src\\cli.ts",
+      "source_location": "L158"
+    },
+    {
+      "id": "cli_listcapabilities",
+      "label": "listCapabilities()",
+      "file_type": "code",
+      "source_file": "src\\cli.ts",
+      "source_location": "L189"
+    },
+    {
+      "id": "cli_selftest",
+      "label": "selftest()",
+      "file_type": "code",
+      "source_file": "src\\cli.ts",
+      "source_location": "L213"
+    },
+    {
+      "id": "cli_explain",
+      "label": "explain()",
+      "file_type": "code",
+      "source_file": "src\\cli.ts",
+      "source_location": "L265"
+    },
+    {
+      "id": "cli_stats",
+      "label": "stats()",
+      "file_type": "code",
+      "source_file": "src\\cli.ts",
+      "source_location": "L291"
+    },
+    {
+      "id": "cli_usage",
+      "label": "usage()",
+      "file_type": "code",
+      "source_file": "src\\cli.ts",
+      "source_location": "L337"
+    },
+    {
+      "id": "src_config_ts",
+      "label": "config.ts",
+      "file_type": "code",
+      "source_file": "src\\config.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "config_loadconfig",
+      "label": "loadConfig()",
+      "file_type": "code",
+      "source_file": "src\\config.ts",
+      "source_location": "L47"
+    },
+    {
+      "id": "config_mergeconfig",
+      "label": "mergeConfig()",
+      "file_type": "code",
+      "source_file": "src\\config.ts",
+      "source_location": "L59"
+    },
+    {
+      "id": "src_discovery_ts",
+      "label": "discovery.ts",
+      "file_type": "code",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "discovery_sortedentries",
+      "label": "sortedEntries()",
+      "file_type": "code",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L19"
+    },
+    {
+      "id": "discovery_isfile",
+      "label": "isFile()",
+      "file_type": "code",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L27"
+    },
+    {
+      "id": "discovery_walkfiles",
+      "label": "walkFiles()",
+      "file_type": "code",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L36"
+    },
+    {
+      "id": "discovery_readsafe",
+      "label": "readSafe()",
+      "file_type": "code",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L60"
+    },
+    {
+      "id": "discovery_tocapability",
+      "label": "toCapability()",
+      "file_type": "code",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L68"
+    },
+    {
+      "id": "discovery_discoverskills",
+      "label": "discoverSkills()",
+      "file_type": "code",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L78"
+    },
+    {
+      "id": "discovery_discoveragents",
+      "label": "discoverAgents()",
+      "file_type": "code",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L89"
+    },
+    {
+      "id": "discovery_discovercommands",
+      "label": "discoverCommands()",
+      "file_type": "code",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L105"
+    },
+    {
+      "id": "discovery_discoverplugins",
+      "label": "discoverPlugins()",
+      "file_type": "code",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L120"
+    },
+    {
+      "id": "discovery_discovermcp",
+      "label": "discoverMcp()",
+      "file_type": "code",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L144"
+    },
+    {
+      "id": "discovery_discoverall",
+      "label": "discoverAll()",
+      "file_type": "code",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L179"
+    },
+    {
+      "id": "discovery_scanfingerprint",
+      "label": "scanFingerprint()",
+      "file_type": "code",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L203"
+    },
+    {
+      "id": "discovery_indexbyid",
+      "label": "indexById()",
+      "file_type": "code",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L262"
+    },
+    {
+      "id": "src_enhancer_ts",
+      "label": "enhancer.ts",
+      "file_type": "code",
+      "source_file": "src\\enhancer.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "enhancer_estimatetokens",
+      "label": "estimateTokens()",
+      "file_type": "code",
+      "source_file": "src\\enhancer.ts",
+      "source_location": "L9"
+    },
+    {
+      "id": "enhancer_escapexml",
+      "label": "escapeXml()",
+      "file_type": "code",
+      "source_file": "src\\enhancer.ts",
+      "source_location": "L15"
+    },
+    {
+      "id": "enhancer_invocationfor",
+      "label": "invocationFor()",
+      "file_type": "code",
+      "source_file": "src\\enhancer.ts",
+      "source_location": "L28"
+    },
+    {
+      "id": "enhancer_buildenhancedprompt",
+      "label": "buildEnhancedPrompt()",
+      "file_type": "code",
+      "source_file": "src\\enhancer.ts",
+      "source_location": "L50"
+    },
+    {
+      "id": "src_fingerprint_ts",
+      "label": "fingerprint.ts",
+      "file_type": "code",
+      "source_file": "src\\fingerprint.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "fingerprint_fingerprint",
+      "label": "fingerprint()",
+      "file_type": "code",
+      "source_file": "src\\fingerprint.ts",
+      "source_location": "L7"
+    },
+    {
+      "id": "fingerprint_fingerprintjson",
+      "label": "fingerprintJson()",
+      "file_type": "code",
+      "source_file": "src\\fingerprint.ts",
+      "source_location": "L11"
+    },
+    {
+      "id": "src_index_store_ts",
+      "label": "index-store.ts",
+      "file_type": "code",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "index_store_indexfile",
+      "label": "indexFile()",
+      "file_type": "code",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L18"
+    },
+    {
+      "id": "index_store_manifestfile",
+      "label": "manifestFile()",
+      "file_type": "code",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L22"
+    },
+    {
+      "id": "index_store_loadindex",
+      "label": "loadIndex()",
+      "file_type": "code",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L26"
+    },
+    {
+      "id": "index_store_writeatomic",
+      "label": "writeAtomic()",
+      "file_type": "code",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L45"
+    },
+    {
+      "id": "index_store_saveindex",
+      "label": "saveIndex()",
+      "file_type": "code",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L51"
+    },
+    {
+      "id": "index_store_updateindex",
+      "label": "updateIndex()",
+      "file_type": "code",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L61"
+    },
+    {
+      "id": "index_store_buildindex",
+      "label": "buildIndex()",
+      "file_type": "code",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L98"
+    },
+    {
+      "id": "src_logs_ts",
+      "label": "logs.ts",
+      "file_type": "code",
+      "source_file": "src\\logs.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "logs_compactlog",
+      "label": "compactLog()",
+      "file_type": "code",
+      "source_file": "src\\logs.ts",
+      "source_location": "L25"
+    },
+    {
+      "id": "logs_prompthash",
+      "label": "promptHash()",
+      "file_type": "code",
+      "source_file": "src\\logs.ts",
+      "source_location": "L50"
+    },
+    {
+      "id": "logs_todecisionentry",
+      "label": "toDecisionEntry()",
+      "file_type": "code",
+      "source_file": "src\\logs.ts",
+      "source_location": "L54"
+    },
+    {
+      "id": "logs_appenddecisionlog",
+      "label": "appendDecisionLog()",
+      "file_type": "code",
+      "source_file": "src\\logs.ts",
+      "source_location": "L72"
+    },
+    {
+      "id": "logs_appendusagelog",
+      "label": "appendUsageLog()",
+      "file_type": "code",
+      "source_file": "src\\logs.ts",
+      "source_location": "L92"
+    },
+    {
+      "id": "logs_loadusagelog",
+      "label": "loadUsageLog()",
+      "file_type": "code",
+      "source_file": "src\\logs.ts",
+      "source_location": "L101"
+    },
+    {
+      "id": "logs_loaddecisionlog",
+      "label": "loadDecisionLog()",
+      "file_type": "code",
+      "source_file": "src\\logs.ts",
+      "source_location": "L107"
+    },
+    {
+      "id": "logs_readjsonl",
+      "label": "readJsonl()",
+      "file_type": "code",
+      "source_file": "src\\logs.ts",
+      "source_location": "L112"
+    },
+    {
+      "id": "logs_usagescore",
+      "label": "usageScore()",
+      "file_type": "code",
+      "source_file": "src\\logs.ts",
+      "source_location": "L127"
+    },
+    {
+      "id": "logs_computeusagescores",
+      "label": "computeUsageScores()",
+      "file_type": "code",
+      "source_file": "src\\logs.ts",
+      "source_location": "L148"
+    },
+    {
+      "id": "src_metadata_extractor_ts",
+      "label": "metadata-extractor.ts",
+      "file_type": "code",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "metadata_extractor_parsefrontmatter",
+      "label": "parseFrontmatter()",
+      "file_type": "code",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L17"
+    },
+    {
+      "id": "metadata_extractor_unquote",
+      "label": "unquote()",
+      "file_type": "code",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L47"
+    },
+    {
+      "id": "metadata_extractor_asstring",
+      "label": "asString()",
+      "file_type": "code",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L53"
+    },
+    {
+      "id": "metadata_extractor_aslist",
+      "label": "asList()",
+      "file_type": "code",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L57"
+    },
+    {
+      "id": "metadata_extractor_firstsentence",
+      "label": "firstSentence()",
+      "file_type": "code",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L67"
+    },
+    {
+      "id": "metadata_extractor_extractfrommarkdown",
+      "label": "extractFromMarkdown()",
+      "file_type": "code",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L83"
+    },
+    {
+      "id": "metadata_extractor_extractfrommcpserver",
+      "label": "extractFromMcpServer()",
+      "file_type": "code",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L110"
+    },
+    {
+      "id": "metadata_extractor_defaultcategory",
+      "label": "defaultCategory()",
+      "file_type": "code",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L132"
+    },
+    {
+      "id": "src_normalization_ts",
+      "label": "normalization.ts",
+      "file_type": "code",
+      "source_file": "src\\normalization.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "normalization_tokenize",
+      "label": "tokenize()",
+      "file_type": "code",
+      "source_file": "src\\normalization.ts",
+      "source_location": "L14"
+    },
+    {
+      "id": "normalization_foldtoken",
+      "label": "foldToken()",
+      "file_type": "code",
+      "source_file": "src\\normalization.ts",
+      "source_location": "L37"
+    },
+    {
+      "id": "normalization_extractmainclause",
+      "label": "extractMainClause()",
+      "file_type": "code",
+      "source_file": "src\\normalization.ts",
+      "source_location": "L46"
+    },
+    {
+      "id": "normalization_buildaliaslookup",
+      "label": "buildAliasLookup()",
+      "file_type": "code",
+      "source_file": "src\\normalization.ts",
+      "source_location": "L53"
+    },
+    {
+      "id": "normalization_tablesfor",
+      "label": "tablesFor()",
+      "file_type": "code",
+      "source_file": "src\\normalization.ts",
+      "source_location": "L76"
+    },
+    {
+      "id": "normalization_normalizetokens",
+      "label": "normalizeTokens()",
+      "file_type": "code",
+      "source_file": "src\\normalization.ts",
+      "source_location": "L90"
+    },
+    {
+      "id": "src_paths_ts",
+      "label": "paths.ts",
+      "file_type": "code",
+      "source_file": "src\\paths.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "paths_cmrhome",
+      "label": "cmrHome()",
+      "file_type": "code",
+      "source_file": "src\\paths.ts",
+      "source_location": "L15"
+    },
+    {
+      "id": "paths_discoveryroots",
+      "label": "discoveryRoots()",
+      "file_type": "code",
+      "source_file": "src\\paths.ts",
+      "source_location": "L19"
+    },
+    {
+      "id": "paths_settingspath",
+      "label": "settingsPath()",
+      "file_type": "code",
+      "source_file": "src\\paths.ts",
+      "source_location": "L26"
+    },
+    {
+      "id": "paths_statedir",
+      "label": "stateDir()",
+      "file_type": "code",
+      "source_file": "src\\paths.ts",
+      "source_location": "L30"
+    },
+    {
+      "id": "paths_logsdir",
+      "label": "logsDir()",
+      "file_type": "code",
+      "source_file": "src\\paths.ts",
+      "source_location": "L34"
+    },
+    {
+      "id": "paths_installroot",
+      "label": "installRoot()",
+      "file_type": "code",
+      "source_file": "src\\paths.ts",
+      "source_location": "L38"
+    },
+    {
+      "id": "paths_claudedir",
+      "label": "claudeDir()",
+      "file_type": "code",
+      "source_file": "src\\paths.ts",
+      "source_location": "L42"
+    },
+    {
+      "id": "src_planner_ts",
+      "label": "planner.ts",
+      "file_type": "code",
+      "source_file": "src\\planner.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "planner_fragmentweight",
+      "label": "fragmentWeight()",
+      "file_type": "code",
+      "source_file": "src\\planner.ts",
+      "source_location": "L14"
+    },
+    {
+      "id": "planner_splitintents",
+      "label": "splitIntents()",
+      "file_type": "code",
+      "source_file": "src\\planner.ts",
+      "source_location": "L26"
+    },
+    {
+      "id": "src_router_ts",
+      "label": "router.ts",
+      "file_type": "code",
+      "source_file": "src\\router.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "router_scoreroute",
+      "label": "scoreRoute()",
+      "file_type": "code",
+      "source_file": "src\\router.ts",
+      "source_location": "L46"
+    },
+    {
+      "id": "router_createrouter",
+      "label": "createRouter()",
+      "file_type": "code",
+      "source_file": "src\\router.ts",
+      "source_location": "L50"
+    },
+    {
+      "id": "src_scorer_ts",
+      "label": "scorer.ts",
+      "file_type": "code",
+      "source_file": "src\\scorer.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "scorer_tokenmatch",
+      "label": "tokenMatch()",
+      "file_type": "code",
+      "source_file": "src\\scorer.ts",
+      "source_location": "L22"
+    },
+    {
+      "id": "scorer_fieldmatch",
+      "label": "fieldMatch()",
+      "file_type": "code",
+      "source_file": "src\\scorer.ts",
+      "source_location": "L29"
+    },
+    {
+      "id": "scorer_scorecapability",
+      "label": "scoreCapability()",
+      "file_type": "code",
+      "source_file": "src\\scorer.ts",
+      "source_location": "L38"
+    },
+    {
+      "id": "scorer_rankcapabilities",
+      "label": "rankCapabilities()",
+      "file_type": "code",
+      "source_file": "src\\scorer.ts",
+      "source_location": "L67"
+    },
+    {
+      "id": "src_stats_ts",
+      "label": "stats.ts",
+      "file_type": "code",
+      "source_file": "src\\stats.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "stats_tsof",
+      "label": "tsOf()",
+      "file_type": "code",
+      "source_file": "src\\stats.ts",
+      "source_location": "L54"
+    },
+    {
+      "id": "stats_computestats",
+      "label": "computeStats()",
+      "file_type": "code",
+      "source_file": "src\\stats.ts",
+      "source_location": "L59"
+    },
+    {
+      "id": "src_types_ts",
+      "label": "types.ts",
+      "file_type": "code",
+      "source_file": "src\\types.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_phase1_discovery_test_ts",
+      "label": "phase1-discovery.test.ts",
+      "file_type": "code",
+      "source_file": "test\\phase1-discovery.test.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "phase1_discovery_test_copyfixturestotemp",
+      "label": "copyFixturesToTemp()",
+      "file_type": "code",
+      "source_file": "test\\phase1-discovery.test.ts",
+      "source_location": "L85"
+    },
+    {
+      "id": "phase1_discovery_test_ids",
+      "label": "ids()",
+      "file_type": "code",
+      "source_file": "test\\phase1-discovery.test.ts",
+      "source_location": "L140"
+    },
+    {
+      "id": "test_phase2_scoring_test_ts",
+      "label": "phase2-scoring.test.ts",
+      "file_type": "code",
+      "source_file": "test\\phase2-scoring.test.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "phase2_scoring_test_buildentries",
+      "label": "buildEntries()",
+      "file_type": "code",
+      "source_file": "test\\phase2-scoring.test.ts",
+      "source_location": "L25"
+    },
+    {
+      "id": "phase2_scoring_test_mk",
+      "label": "mk()",
+      "file_type": "code",
+      "source_file": "test\\phase2-scoring.test.ts",
+      "source_location": "L67"
+    },
+    {
+      "id": "test_phase3_planner_test_ts",
+      "label": "phase3-planner.test.ts",
+      "file_type": "code",
+      "source_file": "test\\phase3-planner.test.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "phase3_planner_test_makerouter",
+      "label": "makeRouter()",
+      "file_type": "code",
+      "source_file": "test\\phase3-planner.test.ts",
+      "source_location": "L22"
+    },
+    {
+      "id": "test_phase4_enhancer_cli_test_ts",
+      "label": "phase4-enhancer-cli.test.ts",
+      "file_type": "code",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "phase4_enhancer_cli_test_makerouter",
+      "label": "makeRouter()",
+      "file_type": "code",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L26"
+    },
+    {
+      "id": "phase4_enhancer_cli_test_mk",
+      "label": "mk()",
+      "file_type": "code",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L78"
+    },
+    {
+      "id": "phase4_enhancer_cli_test_clienv",
+      "label": "cliEnv()",
+      "file_type": "code",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L119"
+    },
+    {
+      "id": "test_phase5_integration_test_ts",
+      "label": "phase5-integration.test.ts",
+      "file_type": "code",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "phase5_integration_test_makerouter",
+      "label": "makeRouter()",
+      "file_type": "code",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L27"
+    },
+    {
+      "id": "phase5_integration_test_installtotemp",
+      "label": "installToTemp()",
+      "file_type": "code",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L40"
+    },
+    {
+      "id": "phase5_integration_test_invokehook",
+      "label": "invokeHook()",
+      "file_type": "code",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L55"
+    },
+    {
+      "id": "phase5_integration_test_mk",
+      "label": "mk()",
+      "file_type": "code",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L204"
+    },
+    {
+      "id": "test_phase6_hardening_test_ts",
+      "label": "phase6-hardening.test.ts",
+      "file_type": "code",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "phase6_hardening_test_makerouter",
+      "label": "makeRouter()",
+      "file_type": "code",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L28"
+    },
+    {
+      "id": "phase6_hardening_test_clienv",
+      "label": "cliEnv()",
+      "file_type": "code",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L37"
+    },
+    {
+      "id": "phase6_hardening_test_runcli",
+      "label": "runCli()",
+      "file_type": "code",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L47"
+    },
+    {
+      "id": "test_phase7_stats_test_ts",
+      "label": "phase7-stats.test.ts",
+      "file_type": "code",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "phase7_stats_test_fakerequest",
+      "label": "fakeRequest()",
+      "file_type": "code",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L26"
+    },
+    {
+      "id": "phase7_stats_test_t",
+      "label": "T()",
+      "file_type": "code",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L39"
+    },
+    {
+      "id": "phase7_stats_test_hook",
+      "label": "hook()",
+      "file_type": "code",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L121"
+    },
+    {
+      "id": "test_phase8_commands_ops_test_ts",
+      "label": "phase8-commands-ops.test.ts",
+      "file_type": "code",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "phase8_commands_ops_test_discoveredids",
+      "label": "discoveredIds()",
+      "file_type": "code",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L24"
+    },
+    {
+      "id": "phase8_commands_ops_test_run",
+      "label": "run()",
+      "file_type": "code",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L95"
+    },
+    {
+      "id": "phase8_commands_ops_test_digestof",
+      "label": "digestOf()",
+      "file_type": "code",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L101"
+    }
+  ],
+  "edges": [
+    {
+      "source": "eval_harness_ts",
+      "target": "node_fs",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "eval_harness_ts",
+      "target": "node_path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "eval_harness_ts",
+      "target": "node_url",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "eval_harness_ts",
+      "target": "eval_src_discovery_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "eval_harness_ts",
+      "target": "eval_src_config_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "eval_harness_ts",
+      "target": "eval_src_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "eval_harness_ts",
+      "target": "harness_loadcorpus",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "eval_harness_ts",
+      "target": "harness_collectexpectedids",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "eval_harness_ts",
+      "target": "harness_discoverycoverage",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
+      "source": "eval_harness_ts",
+      "target": "harness_runroutingmetrics",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L69",
+      "weight": 1.0
+    },
+    {
+      "source": "eval_harness_ts",
+      "target": "harness_reporoot",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L133",
+      "weight": 1.0
+    },
+    {
+      "source": "eval_harness_ts",
+      "target": "harness_defaultfixtureroots",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L137",
+      "weight": 1.0
+    },
+    {
+      "source": "eval_harness_ts",
+      "target": "harness_defaultcorpuspath",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L144",
+      "weight": 1.0
+    },
+    {
+      "source": "eval_harness_ts",
+      "target": "harness_main",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L148",
+      "weight": 1.0
+    },
+    {
+      "source": "harness_discoverycoverage",
+      "target": "harness_collectexpectedids",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L52",
+      "weight": 1.0
+    },
+    {
+      "source": "harness_defaultfixtureroots",
+      "target": "harness_reporoot",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L139",
+      "weight": 1.0
+    },
+    {
+      "source": "harness_defaultcorpuspath",
+      "target": "harness_reporoot",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L145",
+      "weight": 1.0
+    },
+    {
+      "source": "harness_main",
+      "target": "harness_defaultfixtureroots",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L151",
+      "weight": 1.0
+    },
+    {
+      "source": "harness_main",
+      "target": "harness_loadcorpus",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L152",
+      "weight": 1.0
+    },
+    {
+      "source": "harness_main",
+      "target": "harness_defaultcorpuspath",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L152",
+      "weight": 1.0
+    },
+    {
+      "source": "harness_main",
+      "target": "harness_reporoot",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L154",
+      "weight": 1.0
+    },
+    {
+      "source": "harness_main",
+      "target": "harness_discoverycoverage",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L157",
+      "weight": 1.0
+    },
+    {
+      "source": "harness_main",
+      "target": "harness_collectexpectedids",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L163",
+      "weight": 1.0
+    },
+    {
+      "source": "harness_main",
+      "target": "harness_runroutingmetrics",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "eval\\harness.ts",
+      "source_location": "L177",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "node_fs",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "node_child_process",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "node_path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "node_url",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "src_paths_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "src_config_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "src_router_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "src_enhancer_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "src_logs_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "src_stats_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "cli_atomicwrite",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "cli_copyruntime",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L35",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "cli_readsettings",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L47",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "cli_writesettings",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L57",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "cli_hookcommand",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L62",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "cli_hashookregistration",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L71",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "cli_gethooklist",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L84",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "cli_install",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L94",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "cli_uninstall",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L133",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "cli_validate",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L158",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "cli_listcapabilities",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L189",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "cli_selftest",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L213",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "cli_explain",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L265",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "cli_stats",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L291",
+      "weight": 1.0
+    },
+    {
+      "source": "src_cli_ts",
+      "target": "cli_usage",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L337",
+      "weight": 1.0
+    },
+    {
+      "source": "cli_writesettings",
+      "target": "cli_atomicwrite",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L59",
+      "weight": 1.0
+    },
+    {
+      "source": "cli_install",
+      "target": "cli_copyruntime",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L97",
+      "weight": 1.0
+    },
+    {
+      "source": "cli_install",
+      "target": "cli_readsettings",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L104",
+      "weight": 1.0
+    },
+    {
+      "source": "cli_install",
+      "target": "cli_hookcommand",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L106",
+      "weight": 1.0
+    },
+    {
+      "source": "cli_install",
+      "target": "cli_gethooklist",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L110",
+      "weight": 1.0
+    },
+    {
+      "source": "cli_install",
+      "target": "cli_hashookregistration",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L120",
+      "weight": 1.0
+    },
+    {
+      "source": "cli_install",
+      "target": "cli_writesettings",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L127",
+      "weight": 1.0
+    },
+    {
+      "source": "cli_uninstall",
+      "target": "cli_readsettings",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L136",
+      "weight": 1.0
+    },
+    {
+      "source": "cli_uninstall",
+      "target": "cli_hookcommand",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L138",
+      "weight": 1.0
+    },
+    {
+      "source": "cli_uninstall",
+      "target": "cli_gethooklist",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L141",
+      "weight": 1.0
+    },
+    {
+      "source": "cli_uninstall",
+      "target": "cli_writesettings",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L150",
+      "weight": 1.0
+    },
+    {
+      "source": "cli_validate",
+      "target": "cli_readsettings",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L166",
+      "weight": 1.0
+    },
+    {
+      "source": "cli_validate",
+      "target": "cli_hookcommand",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L168",
+      "weight": 1.0
+    },
+    {
+      "source": "cli_validate",
+      "target": "cli_hashookregistration",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L169",
+      "weight": 1.0
+    },
+    {
+      "source": "cli_validate",
+      "target": "cli_gethooklist",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\cli.ts",
+      "source_location": "L169",
+      "weight": 1.0
+    },
+    {
+      "source": "src_config_ts",
+      "target": "node_fs",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\config.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "src_config_ts",
+      "target": "node_path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\config.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "src_config_ts",
+      "target": "src_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\config.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_config_ts",
+      "target": "config_loadconfig",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\config.ts",
+      "source_location": "L47",
+      "weight": 1.0
+    },
+    {
+      "source": "src_config_ts",
+      "target": "config_mergeconfig",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\config.ts",
+      "source_location": "L59",
+      "weight": 1.0
+    },
+    {
+      "source": "config_loadconfig",
+      "target": "config_mergeconfig",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\config.ts",
+      "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "node_fs",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "node_path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "src_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "src_metadata_extractor_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "src_fingerprint_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "src_paths_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "discovery_sortedentries",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "discovery_isfile",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "discovery_walkfiles",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "discovery_readsafe",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L60",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "discovery_tocapability",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L68",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "discovery_discoverskills",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L78",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "discovery_discoveragents",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L89",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "discovery_discovercommands",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L105",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "discovery_discoverplugins",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L120",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "discovery_discovermcp",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L144",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "discovery_discoverall",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L179",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "discovery_scanfingerprint",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L203",
+      "weight": 1.0
+    },
+    {
+      "source": "src_discovery_ts",
+      "target": "discovery_indexbyid",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L262",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discoverskills",
+      "target": "discovery_walkfiles",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L81",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discoverskills",
+      "target": "discovery_tocapability",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L83",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discoverskills",
+      "target": "discovery_readsafe",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L83",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discoveragents",
+      "target": "discovery_sortedentries",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L92",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discoveragents",
+      "target": "discovery_isfile",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L94",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discoveragents",
+      "target": "discovery_tocapability",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L95",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discoveragents",
+      "target": "discovery_readsafe",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L95",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discovercommands",
+      "target": "discovery_sortedentries",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L108",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discovercommands",
+      "target": "discovery_isfile",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L110",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discovercommands",
+      "target": "discovery_readsafe",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L112",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discoverplugins",
+      "target": "discovery_sortedentries",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L124",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discoverplugins",
+      "target": "discovery_discoverskills",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L131",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discoverplugins",
+      "target": "discovery_discoveragents",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L132",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discoverplugins",
+      "target": "discovery_discovercommands",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L133",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discoverall",
+      "target": "discovery_discoverskills",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L182",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discoverall",
+      "target": "discovery_discoveragents",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L185",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discoverall",
+      "target": "discovery_discovercommands",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L187",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discoverall",
+      "target": "discovery_discoverplugins",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L189",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_discoverall",
+      "target": "discovery_discovermcp",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L190",
+      "weight": 1.0
+    },
+    {
+      "source": "discovery_scanfingerprint",
+      "target": "discovery_sortedentries",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\discovery.ts",
+      "source_location": "L232",
+      "weight": 1.0
+    },
+    {
+      "source": "src_enhancer_ts",
+      "target": "src_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\enhancer.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_enhancer_ts",
+      "target": "enhancer_estimatetokens",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\enhancer.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "src_enhancer_ts",
+      "target": "enhancer_escapexml",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\enhancer.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "src_enhancer_ts",
+      "target": "enhancer_invocationfor",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\enhancer.ts",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "src_enhancer_ts",
+      "target": "enhancer_buildenhancedprompt",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\enhancer.ts",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
+      "source": "enhancer_buildenhancedprompt",
+      "target": "enhancer_escapexml",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\enhancer.ts",
+      "source_location": "L58",
+      "weight": 1.0
+    },
+    {
+      "source": "enhancer_buildenhancedprompt",
+      "target": "enhancer_invocationfor",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\enhancer.ts",
+      "source_location": "L76",
+      "weight": 1.0
+    },
+    {
+      "source": "enhancer_buildenhancedprompt",
+      "target": "enhancer_estimatetokens",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\enhancer.ts",
+      "source_location": "L87",
+      "weight": 1.0
+    },
+    {
+      "source": "src_fingerprint_ts",
+      "target": "node_crypto",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\fingerprint.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "src_fingerprint_ts",
+      "target": "fingerprint_fingerprint",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\fingerprint.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_fingerprint_ts",
+      "target": "fingerprint_fingerprintjson",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\fingerprint.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "fingerprint_fingerprintjson",
+      "target": "fingerprint_fingerprint",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\fingerprint.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index_store_ts",
+      "target": "node_fs",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index_store_ts",
+      "target": "node_path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index_store_ts",
+      "target": "src_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index_store_ts",
+      "target": "src_paths_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index_store_ts",
+      "target": "index_store_indexfile",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index_store_ts",
+      "target": "index_store_manifestfile",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index_store_ts",
+      "target": "index_store_loadindex",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index_store_ts",
+      "target": "index_store_writeatomic",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L45",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index_store_ts",
+      "target": "index_store_saveindex",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L51",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index_store_ts",
+      "target": "index_store_updateindex",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L61",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index_store_ts",
+      "target": "index_store_buildindex",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L98",
+      "weight": 1.0
+    },
+    {
+      "source": "index_store_loadindex",
+      "target": "index_store_indexfile",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "index_store_saveindex",
+      "target": "index_store_writeatomic",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "index_store_saveindex",
+      "target": "index_store_indexfile",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "index_store_saveindex",
+      "target": "index_store_manifestfile",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L54",
+      "weight": 1.0
+    },
+    {
+      "source": "index_store_updateindex",
+      "target": "index_store_saveindex",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L92",
+      "weight": 1.0
+    },
+    {
+      "source": "index_store_buildindex",
+      "target": "index_store_updateindex",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\index-store.ts",
+      "source_location": "L99",
+      "weight": 1.0
+    },
+    {
+      "source": "src_logs_ts",
+      "target": "node_fs",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "src_logs_ts",
+      "target": "node_path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "src_logs_ts",
+      "target": "node_crypto",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "src_logs_ts",
+      "target": "src_paths_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "src_logs_ts",
+      "target": "src_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "src_logs_ts",
+      "target": "logs_compactlog",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "src_logs_ts",
+      "target": "logs_prompthash",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
+      "source": "src_logs_ts",
+      "target": "logs_todecisionentry",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L54",
+      "weight": 1.0
+    },
+    {
+      "source": "src_logs_ts",
+      "target": "logs_appenddecisionlog",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
+      "source": "src_logs_ts",
+      "target": "logs_appendusagelog",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L92",
+      "weight": 1.0
+    },
+    {
+      "source": "src_logs_ts",
+      "target": "logs_loadusagelog",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L101",
+      "weight": 1.0
+    },
+    {
+      "source": "src_logs_ts",
+      "target": "logs_loaddecisionlog",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L107",
+      "weight": 1.0
+    },
+    {
+      "source": "src_logs_ts",
+      "target": "logs_readjsonl",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L112",
+      "weight": 1.0
+    },
+    {
+      "source": "src_logs_ts",
+      "target": "logs_usagescore",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L127",
+      "weight": 1.0
+    },
+    {
+      "source": "src_logs_ts",
+      "target": "logs_computeusagescores",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L148",
+      "weight": 1.0
+    },
+    {
+      "source": "logs_todecisionentry",
+      "target": "logs_prompthash",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L57",
+      "weight": 1.0
+    },
+    {
+      "source": "logs_appenddecisionlog",
+      "target": "logs_compactlog",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L77",
+      "weight": 1.0
+    },
+    {
+      "source": "logs_appendusagelog",
+      "target": "logs_compactlog",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L97",
+      "weight": 1.0
+    },
+    {
+      "source": "logs_loadusagelog",
+      "target": "logs_readjsonl",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L103",
+      "weight": 1.0
+    },
+    {
+      "source": "logs_loaddecisionlog",
+      "target": "logs_readjsonl",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\logs.ts",
+      "source_location": "L109",
+      "weight": 1.0
+    },
+    {
+      "source": "src_metadata_extractor_ts",
+      "target": "src_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "src_metadata_extractor_ts",
+      "target": "metadata_extractor_parsefrontmatter",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "src_metadata_extractor_ts",
+      "target": "metadata_extractor_unquote",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L47",
+      "weight": 1.0
+    },
+    {
+      "source": "src_metadata_extractor_ts",
+      "target": "metadata_extractor_asstring",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "src_metadata_extractor_ts",
+      "target": "metadata_extractor_aslist",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L57",
+      "weight": 1.0
+    },
+    {
+      "source": "src_metadata_extractor_ts",
+      "target": "metadata_extractor_firstsentence",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L67",
+      "weight": 1.0
+    },
+    {
+      "source": "src_metadata_extractor_ts",
+      "target": "metadata_extractor_extractfrommarkdown",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L83",
+      "weight": 1.0
+    },
+    {
+      "source": "src_metadata_extractor_ts",
+      "target": "metadata_extractor_extractfrommcpserver",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L110",
+      "weight": 1.0
+    },
+    {
+      "source": "src_metadata_extractor_ts",
+      "target": "metadata_extractor_defaultcategory",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L132",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata_extractor_parsefrontmatter",
+      "target": "metadata_extractor_unquote",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata_extractor_extractfrommarkdown",
+      "target": "metadata_extractor_parsefrontmatter",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L84",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata_extractor_extractfrommarkdown",
+      "target": "metadata_extractor_asstring",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L85",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata_extractor_extractfrommarkdown",
+      "target": "metadata_extractor_firstsentence",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L86",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata_extractor_extractfrommarkdown",
+      "target": "metadata_extractor_aslist",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L87",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata_extractor_extractfrommarkdown",
+      "target": "metadata_extractor_defaultcategory",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L103",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata_extractor_extractfrommcpserver",
+      "target": "metadata_extractor_aslist",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L111",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata_extractor_extractfrommcpserver",
+      "target": "metadata_extractor_asstring",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L112",
+      "weight": 1.0
+    },
+    {
+      "source": "metadata_extractor_extractfrommcpserver",
+      "target": "metadata_extractor_firstsentence",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\metadata-extractor.ts",
+      "source_location": "L120",
+      "weight": 1.0
+    },
+    {
+      "source": "src_normalization_ts",
+      "target": "src_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\normalization.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "src_normalization_ts",
+      "target": "normalization_tokenize",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\normalization.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "src_normalization_ts",
+      "target": "normalization_foldtoken",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\normalization.ts",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "src_normalization_ts",
+      "target": "normalization_extractmainclause",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\normalization.ts",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "src_normalization_ts",
+      "target": "normalization_buildaliaslookup",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\normalization.ts",
+      "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "src_normalization_ts",
+      "target": "normalization_tablesfor",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\normalization.ts",
+      "source_location": "L76",
+      "weight": 1.0
+    },
+    {
+      "source": "src_normalization_ts",
+      "target": "normalization_normalizetokens",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\normalization.ts",
+      "source_location": "L90",
+      "weight": 1.0
+    },
+    {
+      "source": "normalization_tablesfor",
+      "target": "normalization_buildaliaslookup",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\normalization.ts",
+      "source_location": "L79",
+      "weight": 1.0
+    },
+    {
+      "source": "normalization_normalizetokens",
+      "target": "normalization_extractmainclause",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\normalization.ts",
+      "source_location": "L91",
+      "weight": 1.0
+    },
+    {
+      "source": "normalization_normalizetokens",
+      "target": "normalization_tablesfor",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\normalization.ts",
+      "source_location": "L92",
+      "weight": 1.0
+    },
+    {
+      "source": "normalization_normalizetokens",
+      "target": "normalization_tokenize",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\normalization.ts",
+      "source_location": "L94",
+      "weight": 1.0
+    },
+    {
+      "source": "src_paths_ts",
+      "target": "node_os",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\paths.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "src_paths_ts",
+      "target": "node_path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\paths.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "src_paths_ts",
+      "target": "paths_cmrhome",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\paths.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "src_paths_ts",
+      "target": "paths_discoveryroots",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\paths.ts",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "src_paths_ts",
+      "target": "paths_settingspath",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\paths.ts",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "src_paths_ts",
+      "target": "paths_statedir",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\paths.ts",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "src_paths_ts",
+      "target": "paths_logsdir",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\paths.ts",
+      "source_location": "L34",
+      "weight": 1.0
+    },
+    {
+      "source": "src_paths_ts",
+      "target": "paths_installroot",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\paths.ts",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "src_paths_ts",
+      "target": "paths_claudedir",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\paths.ts",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "paths_statedir",
+      "target": "paths_cmrhome",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\paths.ts",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "paths_logsdir",
+      "target": "paths_cmrhome",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\paths.ts",
+      "source_location": "L35",
+      "weight": 1.0
+    },
+    {
+      "source": "paths_installroot",
+      "target": "paths_cmrhome",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\paths.ts",
+      "source_location": "L39",
+      "weight": 1.0
+    },
+    {
+      "source": "src_planner_ts",
+      "target": "planner_fragmentweight",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\planner.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "src_planner_ts",
+      "target": "planner_splitintents",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\planner.ts",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "planner_splitintents",
+      "target": "planner_fragmentweight",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\planner.ts",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "src_router_ts",
+      "target": "src_discovery_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\router.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_router_ts",
+      "target": "src_index_store_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\router.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "src_router_ts",
+      "target": "src_fingerprint_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\router.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "src_router_ts",
+      "target": "src_logs_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\router.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "src_router_ts",
+      "target": "src_normalization_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\router.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "src_router_ts",
+      "target": "src_scorer_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\router.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "src_router_ts",
+      "target": "src_planner_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\router.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "src_router_ts",
+      "target": "src_paths_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\router.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "src_router_ts",
+      "target": "src_paths_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\router.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "src_router_ts",
+      "target": "src_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\router.ts",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "src_router_ts",
+      "target": "router_scoreroute",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\router.ts",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "src_router_ts",
+      "target": "router_createrouter",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\router.ts",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
+      "source": "src_scorer_ts",
+      "target": "src_normalization_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\scorer.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "src_scorer_ts",
+      "target": "src_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\scorer.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "src_scorer_ts",
+      "target": "scorer_tokenmatch",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\scorer.ts",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "src_scorer_ts",
+      "target": "scorer_fieldmatch",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\scorer.ts",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "src_scorer_ts",
+      "target": "scorer_scorecapability",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\scorer.ts",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "src_scorer_ts",
+      "target": "scorer_rankcapabilities",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\scorer.ts",
+      "source_location": "L67",
+      "weight": 1.0
+    },
+    {
+      "source": "scorer_scorecapability",
+      "target": "scorer_fieldmatch",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\scorer.ts",
+      "source_location": "L43",
+      "weight": 1.0
+    },
+    {
+      "source": "src_stats_ts",
+      "target": "src_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\stats.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "src_stats_ts",
+      "target": "src_logs_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\stats.ts",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "src_stats_ts",
+      "target": "stats_tsof",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\stats.ts",
+      "source_location": "L54",
+      "weight": 1.0
+    },
+    {
+      "source": "src_stats_ts",
+      "target": "stats_computestats",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\stats.ts",
+      "source_location": "L59",
+      "weight": 1.0
+    },
+    {
+      "source": "stats_computestats",
+      "target": "stats_tsof",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\stats.ts",
+      "source_location": "L107",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase1_discovery_test_ts",
+      "target": "node_test",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase1-discovery.test.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase1_discovery_test_ts",
+      "target": "strict",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase1-discovery.test.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase1_discovery_test_ts",
+      "target": "node_fs",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase1-discovery.test.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase1_discovery_test_ts",
+      "target": "node_os",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase1-discovery.test.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase1_discovery_test_ts",
+      "target": "node_path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase1-discovery.test.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase1_discovery_test_ts",
+      "target": "node_url",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase1-discovery.test.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase1_discovery_test_ts",
+      "target": "test_src_discovery_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase1-discovery.test.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase1_discovery_test_ts",
+      "target": "test_src_fingerprint_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase1-discovery.test.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase1_discovery_test_ts",
+      "target": "test_src_index_store_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase1-discovery.test.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase1_discovery_test_ts",
+      "target": "test_src_router_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase1-discovery.test.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase1_discovery_test_ts",
+      "target": "test_src_config_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase1-discovery.test.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase1_discovery_test_ts",
+      "target": "phase1_discovery_test_copyfixturestotemp",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase1-discovery.test.ts",
+      "source_location": "L85",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase1_discovery_test_ts",
+      "target": "phase1_discovery_test_ids",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase1-discovery.test.ts",
+      "source_location": "L140",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase2_scoring_test_ts",
+      "target": "node_test",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase2-scoring.test.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase2_scoring_test_ts",
+      "target": "strict",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase2-scoring.test.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase2_scoring_test_ts",
+      "target": "node_path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase2-scoring.test.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase2_scoring_test_ts",
+      "target": "node_url",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase2-scoring.test.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase2_scoring_test_ts",
+      "target": "test_src_normalization_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase2-scoring.test.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase2_scoring_test_ts",
+      "target": "test_src_scorer_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase2-scoring.test.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase2_scoring_test_ts",
+      "target": "test_src_router_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase2-scoring.test.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase2_scoring_test_ts",
+      "target": "test_src_config_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase2-scoring.test.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase2_scoring_test_ts",
+      "target": "test_src_discovery_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase2-scoring.test.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase2_scoring_test_ts",
+      "target": "test_src_index_store_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase2-scoring.test.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase2_scoring_test_ts",
+      "target": "test_src_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase2-scoring.test.ts",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase2_scoring_test_ts",
+      "target": "test_eval_harness_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase2-scoring.test.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase2_scoring_test_ts",
+      "target": "phase2_scoring_test_buildentries",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase2-scoring.test.ts",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase2_scoring_test_ts",
+      "target": "phase2_scoring_test_mk",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase2-scoring.test.ts",
+      "source_location": "L67",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase3_planner_test_ts",
+      "target": "node_test",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase3-planner.test.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase3_planner_test_ts",
+      "target": "strict",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase3-planner.test.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase3_planner_test_ts",
+      "target": "node_path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase3-planner.test.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase3_planner_test_ts",
+      "target": "node_url",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase3-planner.test.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase3_planner_test_ts",
+      "target": "test_src_router_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase3-planner.test.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase3_planner_test_ts",
+      "target": "test_src_planner_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase3-planner.test.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase3_planner_test_ts",
+      "target": "test_src_config_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase3-planner.test.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase3_planner_test_ts",
+      "target": "test_src_discovery_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase3-planner.test.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase3_planner_test_ts",
+      "target": "test_src_index_store_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase3-planner.test.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase3_planner_test_ts",
+      "target": "test_eval_harness_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase3-planner.test.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase3_planner_test_ts",
+      "target": "phase3_planner_test_makerouter",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase3-planner.test.ts",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase4_enhancer_cli_test_ts",
+      "target": "node_test",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase4_enhancer_cli_test_ts",
+      "target": "strict",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase4_enhancer_cli_test_ts",
+      "target": "node_child_process",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase4_enhancer_cli_test_ts",
+      "target": "node_fs",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase4_enhancer_cli_test_ts",
+      "target": "node_os",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase4_enhancer_cli_test_ts",
+      "target": "node_path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase4_enhancer_cli_test_ts",
+      "target": "node_url",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase4_enhancer_cli_test_ts",
+      "target": "test_src_router_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase4_enhancer_cli_test_ts",
+      "target": "test_src_enhancer_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase4_enhancer_cli_test_ts",
+      "target": "test_src_config_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase4_enhancer_cli_test_ts",
+      "target": "test_src_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase4_enhancer_cli_test_ts",
+      "target": "test_src_discovery_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase4_enhancer_cli_test_ts",
+      "target": "test_src_index_store_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase4_enhancer_cli_test_ts",
+      "target": "phase4_enhancer_cli_test_makerouter",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase4_enhancer_cli_test_ts",
+      "target": "phase4_enhancer_cli_test_mk",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L78",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase4_enhancer_cli_test_ts",
+      "target": "phase4_enhancer_cli_test_clienv",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase4-enhancer-cli.test.ts",
+      "source_location": "L119",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase5_integration_test_ts",
+      "target": "node_test",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase5_integration_test_ts",
+      "target": "strict",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase5_integration_test_ts",
+      "target": "node_child_process",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase5_integration_test_ts",
+      "target": "node_fs",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase5_integration_test_ts",
+      "target": "node_os",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase5_integration_test_ts",
+      "target": "node_path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase5_integration_test_ts",
+      "target": "node_url",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase5_integration_test_ts",
+      "target": "test_src_logs_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase5_integration_test_ts",
+      "target": "test_src_router_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase5_integration_test_ts",
+      "target": "test_src_config_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase5_integration_test_ts",
+      "target": "test_src_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase5_integration_test_ts",
+      "target": "test_src_discovery_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase5_integration_test_ts",
+      "target": "test_src_index_store_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase5_integration_test_ts",
+      "target": "phase5_integration_test_makerouter",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase5_integration_test_ts",
+      "target": "phase5_integration_test_installtotemp",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L40",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase5_integration_test_ts",
+      "target": "phase5_integration_test_invokehook",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L55",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase5_integration_test_ts",
+      "target": "phase5_integration_test_mk",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase5-integration.test.ts",
+      "source_location": "L204",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase6_hardening_test_ts",
+      "target": "node_test",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase6_hardening_test_ts",
+      "target": "strict",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase6_hardening_test_ts",
+      "target": "node_child_process",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase6_hardening_test_ts",
+      "target": "node_fs",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase6_hardening_test_ts",
+      "target": "node_os",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase6_hardening_test_ts",
+      "target": "node_path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase6_hardening_test_ts",
+      "target": "node_url",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase6_hardening_test_ts",
+      "target": "test_src_router_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase6_hardening_test_ts",
+      "target": "test_src_config_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase6_hardening_test_ts",
+      "target": "test_src_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase6_hardening_test_ts",
+      "target": "test_src_index_store_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase6_hardening_test_ts",
+      "target": "test_src_discovery_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase6_hardening_test_ts",
+      "target": "test_eval_harness_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase6_hardening_test_ts",
+      "target": "phase6_hardening_test_makerouter",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase6_hardening_test_ts",
+      "target": "phase6_hardening_test_clienv",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase6_hardening_test_ts",
+      "target": "phase6_hardening_test_runcli",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase6-hardening.test.ts",
+      "source_location": "L47",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase7_stats_test_ts",
+      "target": "node_test",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase7_stats_test_ts",
+      "target": "strict",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase7_stats_test_ts",
+      "target": "node_child_process",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase7_stats_test_ts",
+      "target": "node_fs",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase7_stats_test_ts",
+      "target": "node_os",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase7_stats_test_ts",
+      "target": "node_path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase7_stats_test_ts",
+      "target": "node_url",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase7_stats_test_ts",
+      "target": "test_src_stats_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase7_stats_test_ts",
+      "target": "test_src_logs_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase7_stats_test_ts",
+      "target": "test_src_router_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase7_stats_test_ts",
+      "target": "test_src_config_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase7_stats_test_ts",
+      "target": "test_src_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase7_stats_test_ts",
+      "target": "phase7_stats_test_fakerequest",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase7_stats_test_ts",
+      "target": "phase7_stats_test_t",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L39",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase7_stats_test_ts",
+      "target": "phase7_stats_test_hook",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase7-stats.test.ts",
+      "source_location": "L121",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase8_commands_ops_test_ts",
+      "target": "node_test",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase8_commands_ops_test_ts",
+      "target": "strict",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase8_commands_ops_test_ts",
+      "target": "node_path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase8_commands_ops_test_ts",
+      "target": "node_child_process",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase8_commands_ops_test_ts",
+      "target": "node_url",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase8_commands_ops_test_ts",
+      "target": "node_fs",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase8_commands_ops_test_ts",
+      "target": "node_os",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase8_commands_ops_test_ts",
+      "target": "test_src_discovery_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase8_commands_ops_test_ts",
+      "target": "test_src_index_store_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase8_commands_ops_test_ts",
+      "target": "test_src_router_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase8_commands_ops_test_ts",
+      "target": "test_src_config_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase8_commands_ops_test_ts",
+      "target": "test_src_logs_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase8_commands_ops_test_ts",
+      "target": "test_src_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase8_commands_ops_test_ts",
+      "target": "phase8_commands_ops_test_discoveredids",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase8_commands_ops_test_ts",
+      "target": "phase8_commands_ops_test_run",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L95",
+      "weight": 1.0
+    },
+    {
+      "source": "test_phase8_commands_ops_test_ts",
+      "target": "phase8_commands_ops_test_digestof",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test\\phase8-commands-ops.test.ts",
+      "source_location": "L101",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

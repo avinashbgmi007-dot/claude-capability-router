@@ -62,11 +62,19 @@ const check = (name, pass, extra = "") => {
 
 // --- mock upstream -----------------------------------------------------------
 const callCounts = {};
+let lastReceived = null; // { url, body } — lets tests assert what the guard forwarded
 const mock = http.createServer((req, res) => {
+  if (req.url === "/debug/last") {
+    res.writeHead(200, { "content-type": "application/json" });
+    res.end(JSON.stringify(lastReceived ?? {}));
+    return;
+  }
   const chunks = [];
   req.on("data", (c) => chunks.push(c));
   req.on("end", () => {
-    const body = JSON.parse(Buffer.concat(chunks).toString() || "{}");
+    const rawBody = Buffer.concat(chunks).toString();
+    const body = JSON.parse(rawBody || "{}");
+    lastReceived = { url: req.url, body };
     let looping;
     if (body.model === "looper" || body.model === "looper-always") looping = true;
     else if (body.model === "looper-once") {
@@ -229,6 +237,55 @@ try {
   recs = s2();
   check("P2: two strikes for two looped attempts", recs.length === 3 && recs[1].attempt === 1 && recs[2].attempt === 2);
   check("P2: gave-up chain flagged", recs[1].resolvedByRetry === false && recs[2].gaveUpAfterAttempts === 2);
+
+  await stopGuard(g.child);
+
+  // ================= PHASE 3: task-aware sampling profiles =================
+  g = startGuard({}); // defaults: profiles ON, auto-retry ON
+  await new Promise((r) => setTimeout(r, 700));
+
+  const lastUpstream = async () => (await fetch(`http://127.0.0.1:${MOCK_PORT}/debug/last`)).json();
+  async function chatContent(content, model = "healthy", extra = {}) {
+    const body = JSON.stringify({ model, stream: false, messages: [{ role: "user", content }], ...extra });
+    return fetch(`${BASE}/v1/chat/completions`, { method: "POST", body, headers: { "content-type": "application/json" } });
+  }
+
+  // CODE via fence, OpenAI path: full profile incl. penalty exemption
+  await chatContent("Fix this:\n```\nconst x = broken;\n```");
+  let up = (await lastUpstream()).body;
+  check("P3: code profile injects temp .25 + penalties off (openai path)", up.temperature === 0.25 && up.repeat_penalty === 1 && up.dry_multiplier === 0);
+
+  // PLAN via language
+  await chatContent("make a roadmap for the migration");
+  up = (await lastUpstream()).body;
+  check("P3: plan profile injects temp .65", up.temperature === 0.65);
+
+  // CHAT default
+  await chatContent("tell me about giraffes");
+  up = (await lastUpstream()).body;
+  check("P3: chat default temp .75", up.temperature === 0.75);
+
+  // respect-client: explicit temperature wins over code profile
+  await chatContent("Fix this:\n```\nconst y = broken;\n```", "healthy", { temperature: 0.5 });
+  up = (await lastUpstream()).body;
+  check("P3: explicit client temperature respected", up.temperature === 0.5);
+
+  // Anthropic path: temperature injected, extended fields NOT sent (fork ignores them)
+  await anthropic("healthy", false, 1);
+  // anthropic() sends "hi" — plain chat; assert messages-path stripping via direct call:
+  const aBody = JSON.stringify({ model: "healthy", max_tokens: 64, messages: [{ role: "user", content: "Fix this:\n```\nlet z = broken;\n```" }] });
+  lastReceived = null;
+  await fetch(`${BASE}/v1/messages`, { method: "POST", body: aBody, headers: { "content-type": "application/json" } });
+  await new Promise((r) => setTimeout(r, 200));
+  up = (await lastUpstream()).body;
+  check("P3: anthropic code profile temp .25", up.temperature === 0.25);
+  check("P3: anthropic path strips extended sampler fields", !("repeat_penalty" in up) && !("dry_multiplier" in up));
+
+  // strike records carry profile tag
+  await chat("looper", false, 6); // looper + "hi" -> classified chat; loop strikes tagged
+  await new Promise((rr) => setTimeout(rr, 400));
+  const s3 = readStrikes(g.strikesLog);
+  check("P3: strike records carry profile field", s3.length > 0 && typeof s3[s3.length - 1].profile === "string");
 
   console.log(failures === 0 ? "\nSMOKE TEST GREEN" : `\nSMOKE TEST RED (${failures})`);
   writeFileSync(path.join(tmp, "guard-stderr.log"), childErrAll);

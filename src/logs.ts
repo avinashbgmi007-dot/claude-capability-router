@@ -62,6 +62,7 @@ export function toDecisionEntry(req: ExecutionRequest, sessionId?: string): Deci
       primary: s.primary ? s.primary.entry.id : null,
       fallbacks: s.fallbacks.map((f) => f.entry.id),
       confidence: s.primary ? s.primary.confidence : 0,
+      ...(s.domainMatch ? { domainMatch: true } : {}),
     })),
     rationale: req.rationale,
   };

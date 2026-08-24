@@ -67,6 +67,17 @@ export interface PlanStep {
   fallbacks: ScoredCapability[];
   /** top-2 within ambiguityBand — the pick is not confident */
   ambiguous?: boolean;
+  /** set when routing came from domain-fallback (task-class match), not lexical scoring */
+  domainMatch?: true;
+}
+
+/** Domain-fallback routing: when specialists stay silent, suggest the
+    capability the user appointed as that task-domain's representative. */
+export interface DomainRoutingConfig {
+  enabled: boolean;
+  /** capability id per task domain. NOTE: chat representatives are rejected —
+      chat is the catch-all category; a chat rep would fire on every prompt. */
+  representatives: { code?: string; plan?: string; chat?: string };
 }
 
 export interface ExecutionRequest {
@@ -97,6 +108,7 @@ export interface RouterConfig {
   tokenBudget: number;
   /** leading prefix that forces routing past the threshold ("" disables) */
   forcePrefix: string;
+  domainRouting: DomainRoutingConfig;
 }
 
 export interface HookInput {
@@ -123,6 +135,6 @@ export interface DecisionLogEntry {
   /** Claude Code session id — the join key for usage-log correlation (stats). */
   sessionId?: string;
   routed: boolean;
-  plan: Array<{ intent: string; primary: string | null; fallbacks: string[]; confidence: number }>;
+  plan: Array<{ intent: string; primary: string | null; fallbacks: string[]; confidence: number; domainMatch?: boolean }>;
   rationale?: string;
 }

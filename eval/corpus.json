@@ -816,6 +816,18 @@
         "route": false,
         "passThrough": true
       }
+    },
+    {
+      "id": "P071",
+      "prompt": "write me a small pong arcade program with paddle controls",
+      "expect": {
+        "route": true,
+        "plan": [
+          {
+            "primary": "skill:caveman"
+          }
+        ]
+      }
     }
   ]
 }

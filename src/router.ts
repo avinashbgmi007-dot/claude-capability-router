@@ -11,12 +11,18 @@ import { loadUsageLog, computeUsageScores } from "./logs.js";
 import { normalizeTokens, extractMainClause } from "./normalization.js";
 import { rankCapabilities, type Weights } from "./scorer.js";
 import { splitIntents } from "./planner.js";
+import { classifyDomain } from "./domains.js";
 import type { DiscoveryRoots } from "./paths.js";
 import { stateDir } from "./paths.js";
 import type { CapabilityIndexEntry, ExecutionRequest, PlanStep, RouterConfig, ScoredCapability } from "./types.js";
 
 /** Minimum intent tokens required before routing (1-token queries are too weak). */
 const MIN_ROUTE_TOKENS = 2;
+
+/** Confidence recorded on domain-fallback routes. Fixed: it competes with
+    nothing (the domain pass runs only after specialist silence) and exists
+    so downstream tooling sees a stable, distinctly-flagged route class. */
+const DOMAIN_CONFIDENCE = 0.5;
 
 export interface RouterOptions {
   config: RouterConfig;
@@ -106,10 +112,51 @@ export function createRouter(opts: RouterOptions): Router {
     return s;
   }
 
+  const warnedGhosts = new Set<string>();
+
+  /** DOMAIN PASS (fallback): specialist scoring stayed silent — suggest the
+      user-appointed representative for the classified task domain. Never
+      fires for forced routes (@cmr means "top-ranked, whatever it is"). */
+  function tryDomainRoute(prompt: string): ExecutionRequest | null {
+    const dr = opts.config.domainRouting;
+    if (!dr?.enabled) return null;
+    const domain = classifyDomain(prompt);
+    if (domain === "chat") return null; // catch-all category: never represented
+    const repId = dr.representatives[domain];
+    if (!repId) return null;
+    const entry = entries.find((e) => e.id === repId);
+    if (!entry || !entry.enabled) {
+      if (!warnedGhosts.has(repId)) {
+        warnedGhosts.add(repId);
+        console.error(`[domain-routing] representative "${repId}" (${domain}) not found/enabled in discovery index — skipping`);
+      }
+      return null;
+    }
+    const primary: ScoredCapability = {
+      entry,
+      confidence: DOMAIN_CONFIDENCE,
+      fieldScores: { purpose: 0, actions: 0, domains: 0, examples: 0, description: 0, name: 0, body: 0 },
+    };
+    const step: PlanStep = { step: 1, intent: extractMainClause(prompt), primary, fallbacks: [], domainMatch: true };
+    return {
+      originalPrompt: prompt,
+      routed: true,
+      plan: [step],
+      rationale: `domain-match: ${domain} -> ${repId}`,
+    };
+  }
+
   function routeSingleIntent(prompt: string, o: { scoreText?: string; forced?: boolean } = {}): ExecutionRequest {
     const forced = o.forced ?? false;
     const { scored, primary, ambiguous } = routeSegment(o.scoreText ?? prompt, forced);
-    if (!primary) return { originalPrompt: prompt, routed: false, plan: [] };
+    if (!primary) {
+      // specialist silence → domain fallback (never on forced routes)
+      if (!forced) {
+        const dm = tryDomainRoute(prompt);
+        if (dm) return dm;
+      }
+      return { originalPrompt: prompt, routed: false, plan: [] };
+    }
     return {
       originalPrompt: prompt,
       routed: true,

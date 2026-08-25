@@ -33,6 +33,10 @@
     "bench": "node eval/bench.mjs",
     "simulate": "node eval/simulate.mjs",
     "live:check": "node eval/live-check.mjs",
+    "setup": "node setup.mjs",
+    "setup:status": "node setup.mjs status",
+    "setup:remove": "node setup.mjs remove --yes",
+    "repair": "node setup.mjs install --deep",
     "live:e2e": "node eval/live-e2e.mjs"
   },
   "devDependencies": {

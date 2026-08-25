@@ -20,6 +20,28 @@ touching your original prompt. Ordinary chat passes through untouched.
 
 ---
 
+## One-command setup
+
+Everything — build, hooks, runtime, guard autostart, Claude routing, health gate:
+
+```bash
+npm run setup          # install or standard repair (idempotent, rerun anytime)
+```
+
+| Command | Purpose |
+|---|---|
+| `npm run setup` | install / standard repair · ends with a PASS/FAIL/SKIP health table |
+| `npm run repair` | corrupted-state rebuild: clean dist, fresh runtime, fresh hook registrations |
+| `npm run setup:status` | read-only health snapshot |
+| `npm run setup:remove` | reverse everything (restores your backed-up model route) |
+
+Safe-defaults: model route (`ANTHROPIC_BASE_URL`) is rewritten only when it
+points at known-local llama ports; anything else is respected and printed
+instead. Whatever gets replaced is backed up to `~/.claude-cmr/env-backup.json`.
+llama-server itself stays yours to start (tuned launcher: `llama-guard/tuned-launch.ps1`).
+
+---
+
 ## Step-by-step install & run
 
 ### 1. Unzip the package

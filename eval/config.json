@@ -12,9 +12,6 @@
     "body": 0.05
   },
   "domainRouting": {
-    "enabled": true,
-    "representatives": {
-      "code": "skill:caveman"
-    }
+    "enabled": true
   }
 }

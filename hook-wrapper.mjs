@@ -63,7 +63,11 @@ function capabilityIdFromToolUse(hook) {
   const input = hook.tool_input || (hook.tool_use && hook.tool_use.input) || {};
   if (name.startsWith("mcp__")) {
     const parts = name.split("__");
-    return parts.length >= 2 && parts[1] ? `mcp-server:${parts[1]}` : null;
+    // plugin-provided servers arrive as mcp__plugin_<name>_<server>__tool;
+    // strip the marketplace prefix so stats group under the real server
+    let server = parts.length >= 2 && parts[1] ? parts[1] : null;
+    if (server && server.startsWith("plugin_")) server = server.slice("plugin_".length);
+    return server ? `mcp-server:${server}` : null;
   }
   if (name === "Skill") {
     const n = input.name;

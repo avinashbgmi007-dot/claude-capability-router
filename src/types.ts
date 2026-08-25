@@ -107,6 +107,8 @@ export interface RouterConfig {
   /** leading prefix that forces routing past the threshold ("" disables) */
   forcePrefix: string;
   domainRouting: DomainRoutingConfig;
+  /** outcome templates state the delivery bar inside enhanced prompts */
+  outcomes?: { enabled?: boolean };
 }
 
 export interface HookInput {

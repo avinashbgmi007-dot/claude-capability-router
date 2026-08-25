@@ -43,6 +43,7 @@ export const DEFAULT_CONFIG: RouterConfig = {
   tokenBudget: 300,
   forcePrefix: "@cmr",
   domainRouting: { enabled: true },
+  outcomes: { enabled: true },
 };
 
 export function loadConfig(configPath?: string): RouterConfig {
@@ -71,6 +72,9 @@ function mergeConfig(base: RouterConfig, raw: Partial<RouterConfig>): RouterConf
   if (typeof raw.forcePrefix === "string") out.forcePrefix = raw.forcePrefix;
   if (raw.domainRouting && typeof raw.domainRouting === "object") {
     out.domainRouting = { enabled: raw.domainRouting.enabled ?? out.domainRouting.enabled };
+  }
+  if (raw.outcomes && typeof raw.outcomes === "object") {
+    out.outcomes = { enabled: raw.outcomes.enabled ?? out.outcomes?.enabled ?? true };
   }
   return out;
 }

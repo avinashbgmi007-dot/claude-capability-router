@@ -54,6 +54,50 @@ test("enhancer: imperative action closer present when budget allows, dropped fir
   assert.ok(tight.includes("pdf-summarizer"), "primary capability never dropped");
 });
 
+// ---- outcome templates: the delivery bar travels with the task class ----
+
+test("outcome: code/generative spec demands run + fix + verified delivery", () => {
+  const router = makeRouter();
+  const req = router.route("write me a racing program with nitro and 10 cars");
+  const block = buildEnhancedPrompt(req, DEFAULT_CONFIG)!;
+  assert.ok(block.includes("<outcome>"), "outcome present");
+  assert.ok(block.includes("verified working version"), "generative wording");
+  // primacy: outcome sits between intent and first step
+  assert.ok(block.indexOf("<outcome>") < block.indexOf("<step "), "outcome before steps");
+});
+
+test("outcome: diagnostic spec demands reproduction-first and root-cause discipline", () => {
+  const router = makeRouter();
+  const req = router.route("getting TypeError in my game engine, help me debug");
+  const block = buildEnhancedPrompt(req, DEFAULT_CONFIG)!;
+  assert.ok(block.includes("root cause before editing"), block);
+  assert.ok(block.includes("cannot be reproduced in this environment"), "non-repro escape hatch present");
+});
+
+test("outcome: plan class asks for verifiable numbered steps", () => {
+  const router = makeRouter();
+  const req = router.route("rough plan and layout for the migration");
+  assert.equal(req.routed, true);
+  const block = buildEnhancedPrompt(req, DEFAULT_CONFIG)!;
+  assert.ok(block.includes("independently verifiable"), block);
+});
+
+test("outcome: kill-switch removes tag; drop order protects it over alternatives", () => {
+  const router = makeRouter();
+  const req = router.route("write me a racing program with nitro");
+  const cfgOff = { ...DEFAULT_CONFIG, outcomes: { enabled: false } };
+  assert.ok(!buildEnhancedPrompt(req, cfgOff)!.includes("<outcome>"), "kill-switch works");
+
+  // moderate pressure (200): alternatives/on-failure sacrificed, OUTCOME retained
+  const pressured = buildEnhancedPrompt(req, { ...DEFAULT_CONFIG, tokenBudget: 200 })!;
+  assert.ok(pressured.includes("<outcome>"), "outcome survives moderate pressure");
+  assert.ok(!pressured.includes("<alternatives>"), "alternatives die first");
+
+  // extreme pressure (120): everything auxiliary gone, primary + intent remain
+  const extreme = buildEnhancedPrompt(req, { ...DEFAULT_CONFIG, tokenBudget: 120 })!;
+  assert.ok(extreme.includes("pdf-summarizer") || extreme.includes("<intent>"), extreme);
+});
+
 test("enhancer: pass-through produces no block; original prompt untouched", () => {
   const router = makeRouter();
   const req = router.route("how's the weather today?");

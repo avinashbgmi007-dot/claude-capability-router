@@ -4,6 +4,8 @@
  * per-step invocation syntax, alternatives with rationale, token-budgeted.
  * The original prompt is NEVER modified (preservation is a router invariant).
  */
+import { outcomeFor } from "./outcomes.js";
+import { classifyDomain, classifySubtype } from "./domains.js";
 import type { ExecutionRequest, RouterConfig } from "./types.js";
 
 function estimateTokens(text: string): number {
@@ -56,8 +58,15 @@ export function buildEnhancedPrompt(req: ExecutionRequest, config: RouterConfig)
     .map((s) => s.intent)
     .join("; ");
   if (intents) lines.push(`  <intent>${escapeXml(intents)}</intent>`);
-  // imperative directive at PRIMACY position (right after the intent) —
-  // directives at block-end were ignored in live runs; beginnings carry weight
+  // OUTCOME (delivery bar) at primacy: states what "done excellently" means
+  // for this task class, independent of which capability assists. Survives
+  // budget drops longer than alternatives/on-failure.
+  if (config.outcomes?.enabled !== false) {
+    const tmpl = outcomeFor(classifyDomain(req.originalPrompt), classifySubtype(req.originalPrompt));
+    if (tmpl) lines.push(`  <outcome>${escapeXml(tmpl)}</outcome>`);
+  }
+  // imperative directive at PRIMACY position — directives at block-end were
+  // ignored in live runs; beginnings carry weight
   lines.push(`  <action>Invoke the capabilities below with the exact tool calls given, before doing anything else; skip any that fail and continue.</action>`);
   if (req.rationale && config.verbosity === "full") {
     lines.push(`  <rationale>${escapeXml(req.rationale)}</rationale>`);

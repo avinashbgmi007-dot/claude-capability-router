@@ -130,6 +130,22 @@ fixed and guarded by `test/meta-isolation.test.ts`). Restore in one command:
 npm run install:cr
 ```
 
+### Outcome templates — the delivery bar travels with the ask
+
+Routed prompts also carry an `<outcome>` line stating what "done excellently"
+means for the task class, derived deterministically from your classification:
+
+| Class | Delivery bar |
+|---|---|
+| `code/generative` | complete implementation → run/self-test → fix bugs → **verified working version** |
+| `code/diagnostic` | reproduce (or state why not) → root cause first → minimal fix → re-run proof |
+| `plan` | numbered steps, each verifiable, risks called out |
+
+Ask for *"a small program"* and the block instructs tested-and-verified
+delivery — the combo arrives by contract, not luck. Disable with
+`"outcomes": { "enabled": false }`. Under token pressure the drop order is:
+alternatives → on-failure → outcome → (primary never dropped).
+
 ---
 
 ## Daily use

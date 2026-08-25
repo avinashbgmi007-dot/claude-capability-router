@@ -828,6 +828,22 @@
           }
         ]
       }
+    },
+    {
+      "id": "P072",
+      "prompt": "install the n8n skills pack from github",
+      "expect": {
+        "route": false,
+        "passThrough": true
+      }
+    },
+    {
+      "id": "P073",
+      "prompt": "clone this repository and run npm install",
+      "expect": {
+        "route": false,
+        "passThrough": true
+      }
     }
   ]
 }

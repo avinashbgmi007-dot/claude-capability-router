@@ -129,6 +129,16 @@ npm test           # 70 tests across all phases
 node dist/eval/harness.js --routing   # corpus metrics (accuracy@1, FPR, FNR, …)
 ```
 
+### Infrastructure-intent suppression
+
+Prompts whose primary intent is installing/cloning (`install X from github`,
+`clone this repo and npm install`) bypass routing entirely — that's native
+shell work, not a capability task. Detected via verb+source-noun pairing;
+`@cmr` forced routes override the suppression. Debug-style prompts mentioning
+npm/git incidentally still route normally.
+
+---
+
 ## Domain-fallback routing
 
 When no installed capability lexically matches a prompt, the router classifies

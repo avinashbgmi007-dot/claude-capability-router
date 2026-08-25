@@ -334,6 +334,12 @@ export function stats(opts: { days?: number; json?: boolean } = {}): void {
       console.log(`  "${w.prompt.replace(/\s+/g, " ").trim().slice(0, 90)}" -> ${w.invokedIds.join(", ")}`);
     }
   }
+  if (s.suspectedActionLoops.length) {
+    console.log("\nsuspected action-loops (REPORT-ONLY - productive automation can look identical):");
+    for (const c of s.suspectedActionLoops.slice(0, 10)) {
+      console.log(`  ${c.capabilityId} x${c.count} in 10min window (${c.firstTs} -> ${c.lastTs}) args=${c.argsHash}`);
+    }
+  }
 }
 
 function usage(): void {

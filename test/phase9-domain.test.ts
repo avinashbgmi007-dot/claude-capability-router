@@ -10,7 +10,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { classifyDomain, classifySubtype, deriveDomain, signalClass, DOMAIN_TEST_VECTORS, MIN_DERIVE_AFFINITY } from "../src/domains.js";
+import { classifyDomain, classifySubtype, deriveDomain, isInfraIntent, signalClass, DOMAIN_TEST_VECTORS, MIN_DERIVE_AFFINITY } from "../src/domains.js";
 import { createRouter } from "../src/router.js";
 import { DEFAULT_CONFIG } from "../src/config.js";
 import type { CapabilityIndexEntry, RouterConfig } from "../src/types.js";
@@ -161,4 +161,29 @@ test("subtype: signalClass classifies description leanings", () => {
   assert.equal(signalClass("Writes code and delivers production-ready features."), "builder");
   assert.equal(signalClass("Testing, E2E suites and regression review."), "verifier");
   assert.equal(signalClass("Builds features and writes test suites for them."), "mixed");
+});
+
+// ---- infra-intent suppression: install/clone commands are shell work ----
+
+test("infra: classifier requires verb + source noun pairing", () => {
+  assert.equal(isInfraIntent("install the n8n skills pack from github"), true);
+  assert.equal(isInfraIntent("clone this project from github and run npm install"), true);
+  assert.equal(isInfraIntent("pip install these requirements from the repo"), true);
+  // negatives - verbs or nouns alone never suppress
+  assert.equal(isInfraIntent("clone this behavior in our app"), false);
+  assert.equal(isInfraIntent("add retry logic to the client"), false);
+  assert.equal(isInfraIntent("debug the npm install script in our ci"), false);
+});
+
+test("infra: suppression beats domain fallback and specialist silence", () => {
+  const r = routerWith([SW_ENG()]); // would domain-fire on code prompts
+  const req = r.route("install the n8n skills pack from github");
+  assert.equal(req.routed, false, "infra prompt must pass through");
+  assert.match(req.rationale ?? "", /infra-intent suppressed/);
+});
+
+test("infra: @cmr forced route still bypasses suppression", () => {
+  const r = routerWith([SW_ENG()]);
+  const req = r.route("@cmr install the n8n skills pack from github");
+  assert.equal(req.routed, true, "forced routes ignore infra suppression");
 });

@@ -50,6 +50,17 @@ traffic only the temperature axis injects, and your server CLI baseline
 (keep it at `repeat-penalty 1.00`) provides the code-safe penalty floor.
 Penalty/DRY axes fully apply on OpenAI-shaped endpoints.
 
+## Detector scope
+
+| Loop shape | Covered? | Net |
+|---|---|---|
+| Verbatim block ≤160 chars, ≥6× in last 2KB | ✅ | `verbatim-block` |
+| Death spiral of identical full lines (any length ≥1 line, ≥5 consecutive) | ✅ | `line-repeat` |
+| Paraphrased / semantic repetition | ❌ model-level, out of scope |
+| Same failing tool call repeated across turns | ⚠️ visible in CMR stats as suspected action-loops (`argsHash` grouping) |
+
+Each strike records which net caught it (`heuristic` field).
+
 ## Usage
 
 ### Set-and-forget (installed)

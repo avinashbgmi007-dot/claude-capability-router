@@ -82,12 +82,14 @@ export function appendDecisionLog(entry: DecisionLogEntry, dir?: string): void {
 export interface UsageLogEntry {
   ts: string;
   promptHash?: string;
-  /** Claude Code session id — the join key for decision-log correlation (stats). */
+  /** Claude Code session id - the join key for decision-log correlation (stats). */
   sessionId?: string;
   capabilityId: string;
   invoked: boolean;
   override?: string;
   source: "tool-use" | "session-end" | "test";
+  /** sha1-prefix of tool_input - enables action-loop detection without storing content */
+  argsHash?: string;
 }
 
 export function appendUsageLog(entry: UsageLogEntry, dir?: string): void {

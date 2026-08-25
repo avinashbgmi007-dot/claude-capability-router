@@ -32,6 +32,9 @@ const MIN_BLOCK = 16;
 const MAX_BLOCK = 160;
 const BLOCK_STEP = 8;
 const STRIKE_THRESHOLD = 6;
+/** Consecutive identical full lines - catches any-length death spirals that
+    slip past block-size scanning (periods > MAX_BLOCK). */
+const LINE_REPEAT_COUNT = 5;
 
 /** Loop score = max occurrences of any trailing-block within the window. */
 function loopScan(text) {
@@ -49,6 +52,36 @@ function loopScan(text) {
     if (count > worst.count) worst = { count, blockLen: b, snippet: block.slice(0, 60) };
   }
   return worst;
+}
+
+/** Consecutive identical non-empty lines - immune to formatting noise. */
+function lineRepeatScan(text) {
+  const lines = text.split(/\r?\n/);
+  let best = { count: 0, line: "" };
+  let cur = 1;
+  for (let i = 1; i < lines.length; i++) {
+    if (lines[i].trim() && lines[i] === lines[i - 1]) {
+      cur++;
+      if (cur > best.count) best = { count: cur, line: lines[i].slice(0, 60) };
+    } else {
+      cur = 1;
+    }
+  }
+  return best;
+}
+
+/** Unified verdict: which net caught it (if any). Verbatim-block takes
+    precedence when both fire so records stay deterministic. */
+function detectLoop(text) {
+  const v = loopScan(text);
+  if (v.count >= STRIKE_THRESHOLD) {
+    return { strike: true, heuristic: "verbatim-block", count: v.count, blockLen: v.blockLen, snippet: v.snippet };
+  }
+  const lr = lineRepeatScan(text);
+  if (lr.count >= LINE_REPEAT_COUNT) {
+    return { strike: true, heuristic: "line-repeat", count: lr.count, blockLen: null, snippet: lr.line };
+  }
+  return { strike: false, heuristic: null, count: Math.max(v.count, lr.count), snippet: "" };
 }
 
 let prevMessageCount = null;
@@ -250,8 +283,8 @@ function sseTap(upRes, meta) {
   });
   upRes.on("end", () => {
     stats.requests++;
-    const scan = loopScan(text);
-    if (scan.count >= STRIKE_THRESHOLD) {
+    const scan = detectLoop(text);
+    if (scan.strike) {
       const msgCount = meta?.messageCount ?? null;
       logStrike({
         ts: new Date().toISOString(),
@@ -260,6 +293,7 @@ function sseTap(upRes, meta) {
         profile: meta?.profile ?? null,
         messageCount: msgCount,
         suspectedPostCompaction: postCompaction(msgCount),
+        heuristic: scan.heuristic,
         count: scan.count,
         blockLen: scan.blockLen,
         outputChars: text.length,
@@ -355,14 +389,14 @@ const server = http.createServer((clientReq, clientRes) => {
         try {
           const parsed = JSON.parse(raw.toString());
           const text = extractText(parsed);
-          return { text, scan: loopScan(text) };
+          return { text, scan: detectLoop(text) };
         } catch {
-          return null; // error bodies etc. — deliver as-is
+          return null; // error bodies etc. - deliver as-is
         }
       };
 
       let cur = scanOf(out.raw);
-      while (cur && cur.scan.count >= STRIKE_THRESHOLD && attempt < maxAttempts) {
+      while (cur && cur.scan.strike && attempt < maxAttempts) {
         attempts.push({
           ts: new Date().toISOString(),
           kind: "json",
@@ -370,6 +404,7 @@ const server = http.createServer((clientReq, clientRes) => {
           profile: meta?.profile ?? null,
           messageCount: meta?.messageCount ?? null,
           suspectedPostCompaction: postCompaction(meta?.messageCount),
+          heuristic: cur.scan.heuristic,
           count: cur.scan.count,
           blockLen: cur.scan.blockLen,
           outputChars: cur.text.length,
@@ -385,11 +420,11 @@ const server = http.createServer((clientReq, clientRes) => {
           escalateBody(reqBody, attempt - 1),
         );
         cur = scanOf(out.raw);
-        if (!cur) break; // became non-JSON (error) — stop escalating
+        if (!cur) break; // became non-JSON (error) - stop escalating
       }
 
-      const finalLooped = !!cur && cur.scan.count >= STRIKE_THRESHOLD;
-      // every looped generation gets its own record — including the
+      const finalLooped = !!cur && cur.scan.strike;
+      // every looped generation gets its own record - including the
       // terminal one when we gave up escalating
       if (finalLooped && (!attempts.length || attempts[attempts.length - 1].attempt !== attempt)) {
         attempts.push({
@@ -399,6 +434,7 @@ const server = http.createServer((clientReq, clientRes) => {
           profile: meta?.profile ?? null,
           messageCount: meta?.messageCount ?? null,
           suspectedPostCompaction: postCompaction(meta?.messageCount),
+          heuristic: cur.scan.heuristic,
           count: cur.scan.count,
           blockLen: cur.scan.blockLen,
           outputChars: cur.text.length,

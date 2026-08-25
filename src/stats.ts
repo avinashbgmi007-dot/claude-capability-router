@@ -28,6 +28,14 @@ export interface CapabilityStats {
   ignoredDecisions: number;
 }
 
+export interface ActionCycle {
+  capabilityId: string;
+  argsHash: string;
+  count: number;
+  firstTs: string;
+  lastTs: string;
+}
+
 export interface StatsResult {
   decisions: number;
   attributedDecisions: number;
@@ -49,6 +57,46 @@ export interface StatsResult {
   fidelity: number;
   silentWins: SilentWin[];
   perCapability: CapabilityStats[];
+  /** REPORT-ONLY: same capability + same argsHash repeated rapidly.
+      Productive automation (browser testing) can look identical - treat as
+      signal to inspect, never as automatic failure. */
+  suspectedActionLoops: ActionCycle[];
+}
+
+const CYCLE_MIN_COUNT = 6;
+const CYCLE_WINDOW_MS = 10 * 60 * 1000;
+
+/** Identical capability + identical argument-hash >= CYCLE_MIN_COUNT times
+    within a sliding CYCLE_WINDOW_MS. Requires argsHash (post-schema data). */
+export function detectActionCycles(usage: UsageLogEntry[]): ActionCycle[] {
+  const groups = new Map<string, typeof usage>();
+  for (const u of usage) {
+    if (!u.argsHash || !u.capabilityId) continue;
+    const key = `${u.capabilityId}|${u.argsHash}`;
+    const arr = groups.get(key) ?? [];
+    arr.push(u);
+    groups.set(key, arr);
+  }
+  const cycles: ActionCycle[] = [];
+  for (const [key, arr] of groups) {
+    const sorted = [...arr].sort((a, b) => tsOf(a) - tsOf(b));
+    let left = 0;
+    for (let right = 0; right < sorted.length; right++) {
+      while (tsOf(sorted[right]) - tsOf(sorted[left]) > CYCLE_WINDOW_MS) left++;
+      const count = right - left + 1;
+      if (count >= CYCLE_MIN_COUNT) {
+        cycles.push({
+          capabilityId: sorted[left].capabilityId,
+          argsHash: key.split("|")[1],
+          count,
+          firstTs: sorted[left].ts,
+          lastTs: sorted[right].ts,
+        });
+        break; // one cycle record per group is enough signal
+      }
+    }
+  }
+  return cycles.sort((a, b) => b.count - a.count);
 }
 
 function tsOf(e: { ts: string }): number {
@@ -69,6 +117,7 @@ export function computeStats(decisions: DecisionLogEntry[], usage: UsageLogEntry
     correctPassThrough: 0,
     fidelity: 0,
     silentWins: [],
+    suspectedActionLoops: [],
     perCapability: [],
   };
   const capStats = new Map<string, CapabilityStats>();
@@ -149,5 +198,6 @@ export function computeStats(decisions: DecisionLogEntry[], usage: UsageLogEntry
     result.attributedDecisions === 0
       ? 0
       : (result.compliant + result.correctPassThrough) / result.attributedDecisions;
+  result.suspectedActionLoops = detectActionCycles(usage);
   return result;
 }

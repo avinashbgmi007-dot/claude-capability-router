@@ -49,7 +49,23 @@ export function classifyDomain(prompt: string): TaskDomain {
   return "chat";
 }
 
-// ---- intent subtype: building vs fixing (ranks candidates within a domain) ----
+// ---- infra intent: installation/clone operations are native shell work ----
+// Requires an install-class VERB plus a SOURCE/SYSTEM noun nearby - verb alone
+// ("add retry logic") never suppresses, keeping debug-style prompts routable.
+
+const INFRA_VERB_RE = /\b(install|installing|set[ -]?up|setup|clone|download)\b/i;
+const INFRA_NOUN_RE =
+  /\b(github|gitlab|bitbucket|npm|npx|pnpm|yarn|pip|cargo|nuget|repo(?:sitory)?|package|registry|\.git)\b/i;
+
+/** Installation/setup operations are native shell work - never a capability task. */
+export function isInfraIntent(prompt: string): boolean {
+  const t = prompt || "";
+  const m = INFRA_VERB_RE.exec(t);
+  if (!m) return false;
+  // source/system noun must appear near the verb (within ~80 chars after it)
+  return INFRA_NOUN_RE.test(t.slice(m.index, m.index + 80));
+}
+
 
 export type IntentSubtype = "generative" | "diagnostic" | "neutral";
 

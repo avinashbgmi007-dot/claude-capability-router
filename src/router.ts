@@ -11,7 +11,7 @@ import { loadUsageLog, computeUsageScores } from "./logs.js";
 import { normalizeTokens, extractMainClause } from "./normalization.js";
 import { rankCapabilities, type Weights } from "./scorer.js";
 import { splitIntents } from "./planner.js";
-import { classifyDomain, classifySubtype, deriveDomain, MIN_DERIVE_AFFINITY, signalClass, type DomainDerivation } from "./domains.js";
+import { classifyDomain, classifySubtype, deriveDomain, isInfraIntent, MIN_DERIVE_AFFINITY, signalClass, type DomainDerivation } from "./domains.js";
 import type { DiscoveryRoots } from "./paths.js";
 import { stateDir } from "./paths.js";
 import type { CapabilityIndexEntry, ExecutionRequest, PlanStep, RouterConfig, ScoredCapability } from "./types.js";
@@ -209,8 +209,7 @@ export function createRouter(opts: RouterOptions): Router {
   }
 
   function route(prompt: string): ExecutionRequest {
-    // force-route escape hatch: leading prefix bypasses τ + MIN_ROUTE_TOKENS.
-    // originalPrompt stays byte-identical (invariant) — only the working copy is stripped.
+    // forced detection FIRST: @cmr bypasses everything, including infra suppression
     const prefix = opts.config.forcePrefix;
     let forced = false;
     let working = prompt;
@@ -221,6 +220,12 @@ export function createRouter(opts: RouterOptions): Router {
         working = trimmed.slice(prefix.length).trim();
       }
     }
+    // INFRA PASS: installation/clone commands are native shell work - never a
+    // capability task. Suppressed before specialist AND domain passes.
+    if (!forced && isInfraIntent(prompt)) {
+      return { originalPrompt: prompt, routed: false, plan: [], rationale: "infra-intent suppressed" };
+    }
+
     const segments = splitIntents(working);
     if (segments.length < 2) {
       return forced ? routeSingleIntent(prompt, { scoreText: working, forced: true }) : routeSingleIntent(prompt);

@@ -18,6 +18,7 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { createHash } from "node:crypto";
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const RUNTIME = path.join(SCRIPT_DIR, "runtime", "capability-router");
@@ -113,8 +114,24 @@ async function main() {
     const { appendUsageLog } = await rt("logs.js");
     const id = capabilityIdFromToolUse(hook);
     if (id) {
+      // argument fingerprint enables action-loop detection (identical
+      // capability + identical args, repeatedly) WITHOUT storing content
+      let argsHash;
+      try {
+        argsHash = createHash("sha1")
+          .update(JSON.stringify(hook.tool_input ?? hook.tool_use?.input ?? {}))
+          .digest("hex")
+          .slice(0, 12);
+      } catch {}
       appendUsageLog(
-        { ts: new Date().toISOString(), sessionId: hook.session_id, capabilityId: id, invoked: true, source: "tool-use" },
+        {
+          ts: new Date().toISOString(),
+          sessionId: hook.session_id,
+          capabilityId: id,
+          invoked: true,
+          source: "tool-use",
+          ...(argsHash ? { argsHash } : {}),
+        },
         path.join(SCRIPT_DIR, "logs"),
       );
     }

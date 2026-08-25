@@ -28,6 +28,11 @@ const BASE = `http://127.0.0.1:${GUARD_PORT}`;
 
 const LOOP_UNIT = "All systems operational. ";
 const loopText = LOOP_UNIT.repeat(120); // ~2.9KB of pure verbatim repetition
+// long-period death spiral: 5 identical 400-char lines - slips past the
+// 16..160ch verbatim net (period > MAX_BLOCK) but trips line-repeat
+const LONGLINE =
+  "alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu nu xi omicron pi rho sigma tau upsilon phi chi psi omega ".repeat(7).slice(0, 420);
+const longLineText = Array(5).fill(LONGLINE).join("\n") + "\n";
 const healthyText =
   "Guardians of the galaxy tuned their radios toward distant pulsars yesterday. " +
   "Nobody expected the violin solo that followed across three octaves. " +
@@ -76,12 +81,22 @@ const mock = http.createServer((req, res) => {
     const body = JSON.parse(rawBody || "{}");
     lastReceived = { url: req.url, body };
     let looping;
-    if (body.model === "looper" || body.model === "looper-always") looping = true;
-    else if (body.model === "looper-once") {
+    let chosenText;
+    if (body.model === "looper" || body.model === "looper-always") {
+      looping = true;
+      chosenText = loopText;
+    } else if (body.model === "long-line-looper") {
+      looping = true;
+      chosenText = longLineText; // period > MAX_BLOCK: verbatim silent, line-repeat fires
+    } else if (body.model === "looper-once") {
       callCounts[body.model] = (callCounts[body.model] || 0) + 1;
       looping = callCounts[body.model] === 1;
-    } else looping = false;
-    const text = looping ? loopText : healthyText;
+      chosenText = looping ? loopText : healthyText;
+    } else {
+      looping = false;
+      chosenText = healthyText;
+    }
+    const text = looping ? chosenText : healthyText;
     if (req.url === "/v1/messages") {
       // Anthropic protocol
       if (body.stream) {
@@ -191,17 +206,28 @@ try {
   await new Promise((r) => setTimeout(r, 300));
   check("P1: healthy sse adds no strikes", s1().length === 2);
 
+  // line-repeat heuristic: long-period spiral (5 identical 420-char lines)
+  // - verbatim net stays silent (period > MAX_BLOCK), line-repeat fires
+  const lres = await chat("long-line-looper", true, 3);
+  await lres.text();
+  await new Promise((r) => setTimeout(r, 400));
+  s = s1();
+  check(
+    "P1: long-period loop caught by line-repeat net",
+    s.length === 3 && s[2].heuristic === "line-repeat" && s[2].count >= 5,
+  );
+
   await anthropic("looper", false, 6);
   await new Promise((r) => setTimeout(r, 250));
   s = s1();
-  check("P1: anthropic json loop detected", s.length === 3 && s[2].kind === "json");
+  check("P1: anthropic json loop detected", s.length === 4 && s[3].kind === "json");
 
   const aRes = await anthropic("looper", true, 4);
   const aReceived = await aRes.text();
   check("P1: anthropic SSE passthrough byte-identical", aReceived === makeAnthropicSse(loopText));
   await new Promise((r) => setTimeout(r, 400));
   s = s1();
-  check("P1: anthropic SSE loop detected (kind=stream)", s.length === 4 && s[3].kind === "stream");
+  check("P1: anthropic SSE loop detected (kind=stream)", s.length === 5 && s[4].kind === "stream");
 
   await stopGuard(g.child);
 

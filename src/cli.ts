@@ -271,16 +271,25 @@ export function explain(prompt: string): void {
   console.log(`prompt: ${ex.prompt}`);
   console.log(`tokens: [${ex.tokens.join(", ")}]`);
   console.log(`threshold: ${ex.threshold} | decision: ${ex.decision}`);
+  const req = router.route(prompt);
+  // honest decision label: reflect the FULL pipeline (infra suppression +
+  // domain fallback), not just the specialist pass that ex.decision reports
+  let label: string = ex.decision;
+  if (req.plan[0]?.domainMatch) label = "route (domain-match)";
+  else if (/infra-intent suppressed/.test(req.rationale ?? "")) label = "pass-through (infra-intent suppressed)";
+  else if (req.routed && ex.decision !== "route") label = "route";
+  console.log(`threshold: ${ex.threshold} | decision: ${label}`);
   for (const r of ex.ranked) {
     const fs = r.fieldScores;
     console.log(
       `  ${r.entry.id.padEnd(28)} conf=${r.confidence.toFixed(3)}  purpose=${fs.purpose.toFixed(2)} actions=${fs.actions.toFixed(2)} domains=${fs.domains.toFixed(2)} examples=${fs.examples.toFixed(2)} desc=${fs.description.toFixed(2)} name=${fs.name.toFixed(2)} body=${fs.body.toFixed(2)}`,
     );
   }
-  const req = router.route(prompt);
   if (req.routed) {
     if (req.plan[0]?.domainMatch) console.log("route class: DOMAIN-MATCH (specialist pass silent; representative suggested)");
     console.log(`\nenhanced block:\n${buildEnhancedPrompt(req, config)}`);
+  } else if (/infra-intent suppressed/.test(req.rationale ?? "")) {
+    console.log("(routing suppressed: installation/infrastructure intent)");
   }
 }
 

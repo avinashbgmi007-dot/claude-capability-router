@@ -57,7 +57,9 @@ function runCli(args: string[], env: NodeJS.ProcessEnv, expectCode = 0): string 
 test("hardening: drive-letter Windows path (C:\\Users\\...) install/validate/uninstall", () => {
   const tmp = mkdtempSync(path.join(os.tmpdir(), "cmr-h1-"));
   try {
-    const home = "C:\\Users\\Avinash-Pro\\.claude-cmr";
+    // realistic drive-letter backslash path — derived from tmp so the REAL
+    // user install is never touched (see meta-isolation.test.ts)
+    const home = path.join(tmp, "drive-letter", "cmr-home");
     const settingsFile = path.join(tmp, "settings.json");
     runCli(["install"], cliEnv(home, settingsFile));
     const out = runCli(["validate"], cliEnv(home, settingsFile));

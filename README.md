@@ -121,6 +121,15 @@ files, no key-value config: the author's text is the tag.
 - Specialists always beat domain matches; disable with
   `"domainRouting": { "enabled": false }`.
 
+### If hooks ever error with "Cannot find module …hook-wrapper.mjs"
+
+Your local install files were removed (a test suite bug did this historically;
+fixed and guarded by `test/meta-isolation.test.ts`). Restore in one command:
+
+```powershell
+npm run install:cr
+```
+
 ---
 
 ## Daily use

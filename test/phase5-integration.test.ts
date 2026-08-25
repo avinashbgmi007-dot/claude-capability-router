@@ -286,7 +286,7 @@ test("wrapper: crash writes wrapper-error.log and degrades to {}", () => {
 test("wrapper fix: Windows absolute paths must import via file:// URLs", async () => {
   // The exact Windows failure (user's selftest output): bare-path dynamic
   // import of a `C:\...` module throws ERR_UNSUPPORTED_ESM_URL_SCHEME.
-  const winModule = "C:\\Users\\Avinash-Pro\\.claude-cmr\\runtime\\capability-router\\config.js";
+  const winModule = "C:\\Users\\someone\\AppData\\Local\\cmr-fake\\runtime\\capability-router\\config.js";
   await assert.rejects(
     () => import(winModule),
     (e) => (e as NodeJS.ErrnoException).code === "ERR_UNSUPPORTED_ESM_URL_SCHEME",

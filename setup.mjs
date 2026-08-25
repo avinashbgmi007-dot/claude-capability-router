@@ -329,9 +329,11 @@ function remove() {
   // 3. startup entry + guard processes
   if (existsSync(STARTUP_CMD)) rmSync(STARTUP_CMD, { force: true });
   const killByCmd = (filter) => {
+    // constrain to interpreter processes - never touch editors that merely
+    // have these files open in tabs (their cmdline embeds file paths too)
     const out = spawnSync("powershell", [
       "-NoProfile", "-Command",
-      `Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -match '${filter}' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }`,
+      `Get-CimInstance Win32_Process | Where-Object { ($_.Name -eq 'node.exe' -or $_.Name -like 'powershell*') -and $_.CommandLine -match '${filter}' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }`,
     ], { encoding: "utf8", shell: true });
     return out.status === 0;
   };
